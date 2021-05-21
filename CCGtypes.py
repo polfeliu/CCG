@@ -6,8 +6,8 @@ class Int8(GenericType):
 
     typename = "int8"
 
-    def declaration(self, name):
-        return f"{self.typename} {name};"
+    def declaration(self, name, semicolon=True):
+        return f"{self.typename} {name}{';' if semicolon else ''}"
 
 
 class Array(GenericType):
@@ -19,8 +19,8 @@ class Array(GenericType):
     type = None
     length: int
 
-    def declaration(self, name):
-        return f"{self.type.typename} {name}[{self.length}];"
+    def declaration(self, name, semicolon=True):
+        return f"{self.type.typename} {name}[{self.length}]{';' if semicolon else ''}"
 
 if __name__ == "__main__":
     int8 = Int8()

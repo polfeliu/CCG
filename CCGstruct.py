@@ -16,7 +16,7 @@ class StructMember:
 
     def declaration(self):
         return (
-            f"{self.type.declaration(self.name)}"
+            f"{self.type.declaration(self.name, semicolon=False)}{f': {self.bitfield}' if self.bitfield else '' };"
         )
 
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
     ExampleStruct = Struct("examplestruct")
     ExampleStruct.members.extend([
-        StructMember(Int8(), "title"),
+        StructMember(Int8(), "title", bitfield=6),
         StructMember(Array(type=Int8, length=3), "example")
     ])
 
