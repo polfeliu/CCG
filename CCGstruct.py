@@ -5,7 +5,7 @@ from CCGtypes import *
 
 class StructMember:
 
-    def __init__(self, type, name, bitfield=None):
+    def __init__(self, name, type, bitfield=None):
         self.type = type
         self.name = name
         self.bitfield = bitfield
@@ -43,8 +43,8 @@ if __name__ == "__main__":
 
     ExampleStruct = Struct("examplestruct")
     ExampleStruct.members.extend([
-        StructMember(Int8(), "title", bitfield=6),
-        StructMember(Array(type=Int8, length=3), "example")
+        StructMember("title", Int8(), bitfield=6),
+        StructMember("example", Array(type=Int8, length=3))
     ])
 
     print(ExampleStruct.declaration())
