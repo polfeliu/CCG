@@ -20,13 +20,12 @@ class StructMember:
         )
 
 
-class Struct:
+class Struct(BasicType):
 
-    def __init__(self, tag: str, members: List[StructMember]):
-        self.tag = tag
+    def __init__(self, typename: str, members: List[StructMember]):
+        self.typename = typename
         self.members = members
 
-    tag: str
     members: List[StructMember] = []
 
     def declaration(self, name=None, semicolon=True):
@@ -34,7 +33,7 @@ class Struct:
         for member in self.members:
             members += indent(member.declaration(), '\t') + "\r\n"
         return (
-            f"struct {self.tag}{{\r\n"
+            f"struct {self.typename}{{\r\n"
             f"{members}"
             f"}}{name if name is not None else ''}{';' if semicolon else ''}"
         )

@@ -17,13 +17,12 @@ class UnionMember:
         )
 
 
-class Union:
+class Union(BasicType):
 
-    def __init__(self, tag: str, members: List[UnionMember]):
-        self.tag = tag
+    def __init__(self, typename: str, members: List[UnionMember]):
+        self.typename = typename
         self.members = members
 
-    tag: str
     members: List[UnionMember] = []
 
     def declaration(self, name=None, semicolon=True):
@@ -31,7 +30,7 @@ class Union:
         for member in self.members:
             members += indent(member.declaration(), '\t') + "\r\n"
         return (
-            f"union {self.tag}{{\r\n"
+            f"union {self.typename}{{\r\n"
             f"{members}"
             f"}}{name if name is not None else ''}{';' if semicolon else ''}"
         )
