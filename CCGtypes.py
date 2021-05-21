@@ -4,11 +4,17 @@ class GenericType:
     def declaration(self, *args, **kwargs):
         raise NotImplementedError("Types should implement a declaration method")
 
+    def typedef(self, *args, **kwargs):
+        raise NotImplementedError("Types should implement a typedef method")
+
 
 class BasicType(GenericType):
 
     def declaration(self, name, semicolon=True):
         return f"{self.typename} {name}{';' if semicolon else ''}"
+
+    def typedef(self, name):
+        return f"typedef {self.typename} {name};"
 
 
 class Int8(BasicType):
@@ -60,5 +66,7 @@ if __name__ == "__main__":
     int8 = Int8()
     print(int8.declaration("hello"))
 
+    print(int8.typedef('mycustomint'))
+
     array = Array(type=int8, length=10)
-    print(int8.declaration("asdf"))
+    print(array.declaration("asdf"))

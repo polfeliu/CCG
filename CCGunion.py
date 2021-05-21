@@ -35,6 +35,12 @@ class Union(BasicType):
             f"}}{name if name is not None else ''}{';' if semicolon else ''}"
         )
 
+    def typedef(self, name, inplace_declaration=True):
+        return (
+            f"typedef {self.declaration(name = name, semicolon=False) if inplace_declaration else self.typename + ' ' + name};"
+        )
+        print(name)
+
 
 if __name__ == "__main__":
 
@@ -49,3 +55,4 @@ if __name__ == "__main__":
     ])
 
     print(ExampleStruct.declaration())
+    print(ExampleStruct.typedef('type', inplace_declaration=True))
