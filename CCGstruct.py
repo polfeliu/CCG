@@ -3,20 +3,15 @@ from textwrap import indent
 from CCGtypes import *
 
 
-class StructMember:
+class StructMember():
 
-    def __init__(self, name: str, type, bitfield=None):
-        self.type = type
-        self.name = name
+    def __init__(self, variable, bitfield=None):
+        self.variable = variable
         self.bitfield = bitfield
-
-    type = None
-    name: str
-    bitfield: int
 
     def declaration(self):
         return (
-            f"{self.type.declaration(self.name, semicolon=False)}{f': {self.bitfield}' if self.bitfield else '' };"
+            f"{self.variable.declaration(semicolon=False)}{f': {self.bitfield}' if self.bitfield else '' };"
         )
 
 
@@ -31,32 +26,41 @@ class Struct(BasicType):
     def declaration(self, name=None, semicolon=True):
         members = ""
         for member in self.members:
-            members += indent(member.declaration(), '\t') + "\r\n"
+            members += indent(member.declaration(), '\t') + "\n"
         return (
-            f"struct {self.typename}{{\r\n"
+            f"struct {self.typename}{{\n"
             f"{members}"
-            f"}} {name if name is not None else ''}{';' if semicolon else ''}"
+            f"}}"
         )
 
     def typedef(self, name, inplace_declaration=True):
         return (
             f"typedef {self.declaration(name = name, semicolon=False) if inplace_declaration else self.typename + ' ' + name};"
         )
-        print(name)
 
 
 if __name__ == "__main__":
 
     ExampleStruct = Struct("examplestruct_s", members=[
-        StructMember("title", Int8(), bitfield=6),
-        StructMember("example", Array(type=Int8, length=3)),
-        StructMember("Nestedstruct",
-             Struct("nestedstruct_s", members=[
-                StructMember("hello", Int8(), bitfield=6)
-             ])
+        StructMember(Variable("title", Int8)),
+        StructMember(Variable("asdf", Int8), bitfield=3),
+        StructMember(Array("name", type=Int8, length=3)),
+        StructMember(
+            Variable("nestedstruct", inplace_declaration= True, type=Struct(
+                typename="nestedstruct_s",
+                members=[
+                    StructMember(Variable("qwer", Int64)),
+                ]),
+             )
         )
     ])
 
-    print(ExampleStruct.declaration('structvar'))
+    print(Variable("inst", type=ExampleStruct, inplace_declaration=True).declaration())
+    print(Array("inst", type=ExampleStruct, length=10, inplace_declaration=True).declaration())
 
     print(ExampleStruct.typedef('structtype'))
+
+    with open("example.txt", "w") as f:
+        f.write(
+            ExampleStruct.declaration()
+        )

@@ -1,17 +1,11 @@
 class GenericType:
     typename: str
 
-    def declaration(self, *args, **kwargs):
-        raise NotImplementedError("Types should implement a declaration method")
-
     def typedef(self, *args, **kwargs):
         raise NotImplementedError("Types should implement a typedef method")
 
 
 class BasicType(GenericType):
-
-    def declaration(self, name, semicolon=True):
-        return f"{self.typename} {name}{';' if semicolon else ''}"
 
     def typedef(self, name):
         return f"typedef {self.typename} {name};"
@@ -41,6 +35,14 @@ class Uint32(BasicType):
     typename = "uint32_t"
 
 
+class Int64(BasicType):
+    typename = "int64_t"
+
+
+class Uint64(BasicType):
+    typename = "uint64_t"
+
+
 class Float(BasicType):
     typename = "float"
 
@@ -48,25 +50,49 @@ class Float(BasicType):
 class Double(BasicType):
     typename = "double"
 
+class Variable():
 
-class Array(GenericType):
-
-    def __init__(self, type, length):
+    def __init__(self, name, type, inplace_declaration = False):
         self.type = type
-        self.length = length
+        self.name = name
+        self.inplace_declaration = inplace_declaration
 
     type = None
+    name: str = None
+
+    def declaration(self, semicolon=True):
+        if self.inplace_declaration:
+            return f"{self.type.declaration(semicolon=False)} {self.name}{';' if semicolon else ''}"
+        else:
+            return f"{self.type.typename} {self.name}{';' if semicolon else ''}"
+
+class Array(Variable):
+
+    def __init__(self, name, type, length, inplace_declaration = False):
+        super().__init__(name, type, inplace_declaration= inplace_declaration)
+        self.length = length
+
     length: int
 
-    def declaration(self, name, semicolon=True):
-        return f"{self.type.typename} {name}[{self.length}]{';' if semicolon else ''}"
-
+    def declaration(self, semicolon=True):
+        if self.inplace_declaration:
+            return f"{self.type.declaration(semicolon=False)} {self.name}[{self.length}]{';' if semicolon else ''}"
+        else:
+            return f"{self.type.typename} {self.name}[{self.length}]{';' if semicolon else ''}"
 
 if __name__ == "__main__":
-    int8 = Int8()
-    print(int8.declaration("hello"))
+    var = Variable(
+        type=Int8,
+        name="mycustomint"
+    )
+    print(var.declaration())
 
-    print(int8.typedef('mycustomint'))
+    print(Int8().typedef('mycustomtype'))
 
-    array = Array(type=int8, length=10)
-    print(array.declaration("asdf"))
+    array = Array(
+        type=Int8,
+        name="asdf",
+        length=10
+    )
+
+    print(array.declaration())
