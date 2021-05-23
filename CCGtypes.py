@@ -50,15 +50,15 @@ class Float(BasicType):
 class Double(BasicType):
     typename = "double"
 
-import CCGstruct
-import CCGunion
+from CCGstruct import Struct
+from CCGunion import Union
 
 class Variable():
 
     def __init__(self, name, type, inplace_declaration = False):
         self.type = type
         self.name = name
-        if isinstance(type, CCGstruct.Struct) or isinstance(type, CCGunion.Union):
+        if hasattr(type, "declaration"):
             self.inplace_declaration = inplace_declaration
         else:
             self.inplace_declaration = False
