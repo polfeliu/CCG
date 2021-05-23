@@ -44,9 +44,9 @@ if __name__ == "__main__":
     ExampleStruct = Struct("examplestruct_s", members=[
         StructMember(Variable("title", Int8)),
         StructMember(Variable("asdf", Int8), bitfield=3),
-        StructMember(Array("name", type=Int8, length=3)),
+        StructMember(Array("name", type=Int8, length=3, inplace_declaration=True)),
         StructMember(
-            Variable("nestedstruct", inplace_declaration= True, type=Struct(
+            Variable("nestedstruct", inplace_declaration=True, type=Struct(
                 typename="nestedstruct_s",
                 members=[
                     StructMember(Variable("qwer", Int64)),
