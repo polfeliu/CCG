@@ -34,6 +34,6 @@ class CVariable:
                 self.check_hungarian()
 
         if self.inplace_declaration:
-            return f"{self.type.declaration(semicolon=False)} {self.name}{';' if semicolon else ''}"  # TODO
+            return f"{self.type.declaration(semicolon=False, style=style)} {self.name}{';' if semicolon else ''}"  # TODO
         else:
             return f"{self.type.type_name} {self.name}{';' if semicolon else ''}"

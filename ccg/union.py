@@ -15,7 +15,7 @@ class CUnion(CBasicType):
         self.type_name = type_name
         self.members = members
 
-    def declaration(self, name=None, semicolon=True):
+    def declaration(self, name=None, semicolon=True, style: Union['Style', None] = None):
         members = ""
         for member in self.members:
             members += indent(member.declaration(), '\t') + "\n"
@@ -25,7 +25,7 @@ class CUnion(CBasicType):
             f"}}"
         )
 
-    def typedef(self, name, inplace_declaration=True):
+    def typedef(self, name, inplace_declaration=True, style: Union['Style', None] = None):
         return (
-            f"typedef {self.declaration(name=name, semicolon=False) if inplace_declaration else self.type_name + ' ' + name};"
+            f"typedef {self.declaration(name=name, semicolon=False, style=style) if inplace_declaration else self.type_name + ' ' + name};"
         )

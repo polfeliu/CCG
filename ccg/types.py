@@ -13,7 +13,7 @@ class CGenericType(ABC):
     def typedef(self, *args, **kwargs):
         raise NotImplementedError("Types should implement a typedef method")
 
-    def declaration(self, semicolon=True):
+    def declaration(self, semicolon=True, style: Union['Style', None] = None):
         raise NotImplementedError(f"Only Structs and Unions types can be declared, not {self.type_name}")
 
 
@@ -59,7 +59,7 @@ uint32 = CBasicType(
 
 int64 = CBasicType(
     type_name="int8_t",
-    hungarian_prefix="i8"
+    hungarian_prefix="i64"
 )
 
 uint64 = CBasicType(

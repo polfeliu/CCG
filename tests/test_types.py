@@ -1,10 +1,9 @@
-from ccg import Style, CVariable, CArray
+from ccg import CVariable, CArray
 from ccg.types import *
-
+from common_style import style
 
 def test_types():
-    style = Style()
-    style.check_hungarian = True
+
 
     var = CVariable(
         type=int8,

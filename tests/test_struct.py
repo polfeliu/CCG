@@ -1,24 +1,25 @@
 from ccg import CStruct, StructMember, CVariable, CArray
 from ccg.types import *
+from common_style import style
 
 
 def test_struct():
     ExampleStruct = CStruct("examplestruct_s", members=[
-        StructMember(CVariable("title", int8)),
-        StructMember(CVariable("asdf", int8), bitfield=3),
-        StructMember(CArray("name", type=int8, length=3)),
+        StructMember(CVariable("i8Title", int8)),
+        StructMember(CVariable("i8Asdf", int8), bitfield=3),
+        StructMember(CArray("i8Name", type=int8, length=3)),
         StructMember(
-            CVariable("nestedstruct", inplace_declaration=True, type=CStruct(
+            CVariable("tNestedstruct", inplace_declaration=True, type=CStruct(
                 type_name="nestedstruct_s",
                 members=[
-                    StructMember(CVariable("qwer", int64)),
+                    StructMember(CVariable("i64Qwer", int64)),
                 ]),
                       )
         )
     ])
 
-    print(CVariable("inst", type=ExampleStruct, inplace_declaration=False).declaration())
-    print(CArray("inst", type=ExampleStruct, length=10, inplace_declaration=True).declaration())
+    print(CVariable("tInst", type=ExampleStruct, inplace_declaration=False).declaration(style=style))
+    print(CArray("inst", type=ExampleStruct, length=10, inplace_declaration=True).declaration(style=style))
     print(ExampleStruct.typedef('structtype'))
 
 

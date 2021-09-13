@@ -29,7 +29,7 @@ class CFunction:
     arguments: List[CFunctionArgument]
     content = None  # TODO Change content for list of statements or something like that
 
-    def declaration(self):
+    def declaration(self, style: Union['Style', None] = None):
         argumentlist = ""
         for argument in self.arguments:
             argumentlist += f"{argument.type.type_name} {argument.name}, "
@@ -41,5 +41,5 @@ class CFunction:
             f"}}"
         )
 
-    def prototype(self):
+    def prototype(self, style: Union['Style', None] = None):
         pass
