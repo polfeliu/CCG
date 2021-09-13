@@ -1,13 +1,13 @@
-from ccg import Union, Variable, Array
+from ccg import CUnion, CVariable, CArray
 from ccg.types import *
 
 
 def test_union():
-    ExampleUnion = Union(
+    ExampleUnion = CUnion(
         type_name="asdf",
         members=[
-            Variable("var1", int64),
-            Array("asdf", int64, length=12)
+            CVariable("var1", int64),
+            CArray("asdf", int64, length=12)
         ]
     )
 

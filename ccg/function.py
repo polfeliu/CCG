@@ -2,7 +2,7 @@ from typing import List
 from .types import *
 
 
-class FunctionArgument:
+class CFunctionArgument:
 
     def __init__(self, name, type):
         self.name = name
@@ -12,9 +12,9 @@ class FunctionArgument:
     type = None
 
 
-class Function:
+class CFunction:
 
-    def __init__(self, name, return_type=None, arguments: List[FunctionArgument] = None, content=None):
+    def __init__(self, name, return_type=None, arguments: List[CFunctionArgument] = None, content=None):
         if arguments is None:
             self.arguments = []
         else:
@@ -25,8 +25,8 @@ class Function:
         self.content = content
 
     name: str
-    return_type: GenericType = None
-    arguments: List[FunctionArgument]
+    return_type: CGenericType = None
+    arguments: List[CFunctionArgument]
     content = None  # TODO Change content for list of statements or something like that
 
     def declaration(self):

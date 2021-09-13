@@ -1,14 +1,14 @@
-from ccg import Function, FunctionArgument
+from ccg import CFunction, CFunctionArgument
 from ccg.types import *
 
 
 def test_function():
-    f = Function(
+    f = CFunction(
         name="examplefun",
-        return_type=Uint32,
+        return_type=uint32,
         arguments=[
-            FunctionArgument(name="asdf", type=Uint32),
-            FunctionArgument(name="qwerw", type=double)
+            CFunctionArgument(name="asdf", type=uint32),
+            CFunctionArgument(name="qwerw", type=double)
         ]
     )
 

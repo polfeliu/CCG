@@ -3,7 +3,7 @@ from textwrap import indent
 from .types import *
 
 
-class StructMember():
+class StructMember:
 
     def __init__(self, variable, bitfield=None):
         self.variable = variable
@@ -15,10 +15,13 @@ class StructMember():
         )
 
 
-class Struct(BasicType):
+class CStruct(CBasicType):
 
     def __init__(self, type_name: str, members: List[StructMember]):
-        self.type_name = type_name
+        super(CStruct, self).__init__(
+            type_name=type_name,
+            hungarian_prefix="s"
+        )
         self.members = members
 
     members: List[StructMember] = []

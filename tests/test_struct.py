@@ -1,24 +1,24 @@
-from ccg import Struct, StructMember, Variable, Array
+from ccg import CStruct, StructMember, CVariable, CArray
 from ccg.types import *
 
 
 def test_struct():
-    ExampleStruct = Struct("examplestruct_s", members=[
-        StructMember(Variable("title", int8)),
-        StructMember(Variable("asdf", int8), bitfield=3),
-        StructMember(Array("name", type=int8, length=3)),
+    ExampleStruct = CStruct("examplestruct_s", members=[
+        StructMember(CVariable("title", int8)),
+        StructMember(CVariable("asdf", int8), bitfield=3),
+        StructMember(CArray("name", type=int8, length=3)),
         StructMember(
-            Variable("nestedstruct", inplace_declaration=True, type=Struct(
+            CVariable("nestedstruct", inplace_declaration=True, type=CStruct(
                 type_name="nestedstruct_s",
                 members=[
-                    StructMember(Variable("qwer", int64)),
+                    StructMember(CVariable("qwer", int64)),
                 ]),
-                     )
+                      )
         )
     ])
 
-    print(Variable("inst", type=ExampleStruct, inplace_declaration=False).declaration())
-    print(Array("inst", type=ExampleStruct, length=10, inplace_declaration=True).declaration())
+    print(CVariable("inst", type=ExampleStruct, inplace_declaration=False).declaration())
+    print(CArray("inst", type=ExampleStruct, length=10, inplace_declaration=True).declaration())
     print(ExampleStruct.typedef('structtype'))
 
 

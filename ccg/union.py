@@ -2,11 +2,17 @@ from typing import List
 from textwrap import indent
 from .types import *
 
+from .variable import CVariable
 
-class Union(BasicType):
 
-    def __init__(self, typename: str, members):
-        self.type_name = typename
+class CUnion(CBasicType):
+
+    def __init__(self, type_name: str, members: List[CVariable]):
+        super(CUnion, self).__init__(
+            type_name=type_name,
+            hungarian_prefix="u"
+        )
+        self.type_name = type_name
         self.members = members
 
     def declaration(self, name=None, semicolon=True):

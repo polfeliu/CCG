@@ -1,7 +1,7 @@
 from .style import Style
 
-from .variable import Variable
-from .array import Array
-from .struct import Struct, StructMember
-from .union import Union
-from .function import Function, FunctionArgument
+from .variable import CVariable
+from .array import CArray
+from .struct import CStruct, StructMember
+from .union import CUnion
+from .function import CFunction, CFunctionArgument

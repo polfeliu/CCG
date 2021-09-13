@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .types import GenericType
+    from .types import CGenericType
     from .style import Style
 
 
@@ -9,9 +9,9 @@ class HungarianNotationError(Exception):
     pass
 
 
-class Variable:
+class CVariable:
 
-    def __init__(self, name: str, type: 'GenericType', inplace_declaration=False):
+    def __init__(self, name: str, type: 'CGenericType', inplace_declaration=False):
         self.type = type
         self.name = name
         if hasattr(type, "declaration"):

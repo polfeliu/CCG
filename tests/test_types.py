@@ -1,4 +1,4 @@
-from ccg import Style, Variable, Array
+from ccg import Style, CVariable, CArray
 from ccg.types import *
 
 
@@ -6,7 +6,7 @@ def test_types():
     style = Style()
     style.check_hungarian = True
 
-    var = Variable(
+    var = CVariable(
         type=int8,
         name="i8Mycustomint"
     )
@@ -14,7 +14,7 @@ def test_types():
 
     print(int8.typedef('mycustomtype'))
 
-    array = Array(
+    array = CArray(
         type=int8,
         name="asdf",
         length=10
