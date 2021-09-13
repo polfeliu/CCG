@@ -1,4 +1,4 @@
-from ccg import Struct, StructMember
+from ccg import Struct, StructMember, Variable, Array
 from ccg.types import *
 
 
@@ -22,10 +22,6 @@ def test_struct():
 
     print(ExampleStruct.typedef('structtype'))
 
-    with open("example.txt", "w") as f:
-        f.write(
-            ExampleStruct.declaration()
-        )
 
 
 if __name__ == "__main__":

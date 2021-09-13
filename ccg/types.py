@@ -1,6 +1,10 @@
-class GenericType:
+from abc import ABC, abstractmethod
+
+
+class GenericType(ABC):
     typename: str
 
+    @abstractmethod
     def typedef(self, *args, **kwargs):
         raise NotImplementedError("Types should implement a typedef method")
 
@@ -51,36 +55,5 @@ class Double(BasicType):
     typename = "double"
 
 
-class Variable():
-
-    def __init__(self, name, type, inplace_declaration=False):
-        self.type = type
-        self.name = name
-        if hasattr(type, "declaration"):
-            self.inplace_declaration = inplace_declaration
-        else:
-            self.inplace_declaration = False
-
-    type = None
-    name: str = None
-
-    def declaration(self, semicolon=True):
-        if self.inplace_declaration:
-            return f"{self.type.declaration(semicolon=False)} {self.name}{';' if semicolon else ''}"
-        else:
-            return f"{self.type.typename} {self.name}{';' if semicolon else ''}"
 
 
-class Array(Variable):
-
-    def __init__(self, name, type, length, inplace_declaration=False):
-        super().__init__(name, type, inplace_declaration=inplace_declaration)
-        self.length = length
-
-    length: int
-
-    def declaration(self, semicolon=True):
-        if self.inplace_declaration:
-            return f"{self.type.declaration(semicolon=False)} {self.name}[{self.length}]{';' if semicolon else ''}"
-        else:
-            return f"{self.type.typename} {self.name}[{self.length}]{';' if semicolon else ''}"

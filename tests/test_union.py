@@ -1,4 +1,4 @@
-from ccg import Union
+from ccg import Union, Variable, Array
 from ccg.types import *
 
 

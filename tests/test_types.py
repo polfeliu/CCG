@@ -1,3 +1,4 @@
+from ccg import Variable, Array
 from ccg.types import *
 
 
