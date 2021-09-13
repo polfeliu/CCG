@@ -4,7 +4,7 @@ from ccg.types import *
 
 def test_union():
     ExampleUnion = Union(
-        typename="asdf",
+        type_name="asdf",
         members=[
             Variable("var1", Int64),
             Array("asdf", Int64, length=12)

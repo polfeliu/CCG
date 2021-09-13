@@ -32,11 +32,11 @@ class Function:
     def declaration(self):
         argumentlist = ""
         for argument in self.arguments:
-            argumentlist += f"{argument.type.typename} {argument.name}, "
+            argumentlist += f"{argument.type.type_name} {argument.name}, "
         argumentlist = argumentlist.rstrip(", ")
 
         return (
-            f"{self.return_type.typename} {self.name}({argumentlist}){{\n"
+            f"{self.return_type.type_name} {self.name}({argumentlist}){{\n"
             f"{self.content if self.content is not None else ''}"
             f"}}"
         )

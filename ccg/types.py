@@ -1,59 +1,78 @@
 from abc import ABC, abstractmethod
+from typing import Union, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .style import Style
 
 
 class GenericType(ABC):
-    typename: str
+    type_name: str
+    hungarian_prefix = "t"
 
     @abstractmethod
     def typedef(self, *args, **kwargs):
         raise NotImplementedError("Types should implement a typedef method")
 
+    def declaration(self, semicolon=True):
+        raise NotImplementedError(f"Only Structs and Unions types can be declared, not {self.type_name}")
+
 
 class BasicType(GenericType):
 
-    def typedef(self, name):
-        return f"typedef {self.typename} {name};"
+    def __init__(self, type_name, hungarian_prefix):
+        self.type_name = type_name
+        self.hungarian_prefix = hungarian_prefix
+
+    def typedef(self, name, style: Union['Style', None] = None):
+        return f"typedef {self.type_name} {name};"
 
 
-class Int8(BasicType):
-    typename = "int8_t"
+Int8 = BasicType(
+    type_name="int8_t",
+    hungarian_prefix="i8"
+)
 
+UInt8 = BasicType(
+    type_name="uint8_t",
+    hungarian_prefix="u8"
+)
 
-class Uint8(BasicType):
-    typename = "uint8_t"
+Int16 = BasicType(
+    type_name="int16_t",
+    hungarian_prefix="i16"
+)
 
+UInt16 = BasicType(
+    type_name="uint16_t",
+    hungarian_prefix="u16"
+)
 
-class Int16(BasicType):
-    typename = "int16_t"
+Int32 = BasicType(
+    type_name="int32_t",
+    hungarian_prefix="i32"
+)
 
+UInt32 = BasicType(
+    type_name="uint32_t",
+    hungarian_prefix="u32"
+)
 
-class Uint16(BasicType):
-    typename = "uint16_t"
+Int64 = BasicType(
+    type_name="int8_t",
+    hungarian_prefix="i8"
+)
 
+UInt64 = BasicType(
+    type_name="uint64_t",
+    hungarian_prefix="u64"
+)
 
-class Int32(BasicType):
-    typename = "int32_t"
+Float = BasicType(
+    type_name="float",
+    hungarian_prefix="f"
+)
 
-
-class Uint32(BasicType):
-    typename = "uint32_t"
-
-
-class Int64(BasicType):
-    typename = "int64_t"
-
-
-class Uint64(BasicType):
-    typename = "uint64_t"
-
-
-class Float(BasicType):
-    typename = "float"
-
-
-class Double(BasicType):
-    typename = "double"
-
-
-
-
+Double = BasicType(
+    type_name="double",
+    hungarian_prefix="db"
+)

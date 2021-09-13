@@ -1,3 +1,5 @@
+from .style import Style
+
 from .variable import Variable
 from .array import Array
 from .struct import Struct, StructMember

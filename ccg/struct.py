@@ -17,23 +17,25 @@ class StructMember():
 
 class Struct(BasicType):
 
-    def __init__(self, typename: str, members: List[StructMember]):
-        self.typename = typename
+    def __init__(self, type_name: str, members: List[StructMember]):
+        self.type_name = type_name
         self.members = members
 
     members: List[StructMember] = []
+
+    # TODO Hungarian notation
 
     def declaration(self, name=None, semicolon=True):
         members = ""
         for member in self.members:
             members += indent(member.declaration(), '\t') + "\n"
         return (
-            f"struct {self.typename}{{\n"
+            f"struct {self.type_name}{{\n"
             f"{members}"
             f"}}"
         )
 
     def typedef(self, name, inplace_declaration=True):
         return (
-            f"typedef {self.declaration(name=name, semicolon=False) if inplace_declaration else self.typename + ' ' + name};"
+            f"typedef {self.declaration(name=name, semicolon=False) if inplace_declaration else self.type_name + ' ' + name};"
         )

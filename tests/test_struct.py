@@ -6,10 +6,10 @@ def test_struct():
     ExampleStruct = Struct("examplestruct_s", members=[
         StructMember(Variable("title", Int8)),
         StructMember(Variable("asdf", Int8), bitfield=3),
-        StructMember(Array("name", type=Int8, length=3, inplace_declaration=True)),
+        StructMember(Array("name", type=Int8, length=3)),
         StructMember(
             Variable("nestedstruct", inplace_declaration=True, type=Struct(
-                typename="nestedstruct_s",
+                type_name="nestedstruct_s",
                 members=[
                     StructMember(Variable("qwer", Int64)),
                 ]),
@@ -17,9 +17,8 @@ def test_struct():
         )
     ])
 
-    print(Variable("inst", type=ExampleStruct, inplace_declaration=True).declaration())
+    print(Variable("inst", type=ExampleStruct, inplace_declaration=False).declaration())
     print(Array("inst", type=ExampleStruct, length=10, inplace_declaration=True).declaration())
-
     print(ExampleStruct.typedef('structtype'))
 
 

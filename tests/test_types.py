@@ -1,13 +1,16 @@
-from ccg import Variable, Array
+from ccg import Style, Variable, Array
 from ccg.types import *
 
 
 def test_types():
+    style = Style()
+    style.check_hungarian = True
+
     var = Variable(
         type=Int8,
-        name="mycustomint"
+        name="i8Mycustomint"
     )
-    print(var.declaration())
+    print(var.declaration(style=style))
 
     print(Int8().typedef('mycustomtype'))
 
@@ -17,7 +20,7 @@ def test_types():
         length=10
     )
 
-    print(array.declaration())
+    print(array.declaration(style=style))
 
 
 if __name__ == "__main__":
