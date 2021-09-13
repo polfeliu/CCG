@@ -27,52 +27,52 @@ class BasicType(GenericType):
         return f"typedef {self.type_name} {name};"
 
 
-Int8 = BasicType(
+int8 = BasicType(
     type_name="int8_t",
     hungarian_prefix="i8"
 )
 
-UInt8 = BasicType(
+uint8 = BasicType(
     type_name="uint8_t",
     hungarian_prefix="u8"
 )
 
-Int16 = BasicType(
+int16 = BasicType(
     type_name="int16_t",
     hungarian_prefix="i16"
 )
 
-UInt16 = BasicType(
+uint16 = BasicType(
     type_name="uint16_t",
     hungarian_prefix="u16"
 )
 
-Int32 = BasicType(
+int32 = BasicType(
     type_name="int32_t",
     hungarian_prefix="i32"
 )
 
-UInt32 = BasicType(
+uint32 = BasicType(
     type_name="uint32_t",
     hungarian_prefix="u32"
 )
 
-Int64 = BasicType(
+int64 = BasicType(
     type_name="int8_t",
     hungarian_prefix="i8"
 )
 
-UInt64 = BasicType(
+uint64 = BasicType(
     type_name="uint64_t",
     hungarian_prefix="u64"
 )
 
-Float = BasicType(
+float = BasicType(
     type_name="float",
     hungarian_prefix="f"
 )
 
-Double = BasicType(
+double = BasicType(
     type_name="double",
     hungarian_prefix="db"
 )

@@ -6,8 +6,8 @@ def test_union():
     ExampleUnion = Union(
         type_name="asdf",
         members=[
-            Variable("var1", Int64),
-            Array("asdf", Int64, length=12)
+            Variable("var1", int64),
+            Array("asdf", int64, length=12)
         ]
     )
 

@@ -7,15 +7,15 @@ def test_types():
     style.check_hungarian = True
 
     var = Variable(
-        type=Int8,
+        type=int8,
         name="i8Mycustomint"
     )
     print(var.declaration(style=style))
 
-    print(Int8().typedef('mycustomtype'))
+    print(int8.typedef('mycustomtype'))
 
     array = Array(
-        type=Int8,
+        type=int8,
         name="asdf",
         length=10
     )

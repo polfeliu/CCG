@@ -4,14 +4,14 @@ from ccg.types import *
 
 def test_struct():
     ExampleStruct = Struct("examplestruct_s", members=[
-        StructMember(Variable("title", Int8)),
-        StructMember(Variable("asdf", Int8), bitfield=3),
-        StructMember(Array("name", type=Int8, length=3)),
+        StructMember(Variable("title", int8)),
+        StructMember(Variable("asdf", int8), bitfield=3),
+        StructMember(Array("name", type=int8, length=3)),
         StructMember(
             Variable("nestedstruct", inplace_declaration=True, type=Struct(
                 type_name="nestedstruct_s",
                 members=[
-                    StructMember(Variable("qwer", Int64)),
+                    StructMember(Variable("qwer", int64)),
                 ]),
                      )
         )

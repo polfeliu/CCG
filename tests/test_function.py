@@ -8,7 +8,7 @@ def test_function():
         return_type=Uint32,
         arguments=[
             FunctionArgument(name="asdf", type=Uint32),
-            FunctionArgument(name="qwerw", type=Double)
+            FunctionArgument(name="qwerw", type=double)
         ]
     )
 
