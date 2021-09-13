@@ -1,6 +1,7 @@
 from typing import List
 from textwrap import indent
-from CCGtypes import *
+from .types import *
+
 
 class Union(BasicType):
 
@@ -20,19 +21,5 @@ class Union(BasicType):
 
     def typedef(self, name, inplace_declaration=True):
         return (
-            f"typedef {self.declaration(name = name, semicolon=False) if inplace_declaration else self.typename + ' ' + name};"
+            f"typedef {self.declaration(name=name, semicolon=False) if inplace_declaration else self.typename + ' ' + name};"
         )
-
-
-if __name__ == "__main__":
-
-
-    ExampleUnion = Union(
-        typename="asdf",
-        members=[
-            Variable("var1", Int64),
-            Array("asdf", Int64, length=12)
-        ]
-    )
-
-    print(ExampleUnion.declaration())

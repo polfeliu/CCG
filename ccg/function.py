@@ -1,5 +1,6 @@
 from typing import List
-from CCGtypes import *
+from .types import *
+
 
 class FunctionArgument:
 
@@ -9,6 +10,7 @@ class FunctionArgument:
 
     name: str = None
     type = None
+
 
 class Function:
 
@@ -39,19 +41,5 @@ class Function:
             f"}}"
         )
 
-
     def prototype(self):
         pass
-
-if __name__ == "__main__":
-    from CCGtypes import Uint32
-    f = Function(
-        name="examplefun",
-        return_type=Uint32,
-        arguments=[
-            FunctionArgument(name="asdf", type=Uint32),
-            FunctionArgument(name="qwerw", type=Double)
-        ]
-        )
-
-    print(f.declaration())

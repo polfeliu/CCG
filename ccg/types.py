@@ -50,12 +50,10 @@ class Float(BasicType):
 class Double(BasicType):
     typename = "double"
 
-from CCGstruct import Struct
-from CCGunion import Union
 
 class Variable():
 
-    def __init__(self, name, type, inplace_declaration = False):
+    def __init__(self, name, type, inplace_declaration=False):
         self.type = type
         self.name = name
         if hasattr(type, "declaration"):
@@ -72,10 +70,11 @@ class Variable():
         else:
             return f"{self.type.typename} {self.name}{';' if semicolon else ''}"
 
+
 class Array(Variable):
 
-    def __init__(self, name, type, length, inplace_declaration = False):
-        super().__init__(name, type, inplace_declaration= inplace_declaration)
+    def __init__(self, name, type, length, inplace_declaration=False):
+        super().__init__(name, type, inplace_declaration=inplace_declaration)
         self.length = length
 
     length: int
@@ -85,20 +84,3 @@ class Array(Variable):
             return f"{self.type.declaration(semicolon=False)} {self.name}[{self.length}]{';' if semicolon else ''}"
         else:
             return f"{self.type.typename} {self.name}[{self.length}]{';' if semicolon else ''}"
-
-if __name__ == "__main__":
-    var = Variable(
-        type=Int8,
-        name="mycustomint"
-    )
-    print(var.declaration())
-
-    print(Int8().typedef('mycustomtype'))
-
-    array = Array(
-        type=Int8,
-        name="asdf",
-        length=10
-    )
-
-    print(array.declaration())
