@@ -1,5 +1,3 @@
-from .union import Union
-
 
 class Style:
     check_hungarian = False
@@ -27,5 +25,6 @@ class Style:
         return '\n' if self.new_line_function_bracket_close_after else ''
 
 
-
 default_style = Style()
+
+asdf = 1

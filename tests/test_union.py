@@ -6,8 +6,8 @@ def test_union():
     ExampleUnion = CUnion(
         type_name="asdf",
         members=[
-            CVariable("var1", int64),
-            CArray("asdf", int64, length=12)
+            CVariable("var1", Cint64),
+            CArray("asdf", Cint64, length=12)
         ]
     )
 

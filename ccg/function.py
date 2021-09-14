@@ -44,5 +44,5 @@ class CFunction:
             f"{style._new_line_function_bracket_close_before}}}{style._new_line_function_bracket_close_after}"
         )
 
-    def prototype(self, style: Union['Style', None] = None):
+    def prototype(self, style: 'Style' = default_style):
         pass

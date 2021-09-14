@@ -5,14 +5,14 @@ from common_style import style
 
 def test_struct():
     ExampleStruct = CStruct("TExamplestruct", members=[
-        StructMember(CVariable("i8Title", int8)),
-        StructMember(CVariable("i8Asdf", int8), bitfield=3),
-        StructMember(CArray("i8Name", type=int8, length=3)),
+        StructMember(CVariable("i8Title", Cint8)),
+        StructMember(CVariable("i8Asdf", Cint8), bitfield=3),
+        StructMember(CArray("i8Name", type=Cint8, length=3)),
         StructMember(
             CVariable("tNestedstruct", inplace_declaration=True, type=CStruct(
                 type_name="TNestedstruct",
                 members=[
-                    StructMember(CVariable("i64Qwer", int64)),
+                    StructMember(CVariable("i64Qwer", Cint64)),
                 ]),
                       )
         )

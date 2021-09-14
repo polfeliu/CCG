@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Union
-from .types import std_types
+from .types import std_types, HungarianNotationError
+from .style import default_style
 
 if TYPE_CHECKING:
     from .types import CGenericType
     from .style import Style
 
-from .types import HungarianNotationError
 
 class CVariable:
 
@@ -28,7 +28,7 @@ class CVariable:
 
         self.type.check_hungarian()
 
-    def declaration(self, semicolon=True, style: Union['Style', None] = None):
+    def declaration(self, semicolon=True, style: 'Style' = default_style):
         if style is not None:
             if style.check_hungarian:
                 self.check_hungarian()

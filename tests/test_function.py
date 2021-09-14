@@ -6,10 +6,10 @@ from common_style import style
 def test_function():
     f = CFunction(
         name="examplefun",
-        return_type=uint32,
+        return_type=Cuint32,
         arguments=[
-            CFunctionArgument(name="first", type=uint32),
-            CFunctionArgument(name="second", type=double)
+            CFunctionArgument(name="first", type=Cuint32),
+            CFunctionArgument(name="second", type=Cdouble)
         ]
     )
 

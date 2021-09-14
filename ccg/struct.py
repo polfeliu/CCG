@@ -2,6 +2,7 @@ from typing import List
 from textwrap import indent
 from .types import *
 
+from .style import default_style
 
 class StructMember:
 
@@ -9,7 +10,7 @@ class StructMember:
         self.variable = variable
         self.bitfield = bitfield
 
-    def declaration(self, style: Union['Style', None] = None):
+    def declaration(self, style: 'Style' = default_style):
         return (
             f"{self.variable.declaration(semicolon=False, style=style)}{f': {self.bitfield}' if self.bitfield else ''};"
         )
@@ -25,7 +26,7 @@ class CStruct(CBasicType):
 
     members: List[StructMember] = []
 
-    def declaration(self, name=None, semicolon=True, style: Union['Style', None] = None):
+    def declaration(self, name=None, semicolon=True, style: 'Style' = default_style):
         if style is not None:
             if style.check_hungarian:
                 self.check_hungarian()
@@ -39,7 +40,7 @@ class CStruct(CBasicType):
             f"}}"
         )
 
-    def typedef(self, name, inplace_declaration=True, style: Union['Style', None] = None):
+    def typedef(self, name, inplace_declaration=True, style: 'Style' = default_style):
         return (
             f"typedef {self.declaration(name=name, semicolon=False, style=style) if inplace_declaration else self.type_name + ' ' + name};"
         )

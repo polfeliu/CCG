@@ -1,6 +1,7 @@
 from .variable import CVariable
 
 from typing import TYPE_CHECKING, Union
+from .style import default_style
 
 if TYPE_CHECKING:
     from .style import Style
@@ -14,7 +15,7 @@ class CArray(CVariable):
 
     length: int
 
-    def declaration(self, semicolon=True, style: Union['Style', None] = None):
+    def declaration(self, semicolon=True, style: 'Style' = default_style):
         if style is not None:
             if style.check_hungarian:
                 self.check_hungarian()
