@@ -1,22 +1,15 @@
 from typing import List
 from .types import *
+from ccg import CVariable
 
 from .style import default_style
 
 
-class CFunctionArgument:
-
-    def __init__(self, name, type):
-        self.name = name
-        self.type = type
-
-    name: str = None
-    type = None
 
 
 class CFunction:
 
-    def __init__(self, name, return_type=None, arguments: List[CFunctionArgument] = None, content=None):
+    def __init__(self, name, return_type=None, arguments: List[CVariable] = None, content=None):
         if arguments is None:
             self.arguments = []
         else:
@@ -28,7 +21,7 @@ class CFunction:
 
     name: str
     return_type: CGenericType = None
-    arguments: List[CFunctionArgument]
+    arguments: List[CVariable]
     content = None  # TODO Change content for list of statements or something like that
 
     def _argument_list(self):

@@ -1,4 +1,5 @@
-from ccg import CFunction, CFunctionArgument
+from ccg import CFunction
+from ccg import CVariable
 from ccg.types import *
 
 from common_style import style
@@ -8,8 +9,8 @@ def test_function():
         name="examplefun",
         return_type=Cuint32,
         arguments=[
-            CFunctionArgument(name="first", type=Cuint32),
-            CFunctionArgument(name="second", type=Cdouble)
+            CVariable(name="first", type=Cuint32),
+            CVariable(name="second", type=Cdouble)
         ]
     )
 
