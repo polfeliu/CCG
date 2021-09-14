@@ -13,8 +13,8 @@ def test_function():
         ]
     )
 
-    print(f.declaration(style))
     print(f.prototype(style))
+    print(f.declaration(style))
 
 
 if __name__ == "__main__":
