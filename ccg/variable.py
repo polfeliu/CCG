@@ -1,6 +1,7 @@
-from typing import TYPE_CHECKING, Union
-from .types import std_types, HungarianNotationError
+from typing import TYPE_CHECKING
+
 from .style import default_style
+from .types import HungarianNotationError
 
 if TYPE_CHECKING:
     from .types import CGenericType
@@ -17,7 +18,10 @@ class CVariable:
         else:
             self.inplace_declaration = False
 
-    def check_hungarian(self):
+    def style_checks(self, style: 'Style'):
+        self.type.style_checks(style)
+
+        # hungarian
         if not self.name.startswith(self.type.hungarian_prefix):
             raise HungarianNotationError(
                 f"{self.name} doesn't doesn't have the hungarian prefix {self.type.hungarian_prefix}")
@@ -26,12 +30,8 @@ class CVariable:
             if not start_letter.isupper():
                 raise HungarianNotationError(f"{self.name} first letter is not uppercase")
 
-        self.type.check_hungarian()
-
     def declaration(self, semicolon=True, style: 'Style' = default_style):
-        if style is not None:
-            if style.check_hungarian:
-                self.check_hungarian()
+        self.style_checks(style)
 
         if self.inplace_declaration:
             return f"{self.type.declaration(semicolon=False, style=style)} {self.name}{';' if semicolon else ''}"  # TODO

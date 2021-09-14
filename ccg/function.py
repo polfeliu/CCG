@@ -5,8 +5,6 @@ from ccg import CVariable
 from .style import default_style
 
 
-
-
 class CFunction:
 
     def __init__(self, name, return_type=None, arguments: List[CVariable] = None, content=None):
@@ -33,9 +31,9 @@ class CFunction:
     def prototype(self, style: 'Style' = default_style, semicolon: bool = True):
         return (
             f"{self.return_type.type_name} "
-            f"{style._new_line_function_prototype_type}"
+            f"{style.vnew_line_function_prototype_type}"
             f"{self.name}"
-            f"{style._space_function_after_name_prototype}"
+            f"{style.vspace_function_after_name_prototype}"
             f"({self._argument_list()})"
             f"{';' if semicolon else ''}"
         )
@@ -44,9 +42,9 @@ class CFunction:
         return (
             f"{self.return_type.type_name} "
             f"{self.name}"
-            f"{style._space_function_after_name_declaration}"
+            f"{style.vspace_function_after_name_declaration}"
             f"({self._argument_list()})"
-            f"{style._new_line_function_bracket_open_before}{{{style._new_line_function_bracket_open_after}"
+            f"{style.vnew_line_function_bracket_open_before}{{{style.vnew_line_function_bracket_open_after}"
             f"{self.content if self.content is not None else ''}"
-            f"{style._new_line_function_bracket_close_before}}}{style._new_line_function_bracket_close_after};"
+            f"{style.vnew_line_function_bracket_close_before}}}{style.vnew_line_function_bracket_close_after};"
         )

@@ -4,6 +4,7 @@ from .types import *
 
 from .style import default_style
 
+
 class StructMember:
 
     def __init__(self, variable, bitfield=None):
@@ -27,9 +28,7 @@ class CStruct(CBasicType):
     members: List[StructMember] = []
 
     def declaration(self, name=None, semicolon=True, style: 'Style' = default_style):
-        if style is not None:
-            if style.check_hungarian:
-                self.check_hungarian()
+        self.style_checks(style)
 
         members = ""
         for member in self.members:

@@ -1,7 +1,7 @@
-from .variable import CVariable
+from typing import TYPE_CHECKING
 
-from typing import TYPE_CHECKING, Union
 from .style import default_style
+from .variable import CVariable
 
 if TYPE_CHECKING:
     from .style import Style
@@ -16,11 +16,13 @@ class CArray(CVariable):
     length: int
 
     def declaration(self, semicolon=True, style: 'Style' = default_style):
-        if style is not None:
-            if style.check_hungarian:
-                self.check_hungarian()
+        self.style_checks(style)
 
         if self.inplace_declaration:
-            return f"{self.type.declaration(semicolon=False, style=style)} {self.name}[{self.length}]{';' if semicolon else ''}"
+            return f"{self.type.declaration(semicolon=False, style=style)} " \
+                   f"{self.name}[{self.length}]" \
+                   f"{';' if semicolon else ''}"
         else:
-            return f"{self.type.type_name} {self.name}[{self.length}]{';' if semicolon else ''}"
+            return f"{self.type.type_name} " \
+                   f"{self.name}[{self.length}]" \
+                   f"{';' if semicolon else ''}"

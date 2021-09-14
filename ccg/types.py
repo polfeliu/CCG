@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from typing import Union, TYPE_CHECKING
-from .style import default_style
 
 if TYPE_CHECKING:
     from .style import Style
@@ -21,7 +20,8 @@ class CGenericType(ABC):
     def declaration(self, semicolon: bool, style: 'Style'):
         raise NotImplementedError(f"Only Structs and Unions types can be declared, not {self.type_name}")
 
-    def check_hungarian(self):
+    def style_checks(self, style: 'Style'):
+        # hungarian
         if self not in std_types:
             if not self.type_name.startswith('T'):
                 raise HungarianNotationError(
