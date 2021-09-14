@@ -1,6 +1,7 @@
 from ccg import CFunction, CFunctionArgument
 from ccg.types import *
 
+from common_style import style
 
 def test_function():
     f = CFunction(
@@ -12,8 +13,8 @@ def test_function():
         ]
     )
 
-    print(f.declaration())
-    print(f.prototype())
+    print(f.declaration(style))
+    print(f.prototype(style))
 
 
 if __name__ == "__main__":
