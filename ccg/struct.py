@@ -5,7 +5,7 @@ from .types import *
 from .style import default_style
 
 
-class StructMember:
+class CStructMember:
 
     def __init__(self, variable, bitfield=None):
         self.variable = variable
@@ -19,27 +19,66 @@ class StructMember:
 
 class CStruct(CBasicType):
 
-    def __init__(self, type_name: str, members: List[StructMember]):
+    def __init__(self, struct_def: 'CStructDef'):
         super(CStruct, self).__init__(
-            type_name=type_name
+            type_name=struct_def.type_name
         )
+        self.struct_def = struct_def
+
+    def definition(self, style: 'Style' = default_style) -> str:
+        self.style_checks(style)
+
+        return f"struct {self.type_name}"
+
+    def style_checks(self, style: 'Style'):
+        # Name of the struct type is not checked by hungarian
+        pass
+
+
+class CStructDef(CBasicType):
+
+    def __init__(self, name: Union[str, None] = None, members: List[CStructMember] = None):
+        super(CStructDef, self).__init__(
+            type_name=f"struct {name}"
+        )
+
+        if members is None or len(members) < 1:
+            raise KeyError("Structs have to have at least one struct member")
+
         self.members = members
 
-    members: List[StructMember] = []
+        self.name = name
+        self._struct = CStruct(
+            struct_def=self
+        )
 
-    def declaration(self, name=None, semicolon=True, style: 'Style' = default_style):
+    def style_checks(self, style: 'Style'):
+        # Name of the struct type is not checked by hungarian
+        pass
+
+    @property
+    def is_anonymous(self):
+        # If struct definition doesn't have a name the struct is anonymous
+        return self.name is None
+
+    @property
+    def struct(self):
+        return self._struct
+
+    def definition(self, style: 'Style' = default_style) -> str:
         self.style_checks(style)
 
         members = ""
         for member in self.members:
             members += indent(member.declaration(style=style), '\t') + "\n"
         return (
-            f"struct {self.type_name}{{\n"
+            f"struct {self.type_name}{{\n"  # TODO newline
             f"{members}"
             f"}}"
         )
 
-    def typedef(self, name, inplace_declaration=True, style: 'Style' = default_style):
-        return (
-            f"typedef {self.declaration(name=name, semicolon=False, style=style) if inplace_declaration else self.type_name + ' ' + name};"
-        )
+    def declaration(self, semicolon: bool = False, style: 'Style' = default_style):
+        return self.definition(style)
+
+    def typedef(self, style: 'Style' = default_style):
+        raise NotImplementedError

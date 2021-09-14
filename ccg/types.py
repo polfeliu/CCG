@@ -1,5 +1,7 @@
-from abc import ABC, abstractmethod
 from typing import Union, TYPE_CHECKING
+from copy import copy
+
+from .style import default_style
 
 if TYPE_CHECKING:
     from .style import Style
@@ -9,16 +11,13 @@ class HungarianNotationError(Exception):
     pass
 
 
-class CGenericType(ABC):
+class CGenericType:
     type_name: str
     hungarian_prefix = "t"
-
-    @abstractmethod
-    def typedef(self, *args, **kwargs):
-        raise NotImplementedError("Types should implement a typedef method")
+    derived_from: Union['CGenericType', None] = None
 
     def declaration(self, semicolon: bool, style: 'Style'):
-        raise NotImplementedError(f"Only Structs and Unions types can be declared, not {self.type_name}")
+        return self.type_name
 
     def style_checks(self, style: 'Style'):
         # hungarian
@@ -27,9 +26,20 @@ class CGenericType(ABC):
                 raise HungarianNotationError(
                     f"Generic Type ({self.type_name}) Doesn't start with T hungarian style prefix")
             else:
-                start_letter = self.type_name[len(self.hungarian_prefix)]
+                start_letter = self.type_name[1]
                 if not start_letter.isupper():
                     raise HungarianNotationError(f"{self.type_name} first letter is not uppercase")
+
+    def type(self, name: str):
+        new_type = copy(self)
+        new_type.type_name = name
+        new_type.derived_from = self
+        new_type.hungarian_prefix = CGenericType.hungarian_prefix
+
+        return new_type
+
+    def typedef(self, style: 'Style' = default_style):
+        return f"typedef {self.derived_from.declaration(semicolon=False, style=style)} {self.type_name};"
 
 
 class CBasicType(CGenericType):
@@ -39,9 +49,6 @@ class CBasicType(CGenericType):
 
         if hungarian_prefix is not None:
             self.hungarian_prefix = hungarian_prefix
-
-    def typedef(self, name, style: Union['Style', None] = None):
-        return f"typedef {self.type_name} {name};"
 
 
 Cint8 = CBasicType(

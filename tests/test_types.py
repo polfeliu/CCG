@@ -10,8 +10,6 @@ def test_types():
     )
     print(var.declaration(style=style))
 
-    print(Cint8.typedef('mycustomtype'))
-
     array = CArray(
         type=Cint8,
         name="i8Asdf",
@@ -19,6 +17,16 @@ def test_types():
     )
 
     print(array.declaration(style=style))
+
+    # New type
+    custom = Cint8.type('TMyCustomType')
+    var = CVariable(
+        type=custom,
+        name="tMyVar"
+    )
+
+    print(custom.typedef(style=style))
+    print(var.declaration(style=style))
 
 
 if __name__ == "__main__":

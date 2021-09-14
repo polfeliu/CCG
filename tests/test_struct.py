@@ -1,27 +1,38 @@
-from ccg import CStruct, StructMember, CVariable, CArray
+from ccg import CStructDef, CStruct, CStructMember, CVariable, CArray
 from ccg.types import *
 from common_style import style
 
 
 def test_struct():
-    ExampleStruct = CStruct("TExamplestruct", members=[
-        StructMember(CVariable("i8Title", Cint8)),
-        StructMember(CVariable("i8Asdf", Cint8), bitfield=3),
-        StructMember(CArray("i8Name", type=Cint8, length=3)),
-        StructMember(
-            CVariable("tNestedstruct", inplace_declaration=True, type=CStruct(
-                type_name="TNestedstruct",
+    # Struct definition
+    ExampleStructDef = CStructDef("TExamplestruct", members=[
+        CStructMember(CVariable("i8Title", Cint8)),
+        CStructMember(CVariable("i8Asdf", Cint8), bitfield=3),
+        CStructMember(CArray("i8Name", type=Cint8, length=3)),
+        CStructMember(
+            CVariable("tNestedstruct", type=CStructDef(
+                "TNestedstruct",
                 members=[
-                    StructMember(CVariable("i64Qwer", Cint64)),
+                    CStructMember(CVariable("i64Qwer", Cint64)),
                 ]),
+                      )
+        ),
+
+        CStructMember(
+            CVariable("tNestedstruct2", type=CStructDef(
+                "TNestedstruct2",
+                members=[
+                    CStructMember(CVariable("i64Qwer", Cint64)),
+                ]).struct,  # Reference the struct type, not the def, and its not declared inplace
                       )
         )
     ])
 
-    print(CVariable("tInst", type=ExampleStruct, inplace_declaration=False).declaration(style=style))
-    print(CArray("tInst", type=ExampleStruct, length=10, inplace_declaration=True).declaration(style=style))
-    print(ExampleStruct.typedef('structtype'))
+    print(ExampleStructDef.declaration(style))
 
+    # print(CVariable("tInst", type=ExampleStruct).declaration(style=style))
+    # print(CArray("tInst", type=ExampleStruct, length=10, inplace_declaration=True).declaration(style=style))
+    # print(ExampleStruct.typedef('structtype'))
 
 
 if __name__ == "__main__":

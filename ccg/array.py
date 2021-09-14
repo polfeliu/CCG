@@ -9,8 +9,8 @@ if TYPE_CHECKING:
 
 class CArray(CVariable):
 
-    def __init__(self, name, type, length, inplace_declaration=False):
-        super().__init__(name, type, inplace_declaration=inplace_declaration)
+    def __init__(self, name, type, length):
+        super().__init__(name, type)
         self.length = length
 
     length: int
@@ -18,11 +18,6 @@ class CArray(CVariable):
     def declaration(self, semicolon=True, style: 'Style' = default_style):
         self.style_checks(style)
 
-        if self.inplace_declaration:
-            return f"{self.type.declaration(semicolon=False, style=style)} " \
-                   f"{self.name}[{self.length}]" \
-                   f"{';' if semicolon else ''}"
-        else:
-            return f"{self.type.type_name} " \
-                   f"{self.name}[{self.length}]" \
-                   f"{';' if semicolon else ''}"
+        return f"{self.type.declaration(semicolon=False, style=style)} " \
+               f"{self.name}[{self.length}]" \
+               f"{';' if semicolon else ''}"
