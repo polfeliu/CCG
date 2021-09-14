@@ -5,6 +5,10 @@ if TYPE_CHECKING:
     from .style import Style
 
 
+class HungarianNotationError(Exception):
+    pass
+
+
 class CGenericType(ABC):
     type_name: str
     hungarian_prefix = "t"
@@ -16,12 +20,23 @@ class CGenericType(ABC):
     def declaration(self, semicolon=True, style: Union['Style', None] = None):
         raise NotImplementedError(f"Only Structs and Unions types can be declared, not {self.type_name}")
 
+    def check_hungarian(self):
+        if self not in std_types:
+            if not self.type_name.startswith('T'):
+                raise HungarianNotationError(f"Generic Type ({self.type_name}) Doesn't start with T hungarian style prefix")
+            else:
+                start_letter = self.type_name[len(self.hungarian_prefix)]
+                if not start_letter.isupper():
+                    raise HungarianNotationError(f"{self.type_name} first letter is not uppercase")
+
 
 class CBasicType(CGenericType):
 
-    def __init__(self, type_name, hungarian_prefix):
+    def __init__(self, type_name, hungarian_prefix=None):
         self.type_name = type_name
-        self.hungarian_prefix = hungarian_prefix
+
+        if hungarian_prefix is not None:
+            self.hungarian_prefix = hungarian_prefix
 
     def typedef(self, name, style: Union['Style', None] = None):
         return f"typedef {self.type_name} {name};"
@@ -76,3 +91,22 @@ double = CBasicType(
     type_name="double",
     hungarian_prefix="db"
 )
+
+bool = CBasicType(
+    type_name="bool",
+    hungarian_prefix=["b", "is"]
+)
+
+std_types = [
+    int8,
+    uint8,
+    int16,
+    uint16,
+    int32,
+    uint32,
+    int64,
+    uint64,
+    float,
+    double,
+    bool
+]

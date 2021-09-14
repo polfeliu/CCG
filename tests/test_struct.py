@@ -4,13 +4,13 @@ from common_style import style
 
 
 def test_struct():
-    ExampleStruct = CStruct("examplestruct_s", members=[
+    ExampleStruct = CStruct("TExamplestruct", members=[
         StructMember(CVariable("i8Title", int8)),
         StructMember(CVariable("i8Asdf", int8), bitfield=3),
         StructMember(CArray("i8Name", type=int8, length=3)),
         StructMember(
             CVariable("tNestedstruct", inplace_declaration=True, type=CStruct(
-                type_name="nestedstruct_s",
+                type_name="TNestedstruct",
                 members=[
                     StructMember(CVariable("i64Qwer", int64)),
                 ]),
@@ -19,7 +19,7 @@ def test_struct():
     ])
 
     print(CVariable("tInst", type=ExampleStruct, inplace_declaration=False).declaration(style=style))
-    print(CArray("inst", type=ExampleStruct, length=10, inplace_declaration=True).declaration(style=style))
+    print(CArray("tInst", type=ExampleStruct, length=10, inplace_declaration=True).declaration(style=style))
     print(ExampleStruct.typedef('structtype'))
 
 

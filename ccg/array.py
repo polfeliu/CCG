@@ -12,12 +12,14 @@ class CArray(CVariable):
         super().__init__(name, type, inplace_declaration=inplace_declaration)
         self.length = length
 
-        # TODO hungarian
-
     length: int
 
     def declaration(self, semicolon=True, style: Union['Style', None] = None):
+        if style is not None:
+            if style.check_hungarian:
+                self.check_hungarian()
+
         if self.inplace_declaration:
-            return f"{self.type.declaration(semicolon=False, style=style)} {self.name}[{self.length}]{';' if semicolon else ''}"  # TODO
+            return f"{self.type.declaration(semicolon=False, style=style)} {self.name}[{self.length}]{';' if semicolon else ''}"
         else:
             return f"{self.type.type_name} {self.name}[{self.length}]{';' if semicolon else ''}"

@@ -19,16 +19,17 @@ class CStruct(CBasicType):
 
     def __init__(self, type_name: str, members: List[StructMember]):
         super(CStruct, self).__init__(
-            type_name=type_name,
-            hungarian_prefix="t"
+            type_name=type_name
         )
         self.members = members
 
     members: List[StructMember] = []
 
-    # TODO Hungarian notation
-
     def declaration(self, name=None, semicolon=True, style: Union['Style', None] = None):
+        if style is not None:
+            if style.check_hungarian:
+                self.check_hungarian()
+
         members = ""
         for member in self.members:
             members += indent(member.declaration(style=style), '\t') + "\n"

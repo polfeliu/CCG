@@ -7,8 +7,8 @@ def test_function():
         name="examplefun",
         return_type=uint32,
         arguments=[
-            CFunctionArgument(name="asdf", type=uint32),
-            CFunctionArgument(name="qwerw", type=double)
+            CFunctionArgument(name="first", type=uint32),
+            CFunctionArgument(name="second", type=double)
         ]
     )
 
