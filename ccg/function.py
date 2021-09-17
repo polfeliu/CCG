@@ -31,7 +31,7 @@ class CFunction:
     def prototype(self, style: 'Style' = default_style, semicolon: bool = True):
         return (
             f"{self.return_type.type_name} "
-            f"{style.vnew_line_function_prototype_type}"
+            f"{style.vnew_line_struct_prototype_after_type}"
             f"{self.name}"
             f"{style.vspace_function_after_name_prototype}"
             f"({self._argument_list()})"

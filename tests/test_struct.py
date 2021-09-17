@@ -28,11 +28,20 @@ def test_struct():
         )
     ])
 
+    # Declaration of struct definition
     print(ExampleStructDef.declaration(style))
 
-    # print(CVariable("tInst", type=ExampleStruct).declaration(style=style))
-    # print(CArray("tInst", type=ExampleStruct, length=10, inplace_declaration=True).declaration(style=style))
-    # print(ExampleStruct.typedef('structtype'))
+    # Can declare a struct with a variable in the same sentence
+    print(CVariable("tInst", type=ExampleStructDef).declaration(style=style))
+
+    # Or assume the struct is already declared and use it as type
+    print(CVariable("tInst", type=ExampleStructDef.struct).declaration(style=style))
+
+    # Can do a typedef of the struct with the declaration of the struct inplace
+    print(ExampleStructDef.type("TMyStruct").typedef(style))
+
+    # Or the struct is already declared and can be typedefed afterwards
+    print(ExampleStructDef.struct.type("TMyStruct").typedef(style))
 
 
 if __name__ == "__main__":

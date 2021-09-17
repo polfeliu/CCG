@@ -67,18 +67,16 @@ class CStructDef(CBasicType):
 
     def definition(self, style: 'Style' = default_style) -> str:
         self.style_checks(style)
-
+        print(style.vbracket_struct_bracket_open)
         members = ""
         for member in self.members:
             members += indent(member.declaration(style=style), '\t') + "\n"
         return (
-            f"struct {self.type_name}{{\n"  # TODO newline
+            f"{self.type_name}"
+            f""  # TODO newline
             f"{members}"
             f"}}"
         )
 
     def declaration(self, semicolon: bool = False, style: 'Style' = default_style):
         return self.definition(style)
-
-    def typedef(self, style: 'Style' = default_style):
-        raise NotImplementedError
