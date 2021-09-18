@@ -25,9 +25,10 @@ class CGenericType(CGenericItem):
 
     def __init__(self,
                  name: str,
+                 bit_size: int = None,
                  hungarian_prefixes: Union[List[str], str] = "t",
                  derived_from: Union['CGenericType', None] = None,
-                 in_space: Union['CSpace', None] = None
+                 in_space: Union['CSpace', None] = None,
                  ):
         super(CGenericType, self).__init__(
             name=name,
@@ -37,6 +38,7 @@ class CGenericType(CGenericItem):
         if not isinstance(self.hungarian_prefixes, list):
             self.hungarian_prefixes = [self.hungarian_prefixes]
         self.derived_from = derived_from
+        self.bit_size = bit_size
 
     def declaration(self, semicolon: bool = False, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return self.name + (';' if semicolon else '')
@@ -88,6 +90,7 @@ class CIntegerType(CGenericType):
         else:
             self.minimum = 0
             self.maximum = 2 ** bits - 1
+        self.bit_size = bits
 
     def check_value(self, value: Any) -> bool:
         return value in range(self.minimum, self.maximum + 1)
@@ -152,16 +155,18 @@ Cuint64 = CIntegerType(
 Cfloat = CGenericType(
     name="float",
     hungarian_prefixes="f",
+    bit_size=32
 )
 
 Cdouble = CGenericType(
     name="double",
     hungarian_prefixes="db",
+    bit_size=64
 )
 
 Cbool = CGenericType(
     name="bool",
-    hungarian_prefixes=["b", "is"]
+    hungarian_prefixes=["b", "is"],
 )
 
 CVoidType = CGenericType(

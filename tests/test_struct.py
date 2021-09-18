@@ -46,6 +46,14 @@ def test_struct():
     # Or the struct is already declared and can be typedefed afterwards
     print(example_struct_def.struct.type("TMyStruct").typedef(style))
 
+    # Third member is the packed anonymous struct, can be reobtained
+    packed_struct = example_struct_def.members[3].variable.c_type
+    if not isinstance(packed_struct, CStructDef):
+        raise TypeError
+
+    # Only packed structs have bit_sizes, calculated. CCG Cant know the size of structs with possible padding
+    print(packed_struct.bit_size)
+
 
 if __name__ == "__main__":
     test_struct()

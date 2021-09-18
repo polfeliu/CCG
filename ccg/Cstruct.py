@@ -14,11 +14,21 @@ class CStructDefMember:
     def __init__(self, variable: 'CVariable', bitfield: Union[int, None] = None):
         self.variable = variable
         self.bitfield = bitfield
+        if bitfield is not None:
+            if bitfield > self.variable.c_type.bit_size:
+                raise ValueError("Bitfields should not be bigger than type size")
 
     def declaration(self, style: 'Style' = default_style) -> str:
         return (
             f"{self.variable.declaration(semicolon=False, style=style)}{f': {self.bitfield}' if self.bitfield else ''};"
         )
+
+    @property
+    def bit_size(self) -> int:
+        if self.bitfield is not None:
+            return self.bitfield
+        else:
+            return self.variable.c_type.bit_size
 
 
 class CStruct(CGenericType):
@@ -66,7 +76,6 @@ class CStructDef(CGenericType):
         self._struct = CStruct(
             struct_def=self
         )
-        print("asdf")
 
     def style_checks(self, style: 'Style') -> None:
         # Name of the struct type is not checked by hungarian
@@ -99,3 +108,19 @@ class CStructDef(CGenericType):
 
     def declaration(self, semicolon: bool = False, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return self.definition(style) + (';' if semicolon else '')
+
+    @property
+    def bit_size(self) -> int:
+        if not self.is_packed:
+            raise MemoryError(
+                "Cannot compute the bit_size of a non-packed struct"
+            )
+        else:
+            return sum(
+                [member.bit_size for member in self.members]
+            )
+
+    @bit_size.setter
+    def bit_size(self, value):
+        # Parent CGenericType will try to set bit_size. Ignore it
+        pass
