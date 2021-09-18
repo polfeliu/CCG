@@ -20,7 +20,6 @@ def test_types():
     except Exception as ex:
         print(ex)
 
-
     array = CArray(
         type=Cint8,
         name="i8Asdf",

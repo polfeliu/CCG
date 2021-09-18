@@ -15,9 +15,12 @@ class CFunctionArgument(CVariable):
         #  type, or in case of structs, fills the members
         super(CFunctionArgument, self).__init__(name, type)
         self.default = default
+        if default is not None:
+            if self.type.check_value(self._initial_value) is not True:
+                raise ValueError(f"Default value [{default}] does not fit type [{self.type.name}]")
 
 
-class CFunction:
+class CFunction:  # TODO This should also be a type, when asked, it's type name it should return a C pointer
 
     def __init__(self,
                  name: str,

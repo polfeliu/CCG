@@ -16,7 +16,7 @@ class CVariable:
         self._initial_value = initial_value
         if initial_value is not None:
             if self.type.check_value(self._initial_value) is not True:
-                raise ValueError(f"Initial value does not fit type {self.type.name}")
+                raise ValueError(f"Initial value [{initial_value}] does not fit type [{self.type.name}]")
 
     def style_checks(self, style: 'Style'):
         self.type.style_checks(style)

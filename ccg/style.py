@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Union
+from enum import Enum
 
 from textwrap import indent
 
@@ -25,6 +26,11 @@ class Style:
     new_line_union_bracket_close_after = False
     new_line_union_members = True
 
+    new_line_class_bracket_open_before = True
+    new_line_class_bracket_open_after = True
+    new_line_class_bracket_close_before = True
+    new_line_class_bracket_close_after = False
+
     # Spaces
     space_function_after_name_prototype = True
     space_function_after_name_declaration = True
@@ -45,6 +51,20 @@ class Style:
     space_union_bracket_close_before = False
     space_union_bracket_close_after = False
     space_union_members = False
+
+    space_class_bracket_open_before = False
+    space_class_bracket_open_after = False
+    space_class_bracket_close_before = False
+    space_class_bracket_close_after = False
+
+    # Indentation
+    indent_class_member = True
+
+    # Class member styles
+    class ClassMembers(Enum):
+        inline_access_preserve_order = 0
+
+    class_members = ClassMembers.inline_access_preserve_order
 
     def bracket_open(self, object) -> str:
         return (
@@ -76,8 +96,15 @@ class Style:
 
     indent_token = '\t'
 
-    def indent(self, value: str) -> str:
-        return indent(value, self.indent_token)
+    def indent(self, value: str, object: Union[str, None] = None) -> str:
+        style_set = False
+        if object is not None:
+            style_set = self.__getattribute__(f"indent_{object}")
+
+        if style_set:
+            return indent(value, self.indent_token)
+        else:
+            return value
 
     def check_hungarian_variable(self, variable_name: str, hungarian_prefixes: List[str]) -> bool:
         for hungarian_prefix in hungarian_prefixes:
