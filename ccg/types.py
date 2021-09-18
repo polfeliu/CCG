@@ -35,7 +35,7 @@ class CGenericType:
         Returns:
             boolean indicating if value fits type (True) or not
         """
-        raise NotImplementedError
+        return True  # Generic type accept everything. Override this method to check custom types
 
     def style_checks(self, style: 'Style') -> None:
         # hungarian
