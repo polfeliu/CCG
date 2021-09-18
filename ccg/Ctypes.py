@@ -20,24 +20,6 @@ class CGenericItem(CSpace):
             in_space=in_space
         )
         self.name = name
-        self._space = in_space
-
-    @property
-    def space(self):
-        return self._space
-
-    @space.setter
-    def space(self, space: Union['CSpace', None]):
-        self._space = space
-
-    @property
-    def full_space(self):
-        space_def = ""
-        if self.space is not None:
-            for space in self.space.full_space_list:
-                space_def += f"{space.item.name}::"
-
-        return space_def
 
 
 class CGenericType(CGenericItem):

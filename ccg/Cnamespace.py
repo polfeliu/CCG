@@ -10,5 +10,15 @@ class CSpace:
     def full_space_list(self):
         return [self]
 
+    @property
+    def full_space(self):
+        space_def = ""
+        if self.space is not None:
+            for space in self.space.full_space_list:
+                space_def += f"{space.item.name}::"
+
+        return space_def
+
+
 class CNamespace(CSpace):
     pass
