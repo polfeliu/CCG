@@ -20,24 +20,30 @@ class CFunctionArgument(CVariable):
                 raise ValueError(f"Default value [{default}] does not fit type [{self.type.name}]")
 
 
-class CFunction:  # TODO This should also be a type, when asked, it's type name it should return a C pointer
+class CFunction(
+    CGenericType):  # TODO This should also be a type, when asked, it's type name it should return a C pointer
 
     Argument = CFunctionArgument
 
     def __init__(self,
                  name: str,
-                 return_type: Union[CGenericType, None] = None,
+                 return_type: Union['CGenericType', None] = None,
                  arguments: Union[List[CFunctionArgument], None] = None,
-                 content=None):
+                 content=None,
+                 ):
+        super(CFunction, self).__init__(
+            name=name,
+            hungarian_prefixes=[]
+        )
         if arguments is None:
             self.arguments = []
         else:
             self.arguments = arguments
 
-        self.name = name
         self.return_type = return_type
         if self.return_type is None:
             self.return_type = CVoidType
+
         self.content = content  # TODO Change content for list of statements or something like
 
         # Check that non-default arguments are after default arguments
@@ -73,6 +79,7 @@ class CFunction:  # TODO This should also be a type, when asked, it's type name 
     def definition(self, style: 'Style' = default_style) -> str:
         return (
             f"{self.return_type.name} "
+            f"{self.full_space}"
             f"{self.name}"
             f"{style.vspace_function_after_name_declaration}"
             f"({self._argument_list()})"

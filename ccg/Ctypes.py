@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Union, List, Any
 from copy import copy
 
 from .style import default_style
+from .Cnamespace import CSpace
 
 if TYPE_CHECKING:
     from .style import Style
@@ -11,13 +12,44 @@ class HungarianNotationError(Exception):
     pass
 
 
-class CGenericType:
+class CGenericItem(CSpace):
+
+    def __init__(self, name, in_space: Union['CSpace', None] = None):
+        super(CGenericItem, self).__init__(
+            item=self,
+            in_space=in_space
+        )
+        self.name = name
+        self._space = in_space
+
+    @property
+    def space(self):
+        return self._space
+
+    @space.setter
+    def space(self, space: Union['CSpace', None]):
+        self._space = space
+
+    @property
+    def full_space(self):
+        space_def = ""
+        if self.space is not None:
+            for space in self.space.full_space_list:
+                space_def += f"{space.item.name}::"
+
+        return space_def
+
+
+class CGenericType(CGenericItem):
 
     def __init__(self,
                  name: str,
                  hungarian_prefixes: Union[List[str], str] = "t",
-                 derived_from: Union['CGenericType', None] = None):
-        self.name = name
+                 derived_from: Union['CGenericType', None] = None,
+                 ):
+        super(CGenericType, self).__init__(
+            name=name
+        )
         self.hungarian_prefixes = hungarian_prefixes
         if not isinstance(self.hungarian_prefixes, list):
             self.hungarian_prefixes = [self.hungarian_prefixes]
@@ -152,7 +184,6 @@ Cbool = CGenericType(
 CVoidType = CGenericType(
     name='void'
 )
-
 
 std_types = [
     Cint8,

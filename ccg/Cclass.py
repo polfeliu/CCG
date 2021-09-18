@@ -6,6 +6,7 @@ from .Ctypes import CGenericType
 
 from .Cvariable import CVariable
 from .Cfunction import CFunction
+from .Cnamespace import CSpace
 
 if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
@@ -95,6 +96,7 @@ class CClass(CGenericType):
         for member in self.members:
             if isinstance(member, CClassConstructor):
                 member.name = self.name
+            member.space = self
 
     def declaration(self, semicolon: bool = True, style: 'Style' = default_style) -> str:
         self.style_checks(style)

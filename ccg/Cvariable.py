@@ -2,17 +2,20 @@ from typing import TYPE_CHECKING, Any
 
 from .style import default_style
 from .Ctypes import HungarianNotationError
+from .Ctypes import CGenericItem
 
 if TYPE_CHECKING:
     from .Ctypes import CGenericType
     from .style import Style
 
 
-class CVariable:
+class CVariable(CGenericItem):
 
     def __init__(self, name: str, type: 'CGenericType', initial_value: Any = None):
+        super(CVariable, self).__init__(
+            name=name
+        )
         self.type = type
-        self.name = name
         self._initial_value = initial_value
         if initial_value is not None:
             if self.type.check_value(self._initial_value) is not True:
