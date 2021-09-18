@@ -1,11 +1,11 @@
-from ccg import CStructDef, CStruct, CStructMember, CVariable, CArray
+from ccg import CStructDef, CStructMember, CVariable, CArray
 from ccg.types import *
 from common_style import style
 
 
 def test_struct():
     # Struct definition
-    ExampleStructDef = CStructDef("TExamplestruct", members=[
+    example_struct_def = CStructDef("TExamplestruct", members=[
         CStructMember(CVariable("i8Title", Cint8)),
         CStructMember(CVariable("i8Asdf", Cint8), bitfield=3),
         CStructMember(CArray("i8Name", type=Cint8, length=3)),
@@ -29,19 +29,19 @@ def test_struct():
     ])
 
     # Declaration of struct definition
-    print(ExampleStructDef.declaration(style))
+    print(example_struct_def.declaration(style))
 
     # Can declare a struct with a variable in the same sentence
-    print(CVariable("tInst", type=ExampleStructDef).declaration(style=style))
+    print(CVariable("tInst", type=example_struct_def).declaration(style=style))
 
     # Or assume the struct is already declared and use it as type
-    print(CVariable("tInst", type=ExampleStructDef.struct).declaration(style=style))
+    print(CVariable("tInst", type=example_struct_def.struct).declaration(style=style))
 
     # Can do a typedef of the struct with the declaration of the struct inplace
-    print(ExampleStructDef.type("TMyStruct").typedef(style))
+    print(example_struct_def.type("TMyStruct").typedef(style))
 
     # Or the struct is already declared and can be typedefed afterwards
-    print(ExampleStructDef.struct.type("TMyStruct").typedef(style))
+    print(example_struct_def.struct.type("TMyStruct").typedef(style))
 
 
 if __name__ == "__main__":
