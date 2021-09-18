@@ -38,7 +38,7 @@ class CGenericType(CGenericItem):
             self.hungarian_prefixes = [self.hungarian_prefixes]
         self.derived_from = derived_from
 
-    def declaration(self, semicolon: bool = False, style: 'Style' = default_style) -> str:
+    def declaration(self, semicolon: bool = False, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return self.name + (';' if semicolon else '')
 
     def check_value(self, value: Any) -> bool:
@@ -166,6 +166,10 @@ Cbool = CGenericType(
 
 CVoidType = CGenericType(
     name='void'
+)
+
+CNoType = CGenericType(
+    name=''
 )
 
 std_types = [

@@ -73,5 +73,5 @@ class CUnionDef(CGenericType):
             f"{style.bracket_close('union')}"
         )
 
-    def declaration(self, semicolon: bool = False, style: 'Style' = default_style) -> str:
+    def declaration(self, semicolon: bool = False, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return self.definition(style) + (';' if semicolon else '')

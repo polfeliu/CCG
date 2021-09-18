@@ -91,5 +91,5 @@ class CStructDef(CGenericType):
             f"{style.bracket_close('struct')}"
         )
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = False) -> str:
+    def declaration(self, semicolon: bool = False, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return self.definition(style) + (';' if semicolon else '')

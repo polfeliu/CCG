@@ -33,10 +33,10 @@ class CVariable(CGenericItem):
                 f"{self.name} doesn't doesn't have the hungarian prefix {self.type.hungarian_prefixes} "
                 f"or the first letter is not uppercase")
 
-    def declaration(self, semicolon=True, style: 'Style' = default_style):
+    def declaration(self, semicolon=True, style: 'Style' = default_style, from_space: 'CSpace' = None):
         self.style_checks(style)
 
-        return (f"{self.type.declaration(semicolon=False, style=style)}"
+        return (f"{self.type.declaration(semicolon=False, style=style, from_space=from_space)}"
                 f" {self.name}"
                 f"{' = ' + str(self._initial_value) if self._initial_value is not None else ''}"
                 f"{';' if semicolon else ''}"

@@ -2,11 +2,10 @@ from typing import TYPE_CHECKING, List, Union, Any
 from enum import Enum
 
 from .style import Style, default_style
-from .Ctypes import CGenericType
+from .Ctypes import CGenericType, CVoidType, CNoType
 
 from .Cvariable import CVariable
 from .Cfunction import CFunction
-from .Cnamespace import CSpace
 
 if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
@@ -39,7 +38,7 @@ class CClassMethod(CFunction):
 
     def __init__(self,
                  name: str,
-                 return_type: Union[CGenericType, None] = None,
+                 return_type: CGenericType = CVoidType,
                  arguments: Union[List['CFunctionArgument'], None] = None,
                  content=None,
                  access: CClassAccess = CClassAccess.private
@@ -62,20 +61,11 @@ class CClassConstructor(CClassMethod):
                  ):
         super(CClassMethod, self).__init__(
             name='',  # Name of the function is injected by Cclass TODO
-            return_type=None,  # Ensure no type is placed here
+            return_type=CNoType,  # Ensure no type is placed here
             arguments=arguments,
             content=content
         )
         self.access = access
-
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = True) -> str:
-        return (
-            f"{style.vnew_line_function_declaration_after_type}"
-            f"{self.name}"
-            f"{style.vspace_function_after_name_declaration}"
-            f"({self._argument_list(include_defaults=True)})"
-            f"{';' if semicolon else ''}"
-        )
 
 
 class CClass(CGenericType):
@@ -98,7 +88,7 @@ class CClass(CGenericType):
                 member.name = self.name
             member.in_space = self
 
-    def declaration(self, semicolon: bool = True, style: 'Style' = default_style) -> str:
+    def declaration(self, semicolon: bool = False, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         self.style_checks(style)
         return f"class {self.name}{';' if semicolon else ''}"
 
@@ -108,7 +98,7 @@ class CClass(CGenericType):
             for member in self.members:
                 content += style.indent(
                     f"{member.access.name}: "
-                    f"{member.declaration()}",
+                    f"{member.declaration(from_space=self)}",
                     "class_member"
                 )
         if style.class_members == Style.ClassMembers.group_by_access_specified:
@@ -119,7 +109,7 @@ class CClass(CGenericType):
                     access_content = f"{access.name}:\n"
 
                     for member in access_members:
-                        access_content += style.indent(member.declaration(), "class_member")
+                        access_content += style.indent(member.declaration(from_space=self), "class_member")
 
                     access_content = style.indent(access_content, "class_access")
                     access_contents.append(access_content)

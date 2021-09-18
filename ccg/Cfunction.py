@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, List, Union
 from ccg import CVariable
 
 from .style import default_style
-from .Ctypes import CGenericType, CVoidType
+from .Ctypes import CGenericType, CVoidType, CNoType
 
 if TYPE_CHECKING:
     from .style import Style
@@ -20,14 +20,14 @@ class CFunctionArgument(CVariable):
                 raise ValueError(f"Default value [{default}] does not fit type [{self.type.name}]")
 
 
-class CFunction(
-    CGenericType):  # TODO This should also be a type, when asked, it's type name it should return a C pointer
+class CFunction(CGenericType):
+    # TODO This should also be a type, when asked, it's type name it should return a C pointer
 
     Argument = CFunctionArgument
 
     def __init__(self,
                  name: str,
-                 return_type: Union['CGenericType', None] = None,
+                 return_type: CGenericType = CVoidType,
                  arguments: Union[List[CFunctionArgument], None] = None,
                  content=None,
                  in_space: Union['CSpace', None] = None
@@ -43,8 +43,6 @@ class CFunction(
             self.arguments = arguments
 
         self.return_type = return_type
-        if self.return_type is None:
-            self.return_type = CVoidType
 
         self.content = content  # TODO Change content for list of statements or something like
 
@@ -70,7 +68,8 @@ class CFunction(
 
     def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
         return (
-            f"{self.return_type.name} "
+            f"{self.return_type.name}"
+            f"{' ' if self.return_type is not CNoType else ''}"
             f"{style.vnew_line_function_declaration_after_type}"
             f"{self.space_def(from_space)}"
             f"{self.name}"
@@ -81,7 +80,8 @@ class CFunction(
 
     def definition(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return (
-            f"{self.return_type.name} "
+            f"{self.return_type.name}"
+            f"{' ' if self.return_type is not CNoType else ''}"
             f"{self.space_def(from_space)}"
             f"{self.name}"
             f"{style.vspace_function_after_name_definition}"
