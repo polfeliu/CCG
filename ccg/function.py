@@ -56,7 +56,7 @@ class CFunction:  # TODO This should also be a type, when asked, it's type name 
             argumentlist += f"{argument.type.name} {argument.name}{default}, "
         return argumentlist.rstrip(", ")
 
-    def prototype(self, style: 'Style' = default_style, semicolon: bool = True) -> str:
+    def declaration(self, style: 'Style' = default_style, semicolon: bool = True) -> str:
         return (
             f"{self.return_type.name} "
             f"{style.vnew_line_function_prototype_after_type}"
@@ -66,7 +66,7 @@ class CFunction:  # TODO This should also be a type, when asked, it's type name 
             f"{';' if semicolon else ''}"
         )
 
-    def declaration(self, style: 'Style' = default_style) -> str:
+    def definition(self, style: 'Style' = default_style) -> str:
         return (
             f"{self.return_type.name} "
             f"{self.name}"

@@ -14,8 +14,8 @@ def test_function():
         ]
     )
 
-    print(f.prototype(style))
     print(f.declaration(style))
+    print(f.definition(style))
 
 
 if __name__ == "__main__":
