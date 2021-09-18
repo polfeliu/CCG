@@ -44,7 +44,7 @@ class Style:
     space_struct_bracket_open_after = False
     space_struct_bracket_close_before = False
     space_struct_bracket_close_after = False
-    space_struct_members = True
+    space_struct_members = False
 
     space_union_bracket_open_before = False
     space_union_bracket_open_after = False
@@ -97,7 +97,7 @@ class Style:
     indent_token = '\t'
 
     def indent(self, value: str, object: Union[str, None] = None) -> str:
-        style_set = False
+        style_set = True
         if object is not None:
             style_set = self.__getattribute__(f"indent_{object}")
 
