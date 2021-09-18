@@ -8,7 +8,10 @@ class CSpace:
 
     @property
     def full_space_list(self):
-        return [self]
+        if self.in_space is None:
+            return [self]
+        else:
+            return [self, self.in_space.full_space_list]
 
     @property
     def full_space(self):
