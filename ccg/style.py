@@ -32,8 +32,8 @@ class Style:
     new_line_class_bracket_close_after = False
 
     # Spaces
-    space_function_after_name_prototype = True
-    space_function_after_name_declaration = True
+    space_function_after_name_prototype = False
+    space_function_after_name_declaration = False
 
     space_function_bracket_open_before = False
     space_function_bracket_open_after = False
@@ -59,13 +59,15 @@ class Style:
 
     # Indentation
     indent_class_member = True
+    indent_class_access = False
     indent_struct_member = True
 
     # Class member styles
     class ClassMembers(Enum):
         inline_access_preserve_order = 0
+        group_by_access_specified = 1
 
-    class_members = ClassMembers.inline_access_preserve_order
+    class_members = ClassMembers.group_by_access_specified
 
     def bracket_open(self, object) -> str:
         return (

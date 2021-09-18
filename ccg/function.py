@@ -7,6 +7,7 @@ from .types import CGenericType
 if TYPE_CHECKING:
     from .style import Style
 
+CVoidType = CGenericType(name='void')
 
 class CFunctionArgument(CVariable):
 
@@ -34,6 +35,8 @@ class CFunction:  # TODO This should also be a type, when asked, it's type name 
 
         self.name = name
         self.return_type = return_type
+        if self.return_type is None:
+            self.return_type = CVoidType
         self.content = content  # TODO Change content for list of statements or something like
 
         # Check that non-default arguments are after default arguments

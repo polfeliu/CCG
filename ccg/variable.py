@@ -27,7 +27,7 @@ class CVariable:
                 hungarian_prefixes=self.type.hungarian_prefixes
         ):
             raise HungarianNotationError(
-                f"{self.name} doesn't doesn't have the hungarian prefix [{self.type.hungarian_prefixes}] "
+                f"{self.name} doesn't doesn't have the hungarian prefix {self.type.hungarian_prefixes} "
                 f"or the first letter is not uppercase")
 
     def declaration(self, semicolon=True, style: 'Style' = default_style):
