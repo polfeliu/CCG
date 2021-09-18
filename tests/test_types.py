@@ -6,9 +6,20 @@ from common_style import style
 def test_types():
     var = CVariable(
         type=Cint8,
-        name="i8Mycustomint"
+        name="i8Mycustomint",
+        initial_value=4
     )
     print(var.declaration(style=style))
+
+    try:
+        var = CVariable(
+            type=Cuint8,
+            name="i8Mycustomint_invalid",
+            initial_value=500
+        )
+    except Exception as ex:
+        print(ex)
+
 
     array = CArray(
         type=Cint8,

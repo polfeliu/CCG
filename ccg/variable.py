@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from .style import default_style
 from .types import HungarianNotationError
@@ -10,9 +10,13 @@ if TYPE_CHECKING:
 
 class CVariable:
 
-    def __init__(self, name: str, type: 'CGenericType'):
+    def __init__(self, name: str, type: 'CGenericType', initial_value: Any = None):
         self.type = type
         self.name = name
+        self._initial_value = initial_value
+        if initial_value is not None:
+            if self.type.check_value(self._initial_value) is not True:
+                raise ValueError(f"Initial value does not fit type {self.type.name}")
 
     def style_checks(self, style: 'Style'):
         self.type.style_checks(style)
@@ -29,4 +33,8 @@ class CVariable:
     def declaration(self, semicolon=True, style: 'Style' = default_style):
         self.style_checks(style)
 
-        return f"{self.type.declaration(semicolon=False, style=style)} {self.name}{';' if semicolon else ''}"  # TODO
+        return (f"{self.type.declaration(semicolon=False, style=style)}"
+                f" {self.name}"
+                f"{' = ' + str(self._initial_value) if self._initial_value is not None else ''}"
+                f"{';' if semicolon else ''}"
+                )

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union, List
+from typing import TYPE_CHECKING, Union, List, Any
 from copy import copy
 
 from .style import default_style
@@ -26,6 +26,17 @@ class CGenericType:
     def declaration(self, semicolon: bool = False, style: 'Style' = default_style) -> str:
         return self.name + (';' if semicolon else '')
 
+    def check_value(self, value: Any) -> bool:
+        """Checks that a value is correct for the type
+
+        Args:
+            value: value to check
+
+        Returns:
+            boolean indicating if value fits type (True) or not
+        """
+        raise NotImplementedError
+
     def style_checks(self, style: 'Style') -> None:
         # hungarian
         if self not in std_types:
@@ -49,66 +60,91 @@ class CGenericType:
         return f"typedef {self.derived_from.declaration(semicolon=False, style=style)} {self.name};"
 
 
-class CBasicType(CGenericType):
+class CIntegerType(CGenericType):
 
-    def __init__(self, name: str, hungarian_prefixes: Union[List[str], str]):
-        super(CBasicType, self).__init__(
+    def __init__(self, name: str, hungarian_prefixes: Union[List[str], str], bits: int, isSigned: bool):
+        super(CIntegerType, self).__init__(
             name=name,
             hungarian_prefixes=hungarian_prefixes
         )
+        if isSigned:
+            self.minimum = -2 ** (bits - 1)
+            self.maximum = 2 ** (bits - 1) - 1
+        else:
+            self.minimum = 0
+            self.maximum = 2 ** (bits) - 1
+
+    def check_value(self, value: Any) -> bool:
+        return value in range(self.minimum, self.maximum + 1)
 
 
-Cint8 = CBasicType(
+Cint8 = CIntegerType(
     name="int8_t",
-    hungarian_prefixes="i8"
+    hungarian_prefixes="i8",
+    bits=8,
+    isSigned=True
 )
 
-Cuint8 = CBasicType(
+Cuint8 = CIntegerType(
     name="uint8_t",
-    hungarian_prefixes="u8"
+    hungarian_prefixes="u8",
+    bits=8,
+    isSigned=False
 )
 
-Cint16 = CBasicType(
+Cint16 = CIntegerType(
     name="int16_t",
-    hungarian_prefixes="i16"
+    hungarian_prefixes="i16",
+    bits=16,
+    isSigned=True
 )
 
-Cuint16 = CBasicType(
+Cuint16 = CIntegerType(
     name="uint16_t",
-    hungarian_prefixes="u16"
+    hungarian_prefixes="u16",
+    bits=16,
+    isSigned=False
 )
 
-Cint32 = CBasicType(
+Cint32 = CIntegerType(
     name="int32_t",
-    hungarian_prefixes="i32"
+    hungarian_prefixes="i32",
+    bits=32,
+    isSigned=True
 )
 
-Cuint32 = CBasicType(
+Cuint32 = CIntegerType(
     name="uint32_t",
-    hungarian_prefixes="u32"
+    hungarian_prefixes="u32",
+    bits=32,
+    isSigned=False
 )
 
-Cint64 = CBasicType(
+Cint64 = CIntegerType(
     name="int8_t",
-    hungarian_prefixes="i64"
+    hungarian_prefixes="i64",
+    bits=64,
+    isSigned=True
 )
 
-Cuint64 = CBasicType(
+Cuint64 = CIntegerType(
     name="uint64_t",
-    hungarian_prefixes="u64"
+    hungarian_prefixes="u64",
+    bits=64,
+    isSigned=False
 )
 
-Cfloat = CBasicType(
+Cfloat = CGenericType(
     name="float",
-    hungarian_prefixes="f"
+    hungarian_prefixes="f",
 )
 
-Cdouble = CBasicType(
+Cdouble = CGenericType(
     name="double",
-    hungarian_prefixes="db"
+    hungarian_prefixes="db",
 )
 
-Cbool = CBasicType(
+Cbool = CGenericType(
     name="bool",
     hungarian_prefixes=["b", "is"]
 )
