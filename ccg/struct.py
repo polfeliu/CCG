@@ -78,7 +78,7 @@ class CStructDef(CGenericType):
         for member in self.members:
             member_declaration = member.declaration(style=style)
             if style.new_line_union_members:
-                member_declaration = style.indent(member_declaration)
+                member_declaration = style.indent(member_declaration, 'struct_member')
             members += member_declaration
             if member != self.members[-1]:  # Is not last member
                 members += style.vnew_line_struct_members

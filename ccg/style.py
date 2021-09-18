@@ -59,6 +59,7 @@ class Style:
 
     # Indentation
     indent_class_member = True
+    indent_struct_member = True
 
     # Class member styles
     class ClassMembers(Enum):
