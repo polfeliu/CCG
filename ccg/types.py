@@ -1,4 +1,4 @@
-from typing import Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Union, List
 from copy import copy
 
 from .style import default_style
@@ -12,98 +12,105 @@ class HungarianNotationError(Exception):
 
 
 class CGenericType:
-    type_name: str
-    hungarian_prefix = "t"
-    derived_from: Union['CGenericType', None] = None
 
-    def declaration(self, semicolon: bool = False, style: 'Style' = default_style):
-        return self.type_name + (';' if semicolon else '')
+    def __init__(self,
+                 name: str,
+                 hungarian_prefixes: Union[List[str], str] = "t",
+                 derived_from: Union['CGenericType', None] = None):
+        self.name = name
+        self.hungarian_prefixes = hungarian_prefixes
+        if not isinstance(self.hungarian_prefixes, list):
+            self.hungarian_prefixes = [self.hungarian_prefixes]
+        self.derived_from = derived_from
 
-    def style_checks(self, style: 'Style'):
+    def declaration(self, semicolon: bool = False, style: 'Style' = default_style) -> str:
+        return self.name + (';' if semicolon else '')
+
+    def style_checks(self, style: 'Style') -> None:
         # hungarian
         if self not in std_types:
-            if not self.type_name.startswith('T'):
+            if not self.name.startswith('T'):
                 raise HungarianNotationError(
-                    f"Generic Type ({self.type_name}) Doesn't start with T hungarian style prefix")
+                    f"Generic Type ({self.name}) Doesn't start with T hungarian style prefix")
             else:
-                start_letter = self.type_name[1]
+                start_letter = self.name[1]
                 if not start_letter.isupper():
-                    raise HungarianNotationError(f"{self.type_name} first letter is not uppercase")
+                    raise HungarianNotationError(f"{self.name} first letter is not uppercase")
 
-    def type(self, name: str):
+    def type(self, name: str) -> 'CGenericType':
         new_type = copy(self)
-        new_type.type_name = name
+        new_type.name = name
         new_type.derived_from = self
-        new_type.hungarian_prefix = CGenericType.hungarian_prefix
+        new_type.hungarian_prefixes = ["t"]
 
         return new_type
 
     def typedef(self, style: 'Style' = default_style):
-        return f"typedef {self.derived_from.declaration(semicolon=False, style=style)} {self.type_name};"
+        return f"typedef {self.derived_from.declaration(semicolon=False, style=style)} {self.name};"
 
 
 class CBasicType(CGenericType):
 
-    def __init__(self, type_name, hungarian_prefix=None):
-        self.type_name = type_name
-
-        if hungarian_prefix is not None:
-            self.hungarian_prefix = hungarian_prefix
+    def __init__(self, name: str, hungarian_prefixes: Union[List[str], str]):
+        super(CBasicType, self).__init__(
+            name=name,
+            hungarian_prefixes=hungarian_prefixes
+        )
 
 
 Cint8 = CBasicType(
-    type_name="int8_t",
-    hungarian_prefix="i8"
+    name="int8_t",
+    hungarian_prefixes="i8"
 )
 
 Cuint8 = CBasicType(
-    type_name="uint8_t",
-    hungarian_prefix="u8"
+    name="uint8_t",
+    hungarian_prefixes="u8"
 )
 
 Cint16 = CBasicType(
-    type_name="int16_t",
-    hungarian_prefix="i16"
+    name="int16_t",
+    hungarian_prefixes="i16"
 )
 
 Cuint16 = CBasicType(
-    type_name="uint16_t",
-    hungarian_prefix="u16"
+    name="uint16_t",
+    hungarian_prefixes="u16"
 )
 
 Cint32 = CBasicType(
-    type_name="int32_t",
-    hungarian_prefix="i32"
+    name="int32_t",
+    hungarian_prefixes="i32"
 )
 
 Cuint32 = CBasicType(
-    type_name="uint32_t",
-    hungarian_prefix="u32"
+    name="uint32_t",
+    hungarian_prefixes="u32"
 )
 
 Cint64 = CBasicType(
-    type_name="int8_t",
-    hungarian_prefix="i64"
+    name="int8_t",
+    hungarian_prefixes="i64"
 )
 
 Cuint64 = CBasicType(
-    type_name="uint64_t",
-    hungarian_prefix="u64"
+    name="uint64_t",
+    hungarian_prefixes="u64"
 )
 
 Cfloat = CBasicType(
-    type_name="float",
-    hungarian_prefix="f"
+    name="float",
+    hungarian_prefixes="f"
 )
 
 Cdouble = CBasicType(
-    type_name="double",
-    hungarian_prefix="db"
+    name="double",
+    hungarian_prefixes="db"
 )
 
 Cbool = CBasicType(
-    type_name="bool",
-    hungarian_prefix=["b", "is"]
+    name="bool",
+    hungarian_prefixes=["b", "is"]
 )
 
 std_types = [

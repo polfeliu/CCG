@@ -1,3 +1,5 @@
+from typing import List
+
 from textwrap import indent
 
 
@@ -44,7 +46,7 @@ class Style:
     space_union_bracket_close_after = False
     space_union_members = False
 
-    def bracket_open(self, object):
+    def bracket_open(self, object) -> str:
         return (
                 self.__getattribute__(f"vnew_line_{object}_bracket_open_before") +
                 self.__getattribute__(f"vspace_{object}_bracket_open_before") +
@@ -53,7 +55,7 @@ class Style:
                 self.__getattribute__(f"vspace_{object}_bracket_open_after")
         )
 
-    def bracket_close(self, object):
+    def bracket_close(self, object) -> str:
         return (
                 self.__getattribute__(f"vnew_line_{object}_bracket_close_before") +
                 self.__getattribute__(f"vspace_{object}_bracket_close_before") +
@@ -62,7 +64,7 @@ class Style:
                 self.__getattribute__(f"vspace_{object}_bracket_close_after")
         )
 
-    def __getattribute__(self, item):
+    def __getattribute__(self, item) -> object:
         if item.startswith('vnew_line'):
             style_set = super(Style, self).__getattribute__(item[1:])
             return '\n' if style_set else ''
@@ -74,8 +76,17 @@ class Style:
 
     indent_token = '\t'
 
-    def indent(self, value: str):
+    def indent(self, value: str) -> str:
         return indent(value, self.indent_token)
+
+    def check_hungarian_variable(self, variable_name: str, hungarian_prefixes: List[str]) -> bool:
+        for hungarian_prefix in hungarian_prefixes:
+            if variable_name.startswith(hungarian_prefix):
+                start_letter = variable_name[len(hungarian_prefix)]
+                if start_letter.isupper():
+                    return True
+
+        return False
 
 
 default_style = Style()

@@ -5,25 +5,25 @@ from .style import default_style
 from .variable import CVariable
 
 
-class CUnion(CBasicType):
+class CUnion(CGenericType):
 
     def __init__(self, union_def: 'CUnionDef'):
         super(CUnion, self).__init__(
-            type_name=union_def.type_name
+            name=union_def.name
         )
         self.union_def = union_def
 
     def definition(self, style: 'Style' = default_style) -> str:
         self.style_checks(style)
 
-        return f"{self.type_name}"
+        return f"{self.name}"
 
-    def style_checks(self, style: 'Style'):
+    def style_checks(self, style: 'Style') -> None:
         # Name of the union type is not checked by hungarian
         pass
 
 
-class CUnionDef(CBasicType):
+class CUnionDef(CGenericType):
 
     def __init__(self, name: Union[str, None] = None, members: List[CVariable] = None):
         if name is None:
@@ -34,7 +34,7 @@ class CUnionDef(CBasicType):
             self.is_anonymous = False
 
         super(CUnionDef, self).__init__(
-            type_name=f"union {self.name}"
+            name=f"union {self.name}"
         )
 
         if members is None or len(members) < 1:
@@ -46,12 +46,12 @@ class CUnionDef(CBasicType):
             union_def=self
         )
 
-    def style_checks(self, style: 'Style'):
+    def style_checks(self, style: 'Style') -> None:
         # Name of the union type is not checked by hungarian
         pass
 
     @property
-    def union(self):
+    def union(self) -> CUnion:
         return self._union
 
     def definition(self, style: 'Style' = default_style) -> str:
@@ -67,11 +67,11 @@ class CUnionDef(CBasicType):
                 members += style.vnew_line_union_members
                 members += style.vspace_union_members
         return (
-            f"{self.type_name}"
+            f"{self.name}"
             f"{style.bracket_open('union')}"
             f"{members}"
             f"{style.bracket_close('union')}"
         )
 
-    def declaration(self, semicolon: bool = False, style: 'Style' = default_style):
+    def declaration(self, semicolon: bool = False, style: 'Style' = default_style) -> str:
         return self.definition(style) + (';' if semicolon else '')

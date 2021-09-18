@@ -18,13 +18,13 @@ class CVariable:
         self.type.style_checks(style)
 
         # hungarian
-        if not self.name.startswith(self.type.hungarian_prefix):
+        if not style.check_hungarian_variable(
+                variable_name=self.name,
+                hungarian_prefixes=self.type.hungarian_prefixes
+        ):
             raise HungarianNotationError(
-                f"{self.name} doesn't doesn't have the hungarian prefix {self.type.hungarian_prefix}")
-        else:
-            start_letter = self.name[len(self.type.hungarian_prefix)]
-            if not start_letter.isupper():
-                raise HungarianNotationError(f"{self.name} first letter is not uppercase")
+                f"{self.name} doesn't doesn't have the hungarian prefix [{self.type.hungarian_prefixes}] "
+                f"or the first letter is not uppercase")
 
     def declaration(self, semicolon=True, style: 'Style' = default_style):
         self.style_checks(style)

@@ -1,43 +1,48 @@
-from typing import List
-from textwrap import indent
-from .types import *
+from typing import TYPE_CHECKING, List, Union
 
 from .style import default_style
+from .types import CGenericType
+
+if TYPE_CHECKING:
+    from .style import Style
+    from .variable import CVariable
 
 
 class CStructMember:
 
-    def __init__(self, variable, bitfield=None):
+    def __init__(self, variable: 'CVariable', bitfield: Union[int, None] = None):
         self.variable = variable
         self.bitfield = bitfield
 
-    def declaration(self, style: 'Style' = default_style):
+    def declaration(self, style: 'Style' = default_style) -> str:
         return (
             f"{self.variable.declaration(semicolon=False, style=style)}{f': {self.bitfield}' if self.bitfield else ''};"
         )
 
 
-class CStruct(CBasicType):
+class CStruct(CGenericType):
 
     def __init__(self, struct_def: 'CStructDef'):
         super(CStruct, self).__init__(
-            type_name=struct_def.type_name
+            name=struct_def.name,
         )
         self.struct_def = struct_def
 
     def definition(self, style: 'Style' = default_style) -> str:
         self.style_checks(style)
 
-        return f"{self.type_name}"
+        return f"{self.name}"
 
-    def style_checks(self, style: 'Style'):
+    def style_checks(self, style: 'Style') -> None:
         # Name of the struct type is not checked by hungarian
         pass
 
 
-class CStructDef(CBasicType):
+class CStructDef(CGenericType):
 
-    def __init__(self, name: Union[str, None] = None, members: List[CStructMember] = None):
+    def __init__(self,
+                 name: Union[str, None] = None,
+                 members: Union[List[CStructMember], None] = None):
         if name is None:
             self.name = ''
             self.is_anonymous = True
@@ -46,7 +51,7 @@ class CStructDef(CBasicType):
             self.is_anonymous = False
 
         super(CStructDef, self).__init__(
-            type_name=f"struct {self.name}"
+            name=f"struct {self.name}"
         )
 
         if members is None or len(members) < 1:
@@ -58,12 +63,12 @@ class CStructDef(CBasicType):
             struct_def=self
         )
 
-    def style_checks(self, style: 'Style'):
+    def style_checks(self, style: 'Style') -> None:
         # Name of the struct type is not checked by hungarian
         pass
 
     @property
-    def struct(self):
+    def struct(self) -> CStruct:
         return self._struct
 
     def definition(self, style: 'Style' = default_style) -> str:
@@ -79,11 +84,11 @@ class CStructDef(CBasicType):
                 members += style.vnew_line_struct_members
                 members += style.vspace_struct_members
         return (
-            f"{self.type_name}"
+            f"{self.name}"
             f"{style.bracket_open('struct')}"
             f"{members}"
             f"{style.bracket_close('struct')}"
         )
 
-    def declaration(self, semicolon: bool = False, style: 'Style' = default_style):
+    def declaration(self, style: 'Style' = default_style, semicolon: bool = False) -> str:
         return self.definition(style) + (';' if semicolon else '')

@@ -5,17 +5,16 @@ from .variable import CVariable
 
 if TYPE_CHECKING:
     from .style import Style
+    from .types import CGenericType
 
 
 class CArray(CVariable):
 
-    def __init__(self, name, type, length):
+    def __init__(self, name: str, type: 'CGenericType', length: int):
         super().__init__(name, type)
         self.length = length
 
-    length: int
-
-    def declaration(self, semicolon=True, style: 'Style' = default_style):
+    def declaration(self, semicolon=True, style: 'Style' = default_style) -> str:
         self.style_checks(style)
 
         return f"{self.type.declaration(semicolon=False, style=style)} " \
