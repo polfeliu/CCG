@@ -30,10 +30,12 @@ class CFunction(
                  return_type: Union['CGenericType', None] = None,
                  arguments: Union[List[CFunctionArgument], None] = None,
                  content=None,
+                 in_space: Union['CSpace', None] = None
                  ):
         super(CFunction, self).__init__(
             name=name,
-            hungarian_prefixes=[]
+            hungarian_prefixes=[],
+            in_space=in_space
         )
         if arguments is None:
             self.arguments = []
@@ -66,20 +68,21 @@ class CFunction(
             argumentlist += f"{argument.type.name} {argument.name}{default}, "
         return argumentlist.rstrip(", ")
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = True) -> str:
+    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
         return (
             f"{self.return_type.name} "
             f"{style.vnew_line_function_prototype_after_type}"
+            f"{self.space_def(from_space)}"
             f"{self.name}"
             f"{style.vspace_function_after_name_prototype}"
             f"({self._argument_list(include_defaults=True)})"
             f"{';' if semicolon else ''}"
         )
 
-    def definition(self, style: 'Style' = default_style) -> str:
+    def definition(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return (
             f"{self.return_type.name} "
-            f"{self.full_space}"
+            f"{self.space_def(from_space)}"
             f"{self.name}"
             f"{style.vspace_function_after_name_declaration}"
             f"({self._argument_list()})"

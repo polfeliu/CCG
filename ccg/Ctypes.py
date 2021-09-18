@@ -16,10 +16,9 @@ class CGenericItem(CSpace):
 
     def __init__(self, name, in_space: Union['CSpace', None] = None):
         super(CGenericItem, self).__init__(
-            item=self,
+            name=name,
             in_space=in_space
         )
-        self.name = name
 
 
 class CGenericType(CGenericItem):
@@ -28,9 +27,11 @@ class CGenericType(CGenericItem):
                  name: str,
                  hungarian_prefixes: Union[List[str], str] = "t",
                  derived_from: Union['CGenericType', None] = None,
+                 in_space: Union['CSpace', None] = None
                  ):
         super(CGenericType, self).__init__(
-            name=name
+            name=name,
+            in_space=in_space
         )
         self.hungarian_prefixes = hungarian_prefixes
         if not isinstance(self.hungarian_prefixes, list):
