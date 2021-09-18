@@ -71,10 +71,10 @@ class CFunction(
     def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
         return (
             f"{self.return_type.name} "
-            f"{style.vnew_line_function_prototype_after_type}"
+            f"{style.vnew_line_function_declaration_after_type}"
             f"{self.space_def(from_space)}"
             f"{self.name}"
-            f"{style.vspace_function_after_name_prototype}"
+            f"{style.vspace_function_after_name_declaration}"
             f"({self._argument_list(include_defaults=True)})"
             f"{';' if semicolon else ''}"
         )
@@ -84,7 +84,7 @@ class CFunction(
             f"{self.return_type.name} "
             f"{self.space_def(from_space)}"
             f"{self.name}"
-            f"{style.vspace_function_after_name_declaration}"
+            f"{style.vspace_function_after_name_definition}"
             f"({self._argument_list()})"
             f"{style.bracket_open('function')}"
             f"{self.content if self.content is not None else ''}"

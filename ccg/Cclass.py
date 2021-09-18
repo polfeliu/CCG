@@ -70,9 +70,9 @@ class CClassConstructor(CClassMethod):
 
     def declaration(self, style: 'Style' = default_style, semicolon: bool = True) -> str:
         return (
-            f"{style.vnew_line_function_prototype_after_type}"
+            f"{style.vnew_line_function_declaration_after_type}"
             f"{self.name}"
-            f"{style.vspace_function_after_name_prototype}"
+            f"{style.vspace_function_after_name_declaration}"
             f"({self._argument_list(include_defaults=True)})"
             f"{';' if semicolon else ''}"
         )

@@ -12,7 +12,7 @@ class Style:
     new_line_function_bracket_open_after = True
     new_line_function_bracket_close_before = True
     new_line_function_bracket_close_after = False
-    new_line_function_prototype_after_type = False
+    new_line_function_declaration_after_type = False
 
     new_line_struct_bracket_open_before = True
     new_line_struct_bracket_open_after = True
@@ -32,7 +32,7 @@ class Style:
     new_line_class_bracket_close_after = False
 
     # Spaces
-    space_function_after_name_prototype = False
+    space_function_after_name_definition = False
     space_function_after_name_declaration = False
 
     space_function_bracket_open_before = False
