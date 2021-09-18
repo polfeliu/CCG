@@ -96,7 +96,7 @@ class CClass(CGenericType):
         for member in self.members:
             if isinstance(member, CClassConstructor):
                 member.name = self.name
-            member.space = self
+            member.in_space = self
 
     def declaration(self, semicolon: bool = True, style: 'Style' = default_style) -> str:
         self.style_checks(style)
