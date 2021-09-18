@@ -3,7 +3,7 @@ from ccg.Ctypes import *
 from common_style import style
 
 
-def test_types():
+def test_class():
     my_class = CClass(
         name="my_class",
         members=[
@@ -22,4 +22,4 @@ def test_types():
 
 
 if __name__ == "__main__":
-    test_types()
+    test_class()
