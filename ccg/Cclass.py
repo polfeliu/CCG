@@ -9,6 +9,7 @@ from .Cfunction import CFunction
 
 if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
+    from .Cnamespace import CSpace
 
 
 class CClassAccess(Enum):
@@ -22,13 +23,13 @@ class CClassAttribute(CVariable):
 
     def __init__(self,
                  name: str,
-                 type: 'CGenericType',
+                 c_type: 'CGenericType',
                  initial_value: Any = None,
                  access: CClassAccess = CClassAccess.private
                  ):
         super(CClassAttribute, self).__init__(
             name=name,
-            type=type,
+            c_type=c_type,
             initial_value=initial_value
         )
         self.access = access

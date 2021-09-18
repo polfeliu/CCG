@@ -7,15 +7,15 @@ def test_union():
     example_union_def = CUnionDef("TExamplestruct", members=[
         CVariable("i8Title", Cint8),
         CVariable("i8Asdf", Cint8),
-        CArray("i8Name", type=Cint8, length=3),
-        CVariable("tNestedstruct", type=CUnionDef(
+        CArray("i8Name", c_type=Cint8, length=3),
+        CVariable("tNestedstruct", c_type=CUnionDef(
             # This union def is anonymous
             members=[
                 CVariable("i64Qwer", Cint64),
             ]),
                   ),
 
-        CVariable("tNestedstruct2", type=CUnionDef(
+        CVariable("tNestedstruct2", c_type=CUnionDef(
             "TNestedstruct2",
             members=[
                 CVariable("i64Qwer", Cint64),
@@ -27,10 +27,10 @@ def test_union():
     print(example_union_def.declaration(style))
 
     # Can declare a struct with a variable in the same sentence
-    print(CVariable("tInst", type=example_union_def).declaration(style=style))
+    print(CVariable("tInst", c_type=example_union_def).declaration(style=style))
 
     # Or assume the struct is already declared and use it as type
-    print(CVariable("tInst", type=example_union_def.union).declaration(style=style))
+    print(CVariable("tInst", c_type=example_union_def.union).declaration(style=style))
 
     # Can do a typedef of the struct with the declaration of the struct inplace
     print(example_union_def.type("TMyStruct").typedef(style))

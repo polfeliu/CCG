@@ -1,8 +1,11 @@
-from typing import List
+from typing import TYPE_CHECKING
 from .Ctypes import *
 from .style import default_style
 
 from .Cvariable import CVariable
+
+if TYPE_CHECKING:
+    pass
 
 
 class CUnion(CGenericType):

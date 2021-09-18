@@ -1,6 +1,5 @@
 from ccg import CClass, CFunction
 from ccg.Ctypes import *
-from common_style import style
 
 
 def test_class():

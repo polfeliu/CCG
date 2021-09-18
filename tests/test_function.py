@@ -9,8 +9,8 @@ def test_function():
         name="examplefun",
         return_type=Cuint32,
         arguments=[
-            CFunction.Argument(name="first", type=Cuint32),
-            CFunction.Argument(name="second", type=Cdouble, default=2)
+            CFunction.Argument(name="first", c_type=Cuint32),
+            CFunction.Argument(name="second", c_type=Cdouble, default=2)
         ]
     )
 

@@ -6,6 +6,7 @@ from .Ctypes import CGenericType
 if TYPE_CHECKING:
     from .style import Style
     from .Cvariable import CVariable
+    from .Cnamespace import CSpace
 
 
 class CStructDefMember:

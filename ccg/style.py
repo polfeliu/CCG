@@ -69,22 +69,22 @@ class Style:
 
     class_members = ClassMembers.group_by_access_specified
 
-    def bracket_open(self, object) -> str:
+    def bracket_open(self, obj) -> str:
         return (
-                self.__getattribute__(f"vnew_line_{object}_bracket_open_before") +
-                self.__getattribute__(f"vspace_{object}_bracket_open_before") +
+                str(self.__getattribute__(f"vnew_line_{obj}_bracket_open_before")) +
+                str(self.__getattribute__(f"vspace_{obj}_bracket_open_before")) +
                 '{' +
-                self.__getattribute__(f"vnew_line_{object}_bracket_open_after") +
-                self.__getattribute__(f"vspace_{object}_bracket_open_after")
+                str(self.__getattribute__(f"vnew_line_{obj}_bracket_open_after")) +
+                str(self.__getattribute__(f"vspace_{obj}_bracket_open_after"))
         )
 
-    def bracket_close(self, object) -> str:
+    def bracket_close(self, obj) -> str:
         return (
-                self.__getattribute__(f"vnew_line_{object}_bracket_close_before") +
-                self.__getattribute__(f"vspace_{object}_bracket_close_before") +
+                str(self.__getattribute__(f"vnew_line_{obj}_bracket_close_before")) +
+                str(self.__getattribute__(f"vspace_{obj}_bracket_close_before")) +
                 '}' +
-                self.__getattribute__(f"vnew_line_{object}_bracket_close_after") +
-                self.__getattribute__(f"vspace_{object}_bracket_close_after")
+                str(self.__getattribute__(f"vnew_line_{obj}_bracket_close_after")) +
+                str(self.__getattribute__(f"vspace_{obj}_bracket_close_after"))
         )
 
     def __getattribute__(self, item) -> object:
@@ -99,17 +99,18 @@ class Style:
 
     indent_token = '\t'
 
-    def indent(self, value: str, object: Union[str, None] = None) -> str:
+    def indent(self, value: str, obj: Union[str, None] = None) -> str:
         style_set = True
-        if object is not None:
-            style_set = self.__getattribute__(f"indent_{object}")
+        if obj is not None:
+            style_set = self.__getattribute__(f"indent_{obj}")
 
         if style_set:
             return indent(value, self.indent_token)
         else:
             return value
 
-    def check_hungarian_variable(self, variable_name: str, hungarian_prefixes: List[str]) -> bool:
+    @staticmethod
+    def check_hungarian_variable(variable_name: str, hungarian_prefixes: List[str]) -> bool:
         for hungarian_prefix in hungarian_prefixes:
             if variable_name.startswith(hungarian_prefix):
                 start_letter = variable_name[len(hungarian_prefix)]

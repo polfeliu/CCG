@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, List, Union
 
 if TYPE_CHECKING:
-    from .Ctypes import CGenericItem
+    pass
 
 
 class CSpace:

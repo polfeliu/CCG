@@ -6,18 +6,19 @@ from .Ctypes import CGenericType, CVoidType, CNoType
 
 if TYPE_CHECKING:
     from .style import Style
+    from .Cnamespace import CSpace
 
 
 class CFunctionArgument(CVariable):
 
-    def __init__(self, name: str, type: 'CGenericType', default=None):
+    def __init__(self, name: str, c_type: 'CGenericType', default=None):
         # TODO what python type should default be??. Maybe types should have a TypeValue object, that validates the
         #  type, or in case of structs, fills the members
-        super(CFunctionArgument, self).__init__(name, type)
+        super(CFunctionArgument, self).__init__(name, c_type)
         self.default = default
         if default is not None:
-            if self.type.check_value(self._initial_value) is not True:
-                raise ValueError(f"Default value [{default}] does not fit type [{self.type.name}]")
+            if self.c_type.check_value(self._initial_value) is not True:
+                raise ValueError(f"Default value [{default}] does not fit type [{self.c_type.name}]")
 
 
 class CFunction(CGenericType):
@@ -63,7 +64,7 @@ class CFunction(CGenericType):
             default = ''
             if argument.default is not None and include_defaults:
                 default = f" = {argument.default}"
-            argumentlist += f"{argument.type.name} {argument.name}{default}, "
+            argumentlist += f"{argument.c_type.name} {argument.name}{default}, "
         return argumentlist.rstrip(", ")
 
     def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:

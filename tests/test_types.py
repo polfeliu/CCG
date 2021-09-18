@@ -5,7 +5,7 @@ from common_style import style
 
 def test_types():
     var = CVariable(
-        type=Cint8,
+        c_type=Cint8,
         name="i8Mycustomint",
         initial_value=4
     )
@@ -13,7 +13,7 @@ def test_types():
 
     try:
         var = CVariable(
-            type=Cuint8,
+            c_type=Cuint8,
             name="i8Mycustomint_invalid",
             initial_value=500
         )
@@ -21,7 +21,7 @@ def test_types():
         print(ex)
 
     array = CArray(
-        type=Cint8,
+        c_type=Cint8,
         name="i8Asdf",
         length=10
     )
@@ -31,7 +31,7 @@ def test_types():
     # New type
     custom = Cint8.type('TMyCustomType')
     var = CVariable(
-        type=custom,
+        c_type=custom,
         name="tMyVar"
     )
 

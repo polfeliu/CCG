@@ -8,9 +8,9 @@ def test_struct():
     example_struct_def = CStructDef("TExamplestruct", members=[
         CStructDef.Member(CVariable("i8Title", Cint8)),
         CStructDef.Member(CVariable("i8Asdf", Cint8), bitfield=3),
-        CStructDef.Member(CArray("i8Name", type=Cint8, length=3)),
+        CStructDef.Member(CArray("i8Name", c_type=Cint8, length=3)),
         CStructDef.Member(
-            CVariable("tNestedstruct", type=CStructDef(
+            CVariable("tNestedstruct", c_type=CStructDef(
                 # This struct def is anonymous
                 members=[
                     CStructDef.Member(CVariable("i64Qwer", Cint64)),
@@ -19,7 +19,7 @@ def test_struct():
         ),
 
         CStructDef.Member(
-            CVariable("tNestedstruct2", type=CStructDef(
+            CVariable("tNestedstruct2", c_type=CStructDef(
                 "TNestedstruct2",
                 members=[
                     CStructDef.Member(CVariable("i64Qwer", Cint64)),
@@ -32,10 +32,10 @@ def test_struct():
     print(example_struct_def.declaration(style))
 
     # Can declare a struct with a variable in the same sentence
-    print(CVariable("tInst", type=example_struct_def).declaration(style=style))
+    print(CVariable("tInst", c_type=example_struct_def).declaration(style=style))
 
     # Or assume the struct is already declared and use it as type
-    print(CVariable("tInst", type=example_struct_def.struct).declaration(style=style))
+    print(CVariable("tInst", c_type=example_struct_def.struct).declaration(style=style))
 
     # Can do a typedef of the struct with the declaration of the struct inplace
     print(example_struct_def.type("TMyStruct").typedef(style))

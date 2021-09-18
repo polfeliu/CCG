@@ -77,17 +77,17 @@ class CGenericType(CGenericItem):
 
 class CIntegerType(CGenericType):
 
-    def __init__(self, name: str, hungarian_prefixes: Union[List[str], str], bits: int, isSigned: bool):
+    def __init__(self, name: str, hungarian_prefixes: Union[List[str], str], bits: int, is_signed: bool):
         super(CIntegerType, self).__init__(
             name=name,
             hungarian_prefixes=hungarian_prefixes
         )
-        if isSigned:
+        if is_signed:
             self.minimum = -2 ** (bits - 1)
             self.maximum = 2 ** (bits - 1) - 1
         else:
             self.minimum = 0
-            self.maximum = 2 ** (bits) - 1
+            self.maximum = 2 ** bits - 1
 
     def check_value(self, value: Any) -> bool:
         return value in range(self.minimum, self.maximum + 1)
@@ -97,56 +97,56 @@ Cint8 = CIntegerType(
     name="int8_t",
     hungarian_prefixes="i8",
     bits=8,
-    isSigned=True
+    is_signed=True
 )
 
 Cuint8 = CIntegerType(
     name="uint8_t",
     hungarian_prefixes="u8",
     bits=8,
-    isSigned=False
+    is_signed=False
 )
 
 Cint16 = CIntegerType(
     name="int16_t",
     hungarian_prefixes="i16",
     bits=16,
-    isSigned=True
+    is_signed=True
 )
 
 Cuint16 = CIntegerType(
     name="uint16_t",
     hungarian_prefixes="u16",
     bits=16,
-    isSigned=False
+    is_signed=False
 )
 
 Cint32 = CIntegerType(
     name="int32_t",
     hungarian_prefixes="i32",
     bits=32,
-    isSigned=True
+    is_signed=True
 )
 
 Cuint32 = CIntegerType(
     name="uint32_t",
     hungarian_prefixes="u32",
     bits=32,
-    isSigned=False
+    is_signed=False
 )
 
 Cint64 = CIntegerType(
     name="int8_t",
     hungarian_prefixes="i64",
     bits=64,
-    isSigned=True
+    is_signed=True
 )
 
 Cuint64 = CIntegerType(
     name="uint64_t",
     hungarian_prefixes="u64",
     bits=64,
-    isSigned=False
+    is_signed=False
 )
 
 Cfloat = CGenericType(
