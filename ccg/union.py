@@ -1,5 +1,4 @@
 from typing import List
-from textwrap import indent
 from .types import *
 from .style import default_style
 
@@ -8,25 +7,71 @@ from .variable import CVariable
 
 class CUnion(CBasicType):
 
-    def __init__(self, type_name: str, members: List[CVariable]):
+    def __init__(self, union_def: 'CUnionDef'):
         super(CUnion, self).__init__(
-            type_name=type_name,
-            hungarian_prefix="u"
+            type_name=union_def.type_name
         )
-        self.type_name = type_name
+        self.union_def = union_def
+
+    def definition(self, style: 'Style' = default_style) -> str:
+        self.style_checks(style)
+
+        return f"{self.type_name}"
+
+    def style_checks(self, style: 'Style'):
+        # Name of the union type is not checked by hungarian
+        pass
+
+
+class CUnionDef(CBasicType):
+
+    def __init__(self, name: Union[str, None] = None, members: List[CVariable] = None):
+        if name is None:
+            self.name = ''
+            self.is_anonymous = True
+        else:
+            self.name = name
+            self.is_anonymous = False
+
+        super(CUnionDef, self).__init__(
+            type_name=f"union {self.name}"
+        )
+
+        if members is None or len(members) < 1:
+            raise KeyError("Unions have to have at least one member")
+
         self.members = members
 
-    def declaration(self, name=None, semicolon=True, style: 'Style' = default_style):
-        members = ""
-        for member in self.members:
-            members += indent(member.declaration(), '\t') + "\n"
-        return (
-            f"union {self.type_name}{{\n"
-            f"{members}"
-            f"}}"
+        self._union = CUnion(
+            union_def=self
         )
 
-    def typedef(self, name, inplace_declaration=True, style: 'Style' = default_style):
+    def style_checks(self, style: 'Style'):
+        # Name of the union type is not checked by hungarian
+        pass
+
+    @property
+    def union(self):
+        return self._union
+
+    def definition(self, style: 'Style' = default_style) -> str:
+        self.style_checks(style)
+
+        members = ""
+        for member in self.members:
+            member_declaration = member.declaration(style=style)
+            if style.new_line_union_members:
+                member_declaration = style.indent(member_declaration)
+            members += member_declaration
+            if member != self.members[-1]:  # Is not last member
+                members += style.vnew_line_union_members
+                members += style.vspace_union_members
         return (
-            f"typedef {self.declaration(name=name, semicolon=False, style=style) if inplace_declaration else self.type_name + ' ' + name};"
+            f"{self.type_name}"
+            f"{style.bracket_open('union')}"
+            f"{members}"
+            f"{style.bracket_close('union')}"
         )
+
+    def declaration(self, semicolon: bool = False, style: 'Style' = default_style):
+        return self.definition(style) + (';' if semicolon else '')

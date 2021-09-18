@@ -16,8 +16,8 @@ class CGenericType:
     hungarian_prefix = "t"
     derived_from: Union['CGenericType', None] = None
 
-    def declaration(self, semicolon: bool, style: 'Style'):
-        return self.type_name
+    def declaration(self, semicolon: bool = False, style: 'Style' = default_style):
+        return self.type_name + (';' if semicolon else '')
 
     def style_checks(self, style: 'Style'):
         # hungarian

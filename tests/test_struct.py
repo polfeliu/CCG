@@ -11,7 +11,7 @@ def test_struct():
         CStructMember(CArray("i8Name", type=Cint8, length=3)),
         CStructMember(
             CVariable("tNestedstruct", type=CStructDef(
-                "TNestedstruct",
+                # This struct def is anonymous
                 members=[
                     CStructMember(CVariable("i64Qwer", Cint64)),
                 ]),
