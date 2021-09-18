@@ -12,6 +12,7 @@ def test_struct():
         CStructDef.Member(
             CVariable("tNestedstruct", c_type=CStructDef(
                 # This struct def is anonymous
+                is_packed=True,  # And packed
                 members=[
                     CStructDef.Member(CVariable("i64Qwer", Cint64)),
                 ]),
@@ -23,7 +24,9 @@ def test_struct():
                 "TNestedstruct2",
                 members=[
                     CStructDef.Member(CVariable("i64Qwer", Cint64)),
-                ]).struct,  # Reference the struct type, not the def, and its not declared inplace
+                ]).struct,
+                      # Reference the struct type, not the def, and its not declared inplace.
+                      # Assumes this struct will be defined somewhere else
                       )
         )
     ])

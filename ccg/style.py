@@ -62,6 +62,9 @@ class Style:
     indent_class_access = False
     indent_struct_member = True
 
+    # Attributes
+    attribute_packed = "__attribute__((__packed__))"
+
     # Class member styles
     class ClassMembers(Enum):
         inline_access_preserve_order = 0

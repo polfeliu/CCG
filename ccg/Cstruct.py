@@ -44,26 +44,29 @@ class CStructDef(CGenericType):
 
     def __init__(self,
                  name: Union[str, None] = None,
+                 is_packed: bool = False,
                  members: Union[List[CStructDefMember], None] = None):
         if name is None:
-            self.name = ''
+            self.struct_name = ''
             self.is_anonymous = True
         else:
-            self.name = name
+            self.struct_name = name
             self.is_anonymous = False
 
         super(CStructDef, self).__init__(
-            name=f"struct {self.name}"
+            name=f"struct {self.struct_name}"
         )
 
         if members is None or len(members) < 1:
             raise KeyError("Structs have to have at least one struct member")
 
+        self.is_packed = is_packed
         self.members = members
 
         self._struct = CStruct(
             struct_def=self
         )
+        print("asdf")
 
     def style_checks(self, style: 'Style') -> None:
         # Name of the struct type is not checked by hungarian
@@ -85,8 +88,10 @@ class CStructDef(CGenericType):
             if member != self.members[-1]:  # Is not last member
                 members += style.vnew_line_struct_members
                 members += style.vspace_struct_members
+
         return (
             f"{self.name}"
+            f"{style.attribute_packed if self.is_packed else ''}"
             f"{style.bracket_open('struct')}"
             f"{members}"
             f"{style.bracket_close('struct')}"
