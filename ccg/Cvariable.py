@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING, Any
 
 from .style import default_style
-from .types import HungarianNotationError
+from .Ctypes import HungarianNotationError
 
 if TYPE_CHECKING:
-    from .types import CGenericType
+    from .Ctypes import CGenericType
     from .style import Style
 
 

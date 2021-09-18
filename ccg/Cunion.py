@@ -1,8 +1,8 @@
 from typing import List
-from .types import *
+from .Ctypes import *
 from .style import default_style
 
-from .variable import CVariable
+from .Cvariable import CVariable
 
 
 class CUnion(CGenericType):

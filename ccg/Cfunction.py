@@ -2,12 +2,11 @@ from typing import TYPE_CHECKING, List, Union
 from ccg import CVariable
 
 from .style import default_style
-from .types import CGenericType
+from .Ctypes import CGenericType, CVoidType
 
 if TYPE_CHECKING:
     from .style import Style
 
-CVoidType = CGenericType(name='void')
 
 class CFunctionArgument(CVariable):
 
@@ -22,6 +21,8 @@ class CFunctionArgument(CVariable):
 
 
 class CFunction:  # TODO This should also be a type, when asked, it's type name it should return a C pointer
+
+    Argument = CFunctionArgument
 
     def __init__(self,
                  name: str,

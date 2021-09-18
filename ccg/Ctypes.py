@@ -149,6 +149,11 @@ Cbool = CGenericType(
     hungarian_prefixes=["b", "is"]
 )
 
+CVoidType = CGenericType(
+    name='void'
+)
+
+
 std_types = [
     Cint8,
     Cuint8,

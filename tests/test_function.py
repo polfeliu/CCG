@@ -1,5 +1,5 @@
-from ccg import CFunction, CFunctionArgument
-from ccg.types import *
+from ccg import CFunction
+from ccg.Ctypes import *
 
 from common_style import style
 
@@ -9,8 +9,8 @@ def test_function():
         name="examplefun",
         return_type=Cuint32,
         arguments=[
-            CFunctionArgument(name="first", type=Cuint32),
-            CFunctionArgument(name="second", type=Cdouble, default=2)
+            CFunction.Argument(name="first", type=Cuint32),
+            CFunction.Argument(name="second", type=Cdouble, default=2)
         ]
     )
 

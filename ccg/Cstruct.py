@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING, List, Union
 
 from .style import default_style
-from .types import CGenericType
+from .Ctypes import CGenericType
 
 if TYPE_CHECKING:
     from .style import Style
-    from .variable import CVariable
+    from .Cvariable import CVariable
 
 
-class CStructMember:
+class CStructDefMember:
 
     def __init__(self, variable: 'CVariable', bitfield: Union[int, None] = None):
         self.variable = variable
@@ -39,10 +39,11 @@ class CStruct(CGenericType):
 
 
 class CStructDef(CGenericType):
+    Member = CStructDefMember
 
     def __init__(self,
                  name: Union[str, None] = None,
-                 members: Union[List[CStructMember], None] = None):
+                 members: Union[List[CStructDefMember], None] = None):
         if name is None:
             self.name = ''
             self.is_anonymous = True

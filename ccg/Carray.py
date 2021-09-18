@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
 from .style import default_style
-from .variable import CVariable
+from .Cvariable import CVariable
 
 if TYPE_CHECKING:
     from .style import Style
-    from .types import CGenericType
+    from .Ctypes import CGenericType
 
 
 class CArray(CVariable):

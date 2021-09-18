@@ -1,28 +1,28 @@
-from ccg import CStructDef, CStructMember, CVariable, CArray
-from ccg.types import *
+from ccg import CStructDef, CVariable, CArray
+from ccg.Ctypes import *
 from common_style import style
 
 
 def test_struct():
     # Struct definition
     example_struct_def = CStructDef("TExamplestruct", members=[
-        CStructMember(CVariable("i8Title", Cint8)),
-        CStructMember(CVariable("i8Asdf", Cint8), bitfield=3),
-        CStructMember(CArray("i8Name", type=Cint8, length=3)),
-        CStructMember(
+        CStructDef.Member(CVariable("i8Title", Cint8)),
+        CStructDef.Member(CVariable("i8Asdf", Cint8), bitfield=3),
+        CStructDef.Member(CArray("i8Name", type=Cint8, length=3)),
+        CStructDef.Member(
             CVariable("tNestedstruct", type=CStructDef(
                 # This struct def is anonymous
                 members=[
-                    CStructMember(CVariable("i64Qwer", Cint64)),
+                    CStructDef.Member(CVariable("i64Qwer", Cint64)),
                 ]),
                       )
         ),
 
-        CStructMember(
+        CStructDef.Member(
             CVariable("tNestedstruct2", type=CStructDef(
                 "TNestedstruct2",
                 members=[
-                    CStructMember(CVariable("i64Qwer", Cint64)),
+                    CStructDef.Member(CVariable("i64Qwer", Cint64)),
                 ]).struct,  # Reference the struct type, not the def, and its not declared inplace
                       )
         )

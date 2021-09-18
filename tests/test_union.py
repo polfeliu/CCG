@@ -1,5 +1,5 @@
 from ccg import CUnionDef, CVariable, CArray
-from ccg.types import *
+from ccg.Ctypes import *
 from common_style import style
 
 

@@ -2,13 +2,13 @@ from typing import TYPE_CHECKING, List, Union, Any
 from enum import Enum
 
 from .style import Style, default_style
-from .types import CGenericType
+from .Ctypes import CGenericType
 
-from .variable import CVariable
-from .function import CFunction
+from .Cvariable import CVariable
+from .Cfunction import CFunction
 
 if TYPE_CHECKING:
-    from .function import CFunctionArgument
+    from .Cfunction import CFunctionArgument
 
 
 class CClassAccess(Enum):
@@ -78,6 +78,10 @@ class CClassConstructor(CClassMethod):
 
 
 class CClass(CGenericType):
+    Access = CClassAccess
+    Attribute = CClassAttribute
+    Method = CClassMethod
+    Constructor = CClassConstructor
 
     def __init__(self,
                  name: str,

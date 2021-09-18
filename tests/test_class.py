@@ -1,5 +1,5 @@
-from ccg import CClass, CClassConstructor, CClassMethod, CClassAttribute, CFunctionArgument, CClassAccess
-from ccg.types import *
+from ccg import CClass, CFunction
+from ccg.Ctypes import *
 from common_style import style
 
 
@@ -7,9 +7,9 @@ def test_types():
     my_class = CClass(
         name="my_class",
         members=[
-            CClassConstructor(arguments=[CFunctionArgument('arg', Cuint32)], access=CClassAccess.public),
-            CClassMethod('my_method', arguments=[CFunctionArgument('hello', Cuint8)], access=CClassAccess.protected),
-            CClassAttribute('u8My_attr', Cuint8, initial_value=3, access=CClassAccess.private)
+            CClass.Constructor(arguments=[CFunction.Argument('arg', Cuint32)], access=CClass.Access.public),
+            CClass.Method('my_method', arguments=[CFunction.Argument('hello', Cuint8)], access=CClass.Access.protected),
+            CClass.Attribute('u8My_attr', Cuint8, initial_value=3, access=CClass.Access.private)
         ]
     )
 
