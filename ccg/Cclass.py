@@ -1,11 +1,10 @@
-from typing import TYPE_CHECKING, List, Union, Any
 from enum import Enum
+from typing import TYPE_CHECKING, List, Union, Any
 
-from .style import Style, default_style
-from .Ctypes import CGenericType, CVoidType, CNoType
-
-from .Cvariable import CVariable
 from .Cfunction import CFunction
+from .Ctypes import CGenericType, CVoidType, CNoType
+from .Cvariable import CVariable
+from .style import Style, default_style
 
 if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
@@ -89,7 +88,7 @@ class CClass(CGenericType):
                 member.name = self.name
             member.in_space = self
 
-    def declaration(self, semicolon: bool = False, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+    def declaration(self, semicolon: bool = True, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         self.style_checks(style)
         return f"class {self.name}{';' if semicolon else ''}"
 

@@ -15,18 +15,19 @@ class CSpace:
         if self.in_space is None:
             return [self]
         else:
-            return [self] + self.in_space.full_space_list
+            return self.in_space.full_space_list + [self]
 
     def space_def(self, from_space: 'CSpace' = None) -> str:
         space_def = ""
-        space_list = reversed(self.full_space_list[1:])
+        space_list = self.full_space_list
         if from_space is not None:
             # Remove redundant space
-            space_set = set(space_list)
-            from_space_set = set(from_space.full_space_list)
-            space_set = space_set - from_space_set
-            space_list = list(space_set)
+            from_space_list = from_space.full_space_list
+            for space in from_space_list:
+                if space == space_list[0]:
+                    del space_list[0]
 
+        del space_list[-1]
         for space in space_list:
             space_def += (space.name + "::")
 

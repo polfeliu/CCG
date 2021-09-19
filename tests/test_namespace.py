@@ -1,5 +1,5 @@
-from common_style import style
 from ccg import CNamespace, CFunction
+from common_style import style
 
 
 def test_namespace():
@@ -16,6 +16,7 @@ def test_namespace():
     print(fun.declaration(style=style))
     # But typically the namespace is indicated with a namespace section,
     # So we can omit inline namespace by saying that we are on a namespace
+    print(fun.declaration(from_space=ns1, style=style))
     print(fun.declaration(from_space=ns2, style=style))
 
 
