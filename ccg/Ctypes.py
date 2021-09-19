@@ -1,8 +1,10 @@
-from typing import TYPE_CHECKING, Union, List, Any
+from abc import ABC, abstractmethod
 from copy import copy
+from typing import TYPE_CHECKING, Union, List, Any
 
-from .style import default_style
 from .Cnamespace import CSpace
+from .Cstatement import Cdeclaration, Cstatement
+from .style import default_style
 
 if TYPE_CHECKING:
     from .style import Style
@@ -12,13 +14,22 @@ class HungarianNotationError(Exception):
     pass
 
 
-class CGenericItem(CSpace):
+class CGenericItem(CSpace, ABC):
 
     def __init__(self, name, in_space: Union['CSpace', None] = None):
         super(CGenericItem, self).__init__(
             name=name,
             in_space=in_space
         )
+
+    def declare(self) -> Cstatement:
+        return Cstatement(
+            render_function=self.declaration
+        )
+
+    @abstractmethod  # TODO Some inheriting methods do not have the same order of arguments
+    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
+        raise NotImplemented
 
 
 class CGenericType(CGenericItem):

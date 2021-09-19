@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, List, Union
-from ccg import CVariable
 
-from .style import default_style
+from ccg import CVariable
+from .Cstatement import Cdeclaration
 from .Ctypes import CGenericType, CVoidType, CNoType
+from .style import default_style
 
 if TYPE_CHECKING:
     from .style import Style
@@ -90,4 +91,14 @@ class CFunction(CGenericType):
             f"{style.bracket_open('function')}"
             f"{self.content if self.content is not None else ''}"
             f"{style.bracket_close('function')};"
+        )
+
+    def declare(self) -> Cdeclaration:
+        return Cdeclaration(
+            render_function=self.declaration
+        )
+
+    def define(self) -> Cdeclaration:
+        return Cdeclaration(
+            render_function=self.definition
         )

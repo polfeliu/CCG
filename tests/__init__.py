@@ -4,6 +4,7 @@ from test_types import test_types
 from test_union import test_union
 from test_class import test_class
 from test_namespace import test_namespace
+from test_statement import test_statement
 
 test_function()
 test_struct()
@@ -11,3 +12,4 @@ test_types()
 test_union()
 test_class()
 test_namespace()
+test_statement()

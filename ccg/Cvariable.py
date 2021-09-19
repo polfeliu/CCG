@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Any
 
-from .style import default_style
-from .Ctypes import HungarianNotationError
+from .Cstatement import Cdeclaration
 from .Ctypes import CGenericItem
+from .Ctypes import HungarianNotationError
+from .style import default_style
 
 if TYPE_CHECKING:
     from .Ctypes import CGenericType
@@ -34,7 +35,8 @@ class CVariable(CGenericItem):
                 f"{self.name} doesn't doesn't have the hungarian prefix {self.c_type.hungarian_prefixes} "
                 f"or the first letter is not uppercase")
 
-    def declaration(self, semicolon=True, style: 'Style' = default_style, from_space: 'CSpace' = None):
+
+    def declaration(self, semicolon=True, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         self.style_checks(style)
 
         return (f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)}"

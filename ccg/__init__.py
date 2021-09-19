@@ -7,3 +7,4 @@ from .Cunion import CUnionDef
 from .Cfunction import CFunction
 from .Cclass import CClass
 from .Cnamespace import CNamespace
+from .Cstatement import Cstatements, Cdeclarations
