@@ -7,8 +7,10 @@ def test_class():
         name="my_class",
         members=[
             CClass.Constructor(arguments=[CFunction.Argument('arg', Cuint32)], access=CClass.Access.public),
-            CClass.Method('my_method', arguments=[CFunction.Argument('hello', Cuint8)], access=CClass.Access.protected),
-            CClass.Attribute('u8My_attr', Cuint8, initial_value=3, access=CClass.Access.private)
+            CClass.Method('my_method', arguments=[CFunction.Argument('hello', Cuint8)], access=CClass.Access.protected,
+                          static=True),
+            CClass.Attribute('u8My_attr', Cuint8, initial_value=3, access=CClass.Access.private, static=True,
+                             constexpr=True)
         ]
     )
 

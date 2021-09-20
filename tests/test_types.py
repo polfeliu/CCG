@@ -38,6 +38,18 @@ def test_types():
     print(custom.typedef(style=style))
     print(var.declaration(style=style))
 
+    # Static
+    var = CVariable(c_type=Cuint8, name="u8Var", static=True)
+    print(var.declaration())
+
+    # Static and const
+    var = CVariable(c_type=Cuint8, name="u8Var", static=True, const=True)
+    print(var.declaration())
+
+    # Constexpr
+    var = CVariable(c_type=Cuint8, name="u8Var", constexpr=True)
+    print(var.declaration())
+
 
 if __name__ == "__main__":
     test_types()

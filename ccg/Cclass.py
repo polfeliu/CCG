@@ -17,19 +17,22 @@ class CClassAccess(Enum):
     private = 2
 
 
-# TODO Static methods and attributes
 class CClassAttribute(CVariable):
 
     def __init__(self,
                  name: str,
                  c_type: 'CGenericType',
                  initial_value: Any = None,
-                 access: CClassAccess = CClassAccess.private
+                 access: CClassAccess = CClassAccess.private,
+                 static: bool = False, const: bool = False, constexpr: bool = False
                  ):
         super(CClassAttribute, self).__init__(
             name=name,
             c_type=c_type,
-            initial_value=initial_value
+            initial_value=initial_value,
+            static=static,
+            const=const,
+            constexpr=constexpr
         )
         self.access = access
 
@@ -41,13 +44,15 @@ class CClassMethod(CFunction):
                  return_type: CGenericType = CVoidType,
                  arguments: Union[List['CFunctionArgument'], None] = None,
                  content=None,
-                 access: CClassAccess = CClassAccess.private
+                 access: CClassAccess = CClassAccess.private,
+                 static: bool = False
                  ):
         super(CClassMethod, self).__init__(
             name=name,
             return_type=return_type,
             arguments=arguments,
-            content=content
+            content=content,
+            static=static
         )
         self.access = access
 

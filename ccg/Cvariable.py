@@ -13,7 +13,8 @@ if TYPE_CHECKING:
 
 class CVariable(CGenericItem):
 
-    def __init__(self, name: str, c_type: 'CGenericType', initial_value: Any = None):
+    def __init__(self, name: str, c_type: 'CGenericType', initial_value: Any = None,
+                 static: bool = False, const: bool = False, constexpr: bool = False):
         super(CVariable, self).__init__(
             name=name
         )
@@ -22,6 +23,10 @@ class CVariable(CGenericItem):
         if initial_value is not None:
             if self.c_type.check_value(self._initial_value) is not True:
                 raise ValueError(f"Initial value [{initial_value}] does not fit type [{self.c_type.name}]")
+
+        self.static = static
+        self.const = const
+        self.constexpr = constexpr
 
     def style_checks(self, style: 'Style'):
         self.c_type.style_checks(style)
@@ -35,11 +40,14 @@ class CVariable(CGenericItem):
                 f"{self.name} doesn't doesn't have the hungarian prefix {self.c_type.hungarian_prefixes} "
                 f"or the first letter is not uppercase")
 
-
     def declaration(self, semicolon=True, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         self.style_checks(style)
 
-        return (f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)}"
+        return (
+                f"{'static ' if self.static else ''}"
+                f"{'const ' if self.const else ''}"
+                f"{'constexpr ' if self.constexpr else ''}"
+                f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)}"
                 f" {self.name}"
                 f"{' = ' + str(self._initial_value) if self._initial_value is not None else ''}"
                 f"{';' if semicolon else ''}"

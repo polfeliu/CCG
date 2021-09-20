@@ -32,7 +32,8 @@ class CFunction(CGenericType):
                  return_type: CGenericType = CVoidType,
                  arguments: Union[List[CFunctionArgument], None] = None,
                  content=None,
-                 in_space: Union['CSpace', None] = None
+                 in_space: Union['CSpace', None] = None,
+                 static: bool = False
                  ):
         super(CFunction, self).__init__(
             name=name,
@@ -47,6 +48,7 @@ class CFunction(CGenericType):
         self.return_type = return_type
 
         self.content = content  # TODO Change content for list of statements or something like
+        self.static = static
 
         # Check that non-default arguments are after default arguments
         defaults_started = False
@@ -70,6 +72,7 @@ class CFunction(CGenericType):
 
     def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
         return (
+            f"{'static ' if self.static else ''}"
             f"{self.return_type.name}"
             f"{' ' if self.return_type is not CNoType else ''}"
             f"{style.vnew_line_function_declaration_after_type}"
@@ -82,6 +85,7 @@ class CFunction(CGenericType):
 
     def definition(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return (
+            f"{'static ' if self.static else ''}"
             f"{self.return_type.name}"
             f"{' ' if self.return_type is not CNoType else ''}"
             f"{self.space_def(from_space)}"

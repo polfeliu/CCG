@@ -17,6 +17,11 @@ def test_function():
     print(f.declaration(style))
     print(f.definition(style))
 
+    f.static = True
+
+    print(f.declaration(style))
+    print(f.definition(style))
+
 
 if __name__ == "__main__":
     test_function()
