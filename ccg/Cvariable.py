@@ -11,13 +11,20 @@ if TYPE_CHECKING:
     from .Cnamespace import CSpace
 
 
+def hungarize(name: str, c_type: 'CGenericType'):
+    return c_type.hungarian_prefixes[0] + name.capitalize()
+
+
 class CVariable(CGenericItem):
 
     def __init__(self, name: str, c_type: 'CGenericType', initial_value: Any = None,
-                 static: bool = False, const: bool = False, constexpr: bool = False):
-        super(CVariable, self).__init__(
-            name=name
-        )
+                 static: bool = False, const: bool = False, constexpr: bool = False,
+                 auto_hungarize: bool = False
+                 ):
+        if auto_hungarize:
+            name = hungarize(name, c_type)
+
+        super(CVariable, self).__init__(name=name)
         self.c_type = c_type
         self._initial_value = initial_value
         if initial_value is not None:
@@ -44,11 +51,11 @@ class CVariable(CGenericItem):
         self.style_checks(style)
 
         return (
-                f"{'static ' if self.static else ''}"
-                f"{'const ' if self.const else ''}"
-                f"{'constexpr ' if self.constexpr else ''}"
-                f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)}"
-                f" {self.name}"
-                f"{' = ' + str(self._initial_value) if self._initial_value is not None else ''}"
-                f"{';' if semicolon else ''}"
-                )
+            f"{'static ' if self.static else ''}"
+            f"{'const ' if self.const else ''}"
+            f"{'constexpr ' if self.constexpr else ''}"
+            f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)}"
+            f" {self.name}"
+            f"{' = ' + str(self._initial_value) if self._initial_value is not None else ''}"
+            f"{';' if semicolon else ''}"
+        )
