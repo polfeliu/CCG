@@ -162,6 +162,7 @@ class CClass(CGenericType):
 
                     for member in access_members:
                         access_content += style.indent(member.declaration(from_space=self) + '\n', "class_member")
+                    access_content = access_content.rstrip('\n')
 
                     access_content = style.indent(access_content, "class_access")
                     access_contents.append(access_content)
