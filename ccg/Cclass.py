@@ -158,7 +158,7 @@ class CClass(CGenericType):
         if style.class_members == Style.ClassMembers.group_by_access_specified:
             access_contents = []
             for access in CClassAccess:
-                access_members = [member for member in self.members if member.access == access]
+                access_members = [member for member in self.members if member.access.value == access.value]
                 if len(access_members) > 0:
                     access_content = f"{access.name}:\n"
 
