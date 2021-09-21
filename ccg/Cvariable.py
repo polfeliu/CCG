@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 def hungarize(name: str, c_type: 'CGenericType'):
-    return c_type.hungarian_prefixes[0] + name.capitalize()
+    return c_type.hungarian_prefixes[0] + name[0].upper() + name[1:]
 
 
 class CVariable(CGenericItem):

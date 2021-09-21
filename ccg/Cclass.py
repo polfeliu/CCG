@@ -26,7 +26,8 @@ class CClassAttribute(CVariable):
                  c_type: 'CGenericType',
                  initial_value: Any = None,
                  access: CClassAccess = CClassAccess.private,
-                 static: bool = False, const: bool = False, constexpr: bool = False
+                 static: bool = False, const: bool = False, constexpr: bool = False,
+                 auto_hungarize: bool = False
                  ):
         super(CClassAttribute, self).__init__(
             name=name,
@@ -34,7 +35,8 @@ class CClassAttribute(CVariable):
             initial_value=initial_value,
             static=static,
             const=const,
-            constexpr=constexpr
+            constexpr=constexpr,
+            auto_hungarize=True
         )
         self.access = access
 
