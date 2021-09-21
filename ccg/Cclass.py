@@ -73,11 +73,25 @@ class CClassConstructor(CClassMethod):
         self.access = access
 
 
+class TypeMember():
+    def __init__(self,
+                 member,
+                 access: CClassAccess = CClassAccess.private
+                 ):
+        self.member = member
+        self.access = access
+        pass
+
+    def declaration(self, from_space):
+        return self.member.typedef()
+
+
 class CClass(CGenericType):
     Access = CClassAccess
     Attribute = CClassAttribute
     Method = CClassMethod
     Constructor = CClassConstructor
+    TypeMember = TypeMember
 
     def __init__(self,
                  name: str,
