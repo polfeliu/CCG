@@ -9,4 +9,5 @@ from .Cunion import CUnionDef
 from .Cfunction import CFunction
 from .Cclass import CClass
 from .Cnamespace import CNamespace
+from .Cusing import CUsing
 from .Cstatement import Cstatements, Cdeclarations

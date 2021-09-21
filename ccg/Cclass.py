@@ -5,10 +5,12 @@ from .Cfunction import CFunction
 from .Ctypes import CGenericType, CVoidType, CNoType
 from .Cvariable import CVariable
 from .style import Style, default_style
+from .Cusing import CUsing
 
 if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
     from .Cnamespace import CSpace
+    from .Ctypes import CGenericItem
 
 
 class CClassAccess(Enum):
@@ -73,9 +75,9 @@ class CClassConstructor(CClassMethod):
         self.access = access
 
 
-class TypeMember():
+class ClassTypeMember:
     def __init__(self,
-                 member,
+                 member: CGenericType,
                  access: CClassAccess = CClassAccess.private
                  ):
         self.member = member
@@ -86,21 +88,36 @@ class TypeMember():
         return self.member.typedef()
 
 
+class CClassUsing(CUsing):
+
+    def __init__(self,
+                 item: 'CGenericItem',
+                 access: CClassAccess = CClassAccess.private
+                 ):
+        super(CClassUsing, self).__init__(item)
+        self.access = access
+
+
 class CClass(CGenericType):
     Access = CClassAccess
     Attribute = CClassAttribute
     Method = CClassMethod
     Constructor = CClassConstructor
-    TypeMember = TypeMember
+    TypeMember = ClassTypeMember
+    Using = CClassUsing
 
     def __init__(self,
                  name: str,
-                 members: List[Union[CClassConstructor, CClassAttribute, CClassMethod]]
+                 members: List[Union[CClassConstructor, CClassAttribute, CClassMethod, TypeMember, CClassUsing]] = None
+                 # TODO Unify types
                  ):
         super(CClass, self).__init__(
             name=name,
         )
-        self.members = members
+        if members is None:
+            self.members = []
+        else:
+            self.members = members
 
         for member in self.members:
             if isinstance(member, CClassConstructor):
@@ -157,3 +174,9 @@ class CClass(CGenericType):
 
     def style_checks(self, style: 'Style') -> None:
         pass
+
+    @property
+    def constructor(self):
+        for member in self.members:
+            if isinstance(member, CClassConstructor):
+                return member

@@ -70,7 +70,9 @@ class CFunction(CGenericType):
             argumentlist += f"{argument.c_type.name} {argument.name}{default}, "
         return argumentlist.rstrip(", ")
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
+    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None,
+                    without_arguments: bool = False) -> str:
+        arguments = self._argument_list(include_defaults=True)
         return (
             f"{'static ' if self.static else ''}"
             f"{self.return_type.name}"
@@ -79,7 +81,7 @@ class CFunction(CGenericType):
             f"{self.space_def(from_space)}"
             f"{self.name}"
             f"{style.vspace_function_after_name_declaration}"
-            f"({self._argument_list(include_defaults=True)})"
+            f"{'(' + self._argument_list(include_defaults=True) + ')' if without_arguments == False else ''}"
             f"{';' if semicolon else ''}"
         )
 
