@@ -98,6 +98,13 @@ class CClassUsing(CUsing):
         self.access = access
 
 
+class CClassInheritance:
+
+    def __init__(self, cls: 'CClass', access: CClassAccess = CClassAccess.private):
+        self.cls = cls
+        self.access = access
+
+
 class CClass(CGenericType):
     Access = CClassAccess
     Attribute = CClassAttribute
@@ -105,11 +112,13 @@ class CClass(CGenericType):
     Constructor = CClassConstructor
     TypeMember = ClassTypeMember
     Using = CClassUsing
+    Inherit = CClassInheritance
 
     def __init__(self,
                  name: str,
-                 members: List[Union[CClassConstructor, CClassAttribute, CClassMethod, TypeMember, CClassUsing]] = None
+                 members: List[Union[CClassConstructor, CClassAttribute, CClassMethod, TypeMember, CClassUsing]] = None,
                  # TODO Unify types
+                 inherit_from: Union['CClassInheritance', List['CClassInheritance'], None] = None
                  ):
         super(CClass, self).__init__(
             name=name,
@@ -118,6 +127,13 @@ class CClass(CGenericType):
             self.members = []
         else:
             self.members = members
+
+        if inherit_from is None:
+            self.inherit_from = []
+        elif isinstance(inherit_from, list):
+            self.inherit_from = inherit_from
+        else:
+            self.inherit_from = [inherit_from]
 
         for member in self.members:
             if isinstance(member, CClassConstructor):
@@ -154,11 +170,20 @@ class CClass(CGenericType):
 
         return content
 
+    @property
+    def _inheritance_definition(self) -> str:
+        content = ":"
+        for inherit in self.inherit_from:
+            content += f" {inherit.access.name} {inherit.cls.name},"
+
+        return content.rstrip(",")
+
     def definition(self, style: 'Style' = default_style) -> str:
         self.style_checks(style)
 
         return (
             f"{self.declaration(False, style)}"
+            f"{self._inheritance_definition}"
             f"{style.bracket_open('class')}"
             f"{self._member_definition(style)}"
             f"{style.bracket_close('class')};"
