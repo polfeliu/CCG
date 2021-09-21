@@ -12,10 +12,10 @@ if TYPE_CHECKING:
 
 class CFunctionArgument(CVariable):
 
-    def __init__(self, name: str, c_type: 'CGenericType', default=None):
+    def __init__(self, name: str, c_type: 'CGenericType', default=None, auto_hungarize: bool = False):
         # TODO what python type should default be??. Maybe types should have a TypeValue object, that validates the
         #  type, or in case of structs, fills the members
-        super(CFunctionArgument, self).__init__(name, c_type)
+        super(CFunctionArgument, self).__init__(name, c_type, auto_hungarize=auto_hungarize)
         self.default = default
         if default is not None:
             if self.c_type.check_value(self._initial_value) is not True:
