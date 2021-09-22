@@ -66,15 +66,15 @@ class CGenericType(CGenericItem):
         return True  # Generic type accept everything. Override this method to check custom types
 
     def style_checks(self, style: 'Style') -> None:
-        # hungarian
-        if self not in std_types:
-            if not self.name.startswith('T'):
-                raise HungarianNotationError(
-                    f"Generic Type ({self.name}) Doesn't start with T hungarian style prefix")
-            else:
-                start_letter = self.name[1]
-                if not start_letter.isupper():
-                    raise HungarianNotationError(f"{self.name} first letter is not uppercase")
+        if style.check_hungarian:
+            if self not in std_types:
+                if not self.name.startswith('T'):
+                    raise HungarianNotationError(
+                        f"Generic Type ({self.name}) Doesn't start with T hungarian style prefix")
+                else:
+                    start_letter = self.name[1]
+                    if not start_letter.isupper():
+                        raise HungarianNotationError(f"{self.name} first letter is not uppercase")
 
     def type(self, name: str) -> 'CGenericType':
         new_type = copy(self)
