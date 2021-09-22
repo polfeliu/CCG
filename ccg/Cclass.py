@@ -36,7 +36,7 @@ class CClassAttribute(CVariable):
             static=static,
             const=const,
             constexpr=constexpr,
-            auto_hungarize=True
+            auto_hungarize=auto_hungarize
         )
         self.access = access
 
