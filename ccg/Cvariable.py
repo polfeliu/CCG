@@ -37,14 +37,13 @@ class CVariable(CGenericItem):
 
     def style_checks(self, style: 'Style'):
         self.c_type.style_checks(style)
-
-        # hungarian
-        if not style.check_hungarian_variable(
-                variable_name=self.name,
-                hungarian_prefixes=self.c_type.hungarian_prefixes
-        ):
-            raise HungarianNotationError(
-                f"{self.name} doesn't doesn't have the hungarian prefix {self.c_type.hungarian_prefixes} "
+        if style.check_hungarian:
+            if not style.check_hungarian_variable(
+                    variable_name=self.name,
+                    hungarian_prefixes=self.c_type.hungarian_prefixes
+            ):
+                raise HungarianNotationError(
+                    f"{self.name} doesn't doesn't have the hungarian prefix {self.c_type.hungarian_prefixes} "
                 f"or the first letter is not uppercase")
 
     def declaration(self, semicolon=True, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
@@ -59,3 +58,7 @@ class CVariable(CGenericItem):
             f"{' = ' + str(self._initial_value) if self._initial_value is not None else ''}"
             f"{';' if semicolon else ''}"
         )
+
+    @property
+    def bit_size(self):
+        return self.c_type.bit_size

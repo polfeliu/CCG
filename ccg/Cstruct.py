@@ -28,7 +28,7 @@ class CStructDefMember:
         if self.bitfield is not None:
             return self.bitfield
         else:
-            return self.variable.c_type.bit_size
+            return self.variable.bit_size
 
 
 class CStruct(CGenericType):
