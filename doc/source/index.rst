@@ -9,7 +9,7 @@ Welcome to ccg's documentation!
    api/Cclass
    api/Cfunction
    api/Cnamespace
-   api/statement
+   api/Cstatement
    api/Cstruct
    api/Ctypes
    api/Cunion

@@ -12,3 +12,5 @@ class CUsing:
             return f"using {self.item.declaration(without_arguments=True)}"
         else:
             return f"using {self.item.declaration()}"
+
+# TODO Move to namespace

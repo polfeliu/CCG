@@ -72,7 +72,6 @@ class CFunction(CGenericType):
 
     def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None,
                     without_arguments: bool = False) -> str:
-        arguments = self._argument_list(include_defaults=True)
         return (
             f"{'static ' if self.static else ''}"
             f"{self.return_type.name}"
