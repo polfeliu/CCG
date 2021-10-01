@@ -7,5 +7,8 @@ Cvariable
 
 Variable declaration
 -------------------------------------
-
 .. exec:: examples/variable_declaration.py
+
+Variable static, const and constexpr
+-------------------------------------
+.. exec:: examples/variable_static_const_constexpr.py
