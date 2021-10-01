@@ -12,10 +12,10 @@ if TYPE_CHECKING:
 
 class CFunctionArgument(CVariable):
 
-    def __init__(self, name: str, c_type: 'CGenericType', default=None):
+    def __init__(self, name: str, c_type: 'CGenericType', default=None, auto_hungarize: bool = False):
         # TODO what python type should default be??. Maybe types should have a TypeValue object, that validates the
         #  type, or in case of structs, fills the members
-        super(CFunctionArgument, self).__init__(name, c_type)
+        super(CFunctionArgument, self).__init__(name, c_type, auto_hungarize=auto_hungarize)
         self.default = default
         if default is not None:
             if self.c_type.check_value(self._initial_value) is not True:
@@ -61,16 +61,24 @@ class CFunction(CGenericType):
                     raise SyntaxError(f"Argument [{argument.name}] without default follows arguments with defaults"
                                       f"on function [{self.name}]")
 
-    def _argument_list(self, include_defaults: bool = False) -> str:
+    def _argument_list(self, style: 'Style', include_defaults: bool = False) -> str:
         argumentlist = ""
-        for argument in self.arguments:
-            default = ''
-            if argument.default is not None and include_defaults:
-                default = f" = {argument.default}"
-            argumentlist += f"{argument.c_type.name} {argument.name}{default}, "
-        return argumentlist.rstrip(", ")
+        if len(self.arguments) > 0:
+            argumentlist = ""
+            for argument in self.arguments:
+                default = ''
+                if argument.default is not None and include_defaults:
+                    default = f" = {argument.default}"
+                argumentlist += f"{argument.c_type.name} {argument.name}{default}, "
+            argumentlist = argumentlist.rstrip(", ")
+        else:
+            if style.function_void_when_no_arguments:
+                argumentlist = "void"
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
+        return argumentlist
+
+    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None,
+                    without_arguments: bool = False) -> str:
         return (
             f"{'static ' if self.static else ''}"
             f"{self.return_type.name}"
@@ -79,7 +87,7 @@ class CFunction(CGenericType):
             f"{self.space_def(from_space)}"
             f"{self.name}"
             f"{style.vspace_function_after_name_declaration}"
-            f"({self._argument_list(include_defaults=True)})"
+            f"{'(' + self._argument_list(style=style, include_defaults=True) + ')' if without_arguments == False else ''}"
             f"{';' if semicolon else ''}"
         )
 
@@ -91,7 +99,7 @@ class CFunction(CGenericType):
             f"{self.space_def(from_space)}"
             f"{self.name}"
             f"{style.vspace_function_after_name_definition}"
-            f"({self._argument_list()})"
+            f"({self._argument_list(style=style)})"
             f"{style.bracket_open('function')}"
             f"{self.content if self.content is not None else ''}"
             f"{style.bracket_close('function')};"

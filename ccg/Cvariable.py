@@ -11,13 +11,20 @@ if TYPE_CHECKING:
     from .Cnamespace import CSpace
 
 
+def hungarize(name: str, c_type: 'CGenericType'):
+    return c_type.hungarian_prefixes[0] + name[0].upper() + name[1:]
+
+
 class CVariable(CGenericItem):
 
     def __init__(self, name: str, c_type: 'CGenericType', initial_value: Any = None,
-                 static: bool = False, const: bool = False, constexpr: bool = False):
-        super(CVariable, self).__init__(
-            name=name
-        )
+                 static: bool = False, const: bool = False, constexpr: bool = False,
+                 auto_hungarize: bool = False
+                 ):
+        if auto_hungarize:
+            name = hungarize(name, c_type)
+
+        super(CVariable, self).__init__(name=name)
         self.c_type = c_type
         self._initial_value = initial_value
         if initial_value is not None:
@@ -30,25 +37,28 @@ class CVariable(CGenericItem):
 
     def style_checks(self, style: 'Style'):
         self.c_type.style_checks(style)
-
-        # hungarian
-        if not style.check_hungarian_variable(
-                variable_name=self.name,
-                hungarian_prefixes=self.c_type.hungarian_prefixes
-        ):
-            raise HungarianNotationError(
-                f"{self.name} doesn't doesn't have the hungarian prefix {self.c_type.hungarian_prefixes} "
+        if style.check_hungarian:
+            if not style.check_hungarian_variable(
+                    variable_name=self.name,
+                    hungarian_prefixes=self.c_type.hungarian_prefixes
+            ):
+                raise HungarianNotationError(
+                    f"{self.name} doesn't doesn't have the hungarian prefix {self.c_type.hungarian_prefixes} "
                 f"or the first letter is not uppercase")
 
     def declaration(self, semicolon=True, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         self.style_checks(style)
 
         return (
-                f"{'static ' if self.static else ''}"
-                f"{'const ' if self.const else ''}"
-                f"{'constexpr ' if self.constexpr else ''}"
-                f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)}"
-                f" {self.name}"
-                f"{' = ' + str(self._initial_value) if self._initial_value is not None else ''}"
-                f"{';' if semicolon else ''}"
-                )
+            f"{'static ' if self.static else ''}"
+            f"{'const ' if self.const else ''}"
+            f"{'constexpr ' if self.constexpr else ''}"
+            f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)}"
+            f" {self.name}"
+            f"{' = ' + str(self._initial_value) if self._initial_value is not None else ''}"
+            f"{';' if semicolon else ''}"
+        )
+
+    @property
+    def bit_size(self):
+        return self.c_type.bit_size

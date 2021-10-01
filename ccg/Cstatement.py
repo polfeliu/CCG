@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 # TODO propagate styles
 
-class Cstatement:
+class CStatement:
     def __init__(self, render_function: Callable):
         self.render_function = render_function
 
@@ -16,14 +16,14 @@ class Cstatement:
         return self.render_function()
 
 
-class Cdeclaration(Cstatement):
+class Cdeclaration(CStatement):
     pass
 
 
 # TODO Statements vs definitions
-class Cstatements(Cstatement):
-    def __init__(self, statements: List[Cstatement]):
-        super(Cstatements, self).__init__(
+class CStatements(CStatement):
+    def __init__(self, statements: List[CStatement]):
+        super(CStatements, self).__init__(
             render_function=self.render
         )
         self.statements = statements
@@ -35,8 +35,8 @@ class Cstatements(Cstatement):
         return content
 
 
-class Cdeclarations(Cstatements):
+class CDeclarations(CStatements):
     def __init__(self, declarations: List[Cdeclaration]):
-        super(Cdeclarations, self).__init__(
+        super(CDeclarations, self).__init__(
             statements=declarations
         )

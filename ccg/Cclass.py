@@ -5,10 +5,12 @@ from .Cfunction import CFunction
 from .Ctypes import CGenericType, CVoidType, CNoType
 from .Cvariable import CVariable
 from .style import Style, default_style
+from .Cusing import CUsing
 
 if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
     from .Cnamespace import CSpace
+    from .Ctypes import CGenericItem
 
 
 class CClassAccess(Enum):
@@ -24,7 +26,8 @@ class CClassAttribute(CVariable):
                  c_type: 'CGenericType',
                  initial_value: Any = None,
                  access: CClassAccess = CClassAccess.private,
-                 static: bool = False, const: bool = False, constexpr: bool = False
+                 static: bool = False, const: bool = False, constexpr: bool = False,
+                 auto_hungarize: bool = False
                  ):
         super(CClassAttribute, self).__init__(
             name=name,
@@ -32,7 +35,8 @@ class CClassAttribute(CVariable):
             initial_value=initial_value,
             static=static,
             const=const,
-            constexpr=constexpr
+            constexpr=constexpr,
+            auto_hungarize=auto_hungarize
         )
         self.access = access
 
@@ -73,20 +77,65 @@ class CClassConstructor(CClassMethod):
         self.access = access
 
 
+class ClassTypeMember:
+    def __init__(self,
+                 member: CGenericType,
+                 access: CClassAccess = CClassAccess.private
+                 ):
+        self.member = member
+        self.access = access
+        pass
+
+    def declaration(self, from_space):
+        return self.member.typedef()
+
+
+class CClassUsing(CUsing):
+
+    def __init__(self,
+                 item: 'CGenericItem',
+                 access: CClassAccess = CClassAccess.private
+                 ):
+        super(CClassUsing, self).__init__(item)
+        self.access = access
+
+
+class CClassInheritance:
+
+    def __init__(self, cls: 'CClass', access: CClassAccess = CClassAccess.private):
+        self.cls = cls
+        self.access = access
+
+
 class CClass(CGenericType):
     Access = CClassAccess
     Attribute = CClassAttribute
     Method = CClassMethod
     Constructor = CClassConstructor
+    TypeMember = ClassTypeMember
+    Using = CClassUsing
+    Inherit = CClassInheritance
 
     def __init__(self,
                  name: str,
-                 members: List[Union[CClassConstructor, CClassAttribute, CClassMethod]]
+                 members: List[Union[CClassConstructor, CClassAttribute, CClassMethod, TypeMember, CClassUsing]] = None,
+                 # TODO Unify types
+                 inherit_from: Union['CClassInheritance', List['CClassInheritance'], None] = None
                  ):
         super(CClass, self).__init__(
             name=name,
         )
-        self.members = members
+        if members is None:
+            self.members = []
+        else:
+            self.members = members
+
+        if inherit_from is None:
+            self.inherit_from = []
+        elif isinstance(inherit_from, list):
+            self.inherit_from = inherit_from
+        else:
+            self.inherit_from = [inherit_from]
 
         for member in self.members:
             if isinstance(member, CClassConstructor):
@@ -109,12 +158,13 @@ class CClass(CGenericType):
         if style.class_members == Style.ClassMembers.group_by_access_specified:
             access_contents = []
             for access in CClassAccess:
-                access_members = [member for member in self.members if member.access == access]
+                access_members = [member for member in self.members if member.access.value == access.value]
                 if len(access_members) > 0:
                     access_content = f"{access.name}:\n"
 
                     for member in access_members:
-                        access_content += style.indent(member.declaration(from_space=self), "class_member")
+                        access_content += style.indent(member.declaration(from_space=self) + '\n', "class_member")
+                    access_content = access_content.rstrip('\n')
 
                     access_content = style.indent(access_content, "class_access")
                     access_contents.append(access_content)
@@ -123,11 +173,20 @@ class CClass(CGenericType):
 
         return content
 
+    @property
+    def _inheritance_definition(self) -> str:
+        content = ":"
+        for inherit in self.inherit_from:
+            content += f" {inherit.access.name} {inherit.cls.name},"
+
+        return content.rstrip(",")
+
     def definition(self, style: 'Style' = default_style) -> str:
         self.style_checks(style)
 
         return (
             f"{self.declaration(False, style)}"
+            f"{self._inheritance_definition}"
             f"{style.bracket_open('class')}"
             f"{self._member_definition(style)}"
             f"{style.bracket_close('class')};"
@@ -143,3 +202,9 @@ class CClass(CGenericType):
 
     def style_checks(self, style: 'Style') -> None:
         pass
+
+    @property
+    def constructor(self):
+        for member in self.members:
+            if isinstance(member, CClassConstructor):
+                return member

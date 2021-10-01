@@ -15,7 +15,7 @@ class CStructDefMember:
         self.variable = variable
         self.bitfield = bitfield
         if bitfield is not None:
-            if bitfield > self.variable.c_type.bit_size:
+            if bitfield > self.variable.bit_size:
                 raise ValueError("Bitfields should not be bigger than type size")
 
     def declaration(self, style: 'Style' = default_style) -> str:
@@ -28,7 +28,7 @@ class CStructDefMember:
         if self.bitfield is not None:
             return self.bitfield
         else:
-            return self.variable.c_type.bit_size
+            return self.variable.bit_size
 
 
 class CStruct(CGenericType):

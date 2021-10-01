@@ -72,6 +72,9 @@ class Style:
 
     class_members = ClassMembers.group_by_access_specified
 
+    # Functions
+    function_void_when_no_arguments = True
+
     def bracket_open(self, obj) -> str:
         return (
                 str(self.__getattribute__(f"vnew_line_{obj}_bracket_open_before")) +

@@ -21,3 +21,11 @@ class CArray(CVariable):
         return f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)} " \
                f"{self.name}[{self.length}]" \
                f"{';' if semicolon else ''}"
+
+    @property
+    def hungarian_prefixes(self):
+        return self.c_type.hungarian_prefixes
+
+    @property
+    def bit_size(self):
+        return self.c_type.bit_size * self.length
