@@ -9,7 +9,7 @@ name = "pypi"
 sphinx = "==4.0.2"
 sphinx-rtd-theme = "==0.5.2"
 pytest = "*"
-sphinx-automodapi = "*"
+sphinx-exec-directive = "==0.5"
 
 
 [requires]

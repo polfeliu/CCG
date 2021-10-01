@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2483e2c7a99d09f8b0bf5c185509d983c075f3dbfd2c83e532037765598f9d72"
+            "sha256": "a72eb285a7f440405b284463459fe00a2c83d5c14c989d65ba17ef06b9914302"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -256,13 +256,13 @@
             "index": "pypi",
             "version": "==4.0.2"
         },
-        "sphinx-automodapi": {
+        "sphinx-exec-directive": {
             "hashes": [
-                "sha256:e1019336df7f7f0bcbf848eff7b84e7bef71691a57d8b5bda9107a2a046a226a",
-                "sha256:f9ebc9c10597f3aab1d93e5a8b1829903eee7c64f5bafb0cf71fd40e5c7d95f0"
+                "sha256:c28410cfce9891f133cd749e3760d10dc8fabe8d32eff1888069d045b1e3c996",
+                "sha256:fcccfa764461f0db9ee7c9b26befa0f2bf6da638c30ba9f1d5c37e629e38a562"
             ],
             "index": "pypi",
-            "version": "==0.13"
+            "version": "==0.5"
         },
         "sphinx-rtd-theme": {
             "hashes": [
@@ -347,11 +347,11 @@
         },
         "zipp": {
             "hashes": [
-                "sha256:957cfda87797e389580cb8b9e3870841ca991e2125350677b2ca83a0e99390a3",
-                "sha256:f5812b1e007e48cff63449a5e9f4e7ebea716b4111f9c4f9a645f91d579bf0c4"
+                "sha256:71c644c5369f4a6e07636f0aa966270449561fcea2e3d6747b8d23efaa9d7832",
+                "sha256:9fe5ea21568a0a70e50f273397638d39b03353731e6cbbb3fd8502a33fec40bc"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==3.5.0"
+            "version": "==3.6.0"
         }
     }
 }
