@@ -14,6 +14,7 @@ def test_namespace():
 
     # On the declaration it can have the same format
     print(fun.declaration(style=style))
+    
     # But typically the namespace is indicated with a namespace section,
     # So we can omit inline namespace by saying that we are on a namespace
     print(fun.declaration(from_space=ns1, style=style))

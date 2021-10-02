@@ -13,7 +13,7 @@ def test_class():
                              constexpr=True)
         ]
     )
-
+    
     print(my_class.declaration())
 
     print(my_class.definition())

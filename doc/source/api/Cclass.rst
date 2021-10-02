@@ -18,3 +18,7 @@ Cclass
 .. inheritance-diagram:: ccg.Cclass.CClassConstructor
    :top-classes: ccg.Ctypes.CGenericItem
 .. autoclass:: ccg.Cclass.CClassConstructor
+
+Class Declaration and Definitions
+-------------------------------------
+.. exec:: examples/class.py
