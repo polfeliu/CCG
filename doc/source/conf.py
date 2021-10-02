@@ -32,7 +32,7 @@ extensions = [
     'sphinx.ext.graphviz',
     'sphinx.ext.inheritance_diagram',
     'sphinx_exec_directive',
-    'nbsphinx'
+    'myst_nb'
 ]
 
 # Autodoc
