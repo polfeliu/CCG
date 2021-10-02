@@ -4,14 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-myst-nb = "*"
+
 
 [dev-packages]
 sphinx = "==4.0.2"
 sphinx-rtd-theme = "==0.5.2"
 pytest = "*"
 sphinx-exec-directive = "==0.5"
-nbsphinx = "==0.8.7"
+myst-nb = "==0.13.0"
 
 [requires]
 python_version = "3.6"
