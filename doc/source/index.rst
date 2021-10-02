@@ -16,6 +16,12 @@ Welcome to ccg's documentation!
    api/Cvariable
    api/style
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Contents:
+
+   examples/namespace
+
 Indices and tables
 ==================
 

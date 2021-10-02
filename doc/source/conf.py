@@ -31,7 +31,8 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.graphviz',
     'sphinx.ext.inheritance_diagram',
-    'sphinx_exec_directive'
+    'sphinx_exec_directive',
+    'nbsphinx'
 ]
 
 # Autodoc
