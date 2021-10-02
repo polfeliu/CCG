@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Any
 
-from .Cstatement import Cdeclaration
 from .Ctypes import CGenericItem
 from .Ctypes import HungarianNotationError
 from .style import default_style
@@ -44,16 +43,16 @@ class CVariable(CGenericItem):
             ):
                 raise HungarianNotationError(
                     f"{self.name} doesn't doesn't have the hungarian prefix {self.c_type.hungarian_prefixes} "
-                f"or the first letter is not uppercase")
+                    f"or the first letter is not uppercase")
 
-    def declaration(self, semicolon=True, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
         self.style_checks(style)
 
         return (
             f"{'static ' if self.static else ''}"
             f"{'const ' if self.const else ''}"
             f"{'constexpr ' if self.constexpr else ''}"
-            f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)}"
+            f"{self.c_type.declaration(style=style, semicolon=False, from_space=from_space)}"
             f" {self.name}"
             f"{' = ' + str(self._initial_value) if self._initial_value is not None else ''}"
             f"{';' if semicolon else ''}"

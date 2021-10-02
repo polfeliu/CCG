@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, List, Union
 
-from .style import default_style
 from .Ctypes import CGenericType
+from .style import default_style
 
 if TYPE_CHECKING:
     from .style import Style
@@ -106,7 +106,7 @@ class CStructDef(CGenericType):
             f"{style.bracket_close('struct')}"
         )
 
-    def declaration(self, semicolon: bool = False, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+    def declaration(self, style: 'Style' = default_style, semicolon: bool = False, from_space: 'CSpace' = None) -> str:
         return self.definition(style) + (';' if semicolon else '')
 
     @property

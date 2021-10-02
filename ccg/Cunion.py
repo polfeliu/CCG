@@ -1,8 +1,6 @@
-from typing import TYPE_CHECKING
 from .Ctypes import *
-from .style import default_style
-
 from .Cvariable import CVariable
+from .style import default_style
 
 if TYPE_CHECKING:
     pass
@@ -76,5 +74,5 @@ class CUnionDef(CGenericType):
             f"{style.bracket_close('union')}"
         )
 
-    def declaration(self, semicolon: bool = False, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+    def declaration(self, style: 'Style' = default_style, semicolon: bool = False, from_space: 'CSpace' = None) -> str:
         return self.definition(style) + (';' if semicolon else '')

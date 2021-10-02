@@ -3,9 +3,9 @@ from typing import TYPE_CHECKING, List, Union, Any
 
 from .Cfunction import CFunction
 from .Ctypes import CGenericType, CVoidType, CNoType
+from .Cusing import CUsing
 from .Cvariable import CVariable
 from .style import Style, default_style
-from .Cusing import CUsing
 
 if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
@@ -86,8 +86,8 @@ class ClassTypeMember:
         self.access = access
         pass
 
-    def declaration(self, from_space):
-        return self.member.typedef()
+    def declaration(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+        return self.member.typedef(style=style, from_space=from_space)
 
 
 class CClassUsing(CUsing):
@@ -142,7 +142,7 @@ class CClass(CGenericType):
                 member.name = self.name
             member.in_space = self
 
-    def declaration(self, semicolon: bool = True, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
         self.style_checks(style)
         return f"class {self.name}{';' if semicolon else ''}"
 
@@ -185,7 +185,7 @@ class CClass(CGenericType):
         self.style_checks(style)
 
         return (
-            f"{self.declaration(False, style)}"
+            f"{self.declaration(style=style, semicolon=False)}"
             f"{self._inheritance_definition}"
             f"{style.bracket_open('class')}"
             f"{self._member_definition(style)}"

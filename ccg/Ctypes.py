@@ -3,7 +3,7 @@ from copy import copy
 from typing import TYPE_CHECKING, Union, List, Any
 
 from .Cnamespace import CSpace
-from .Cstatement import Cdeclaration, CStatement
+from .Cstatement import CStatement
 from .style import default_style
 
 if TYPE_CHECKING:
@@ -51,7 +51,7 @@ class CGenericType(CGenericItem):
         self.derived_from = derived_from
         self.bit_size = bit_size
 
-    def declaration(self, semicolon: bool = False, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+    def declaration(self, style: 'Style' = default_style, semicolon: bool = False, from_space: 'CSpace' = None) -> str:
         return self.name + (';' if semicolon else '')
 
     def check_value(self, value: Any) -> bool:
@@ -84,8 +84,10 @@ class CGenericType(CGenericItem):
 
         return new_type
 
-    def typedef(self, style: 'Style' = default_style):
-        return f"typedef {self.derived_from.declaration(semicolon=False, style=style)} {self.name};"
+    def typedef(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+        return (f"typedef "
+                f"{self.derived_from.declaration(style=style, semicolon=False, from_space=from_space)} "
+                f"{self.name};")
 
 
 class CIntegerType(CGenericType):
