@@ -3,7 +3,7 @@ Welcome to ccg's documentation!
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
+   :caption: Api:
 
    api/Carray
    api/Cclass
@@ -18,9 +18,15 @@ Welcome to ccg's documentation!
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
+   :caption: Examples:
 
+   examples/class
+   examples/function
    examples/namespace
+   examples/statement
+   examples/struct
+   examples/types
+   examples/union
 
 Indices and tables
 ==================

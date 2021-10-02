@@ -9,7 +9,3 @@ Cfunction
 .. inheritance-diagram:: ccg.Cfunction.CFunctionArgument
    :top-classes: ccg.Ctypes.CGenericItem
 .. autoclass:: ccg.Cfunction.CFunctionArgument
-
-Function Declaration and Definition
--------------------------------------
-.. exec:: examples/function.py

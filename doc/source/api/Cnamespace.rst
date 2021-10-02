@@ -8,7 +8,3 @@ Cnamespace
 .. inheritance-diagram:: ccg.Cnamespace.CSpace
    :top-classes: ccg.Ctypes.CGenericItem
 .. autoclass:: ccg.Cnamespace.CSpace
-
-Namespaces
--------------------------------------
-.. exec:: examples/namespace.py

@@ -31,7 +31,6 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.graphviz',
     'sphinx.ext.inheritance_diagram',
-    'sphinx_exec_directive',
     'myst_nb'
 ]
 
