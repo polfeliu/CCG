@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from .Cfunction import CFunction
 from .Ctypes import CGenericItem
 from .style import default_style
 

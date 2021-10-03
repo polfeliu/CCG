@@ -83,7 +83,7 @@ class CFunction(CGenericType):
             f"{self.space_def(from_space)}"
             f"{self.name}"
             f"{style.vspace_function_after_name_declaration}"
-            f"{'(' + self._argument_list(style=style, include_defaults=True) + ')' if without_arguments == False else ''}"
+            f"{'(' + self._argument_list(style, include_defaults=True) + ')' if without_arguments == False else ''}"
             f"{';' if semicolon else ''}"
         )
 
