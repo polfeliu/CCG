@@ -1,3 +1,5 @@
+__version__ = "0.0.0dev"
+
 from .style import Style
 
 from .Ctypes import Cbool, Cfloat, Cdouble, Cint8, Cint16, Cint32, Cint64, Cuint8, Cuint16, Cuint32, Cuint64, \
