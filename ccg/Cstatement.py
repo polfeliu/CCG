@@ -9,6 +9,8 @@ RenderFunction = Callable[['Style'], str]
 
 
 class CStatement:
+    """Statement"""
+
     def __init__(self, render_function: RenderFunction):
         self.render_function = render_function
 
@@ -17,11 +19,14 @@ class CStatement:
 
 
 class Cdeclaration(CStatement):
-    pass
+    """Declaration
+
+    Definitions are considered as a type of declaration"""
 
 
-# TODO Statements vs definitions
 class CStatements(CStatement):
+    """Statements Collection"""
+
     def __init__(self, statements: List[CStatement]):
         super(CStatements, self).__init__(
             render_function=self.render
@@ -31,11 +36,13 @@ class CStatements(CStatement):
     def render(self, style: 'Style' = default_style):
         content = ""
         for statement in self.statements:
-            content += f"{statement.render()}\n"
+            content += f"{statement.render(style)}\n"
         return content.rstrip('\n')
 
 
 class CDeclarations(CStatements):
+    """Declarations Collection"""
+
     def __init__(self, declarations: List[Cdeclaration]):
         super(CDeclarations, self).__init__(
             statements=declarations

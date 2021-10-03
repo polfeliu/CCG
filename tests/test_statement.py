@@ -7,20 +7,23 @@ def test_statement():
     var = CVariable("u32My_var", Cuint32, initial_value=5)
     array = CArray("u8My_array", Cuint8, length=10)
     statements = CStatements([
-        # Cstatements only allow variable declaration and manipulation
         var.declare(),
-        array.declare()
+        array.declare(),
+
+        # Statements can also contain other statements
+        CStatements([
+            CVariable("u8Var", Cuint8, initial_value=3).declare()
+        ])
     ])
 
     fun = CFunction("my_fun")
 
     declarations = CDeclarations([
-        # Declarations include declarations of variable, function, class... etc
+        # Declarations include declarations and definitions of variable, function, class... etc
+        # But not other statements (if, while, ...)
         fun.declare(),
         fun.define()
     ])
-
-    # TODO nested
 
     print(statements.render())
     print(declarations.render())
