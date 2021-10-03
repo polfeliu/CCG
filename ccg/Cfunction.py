@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, List, Union, Any
 
 from ccg import CVariable
 from .Cstatement import Cdeclaration
@@ -12,9 +12,7 @@ if TYPE_CHECKING:
 
 class CFunctionArgument(CVariable):
 
-    def __init__(self, name: str, c_type: 'CGenericType', default=None, auto_hungarize: bool = False):
-        # TODO what python type should default be??. Maybe types should have a TypeValue object, that validates the
-        #  type, or in case of structs, fills the members
+    def __init__(self, name: str, c_type: 'CGenericType', default: Any = None, auto_hungarize: bool = False):
         super(CFunctionArgument, self).__init__(name, c_type, auto_hungarize=auto_hungarize)
         self.default = default
         if default is not None:
@@ -23,8 +21,6 @@ class CFunctionArgument(CVariable):
 
 
 class CFunction(CGenericType):
-    # TODO This should also be a type, when asked, it's type name it should return a C pointer
-
     Argument = CFunctionArgument
 
     def __init__(self,
@@ -47,7 +43,7 @@ class CFunction(CGenericType):
 
         self.return_type = return_type
 
-        self.content = content  # TODO Change content for list of statements or something like
+        self.content = content
         self.static = static
 
         # Check that non-default arguments are after default arguments
