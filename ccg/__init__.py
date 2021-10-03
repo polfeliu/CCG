@@ -1,4 +1,4 @@
-__version__ = "0.0.0dev"
+__version__ = "0.0.1dev"
 
 from .style import Style
 
