@@ -15,7 +15,7 @@ class CUsing:
         self.item = item
 
     def declaration(self, style: 'Style' = default_style, semicolon: bool = False, from_space: 'CSpace' = None) -> str:
-        if isinstance(self.item, CFunction):
+        if isinstance(self.item, CFunction):  # TODO remove types from attributes and functions
             return f"using {self.item.declaration(without_arguments=True, style=style, semicolon=semicolon, from_space=from_space)}"
         else:
             return f"using {self.item.declaration(style=style, semicolon=semicolon, from_space=from_space)}"

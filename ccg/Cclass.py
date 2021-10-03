@@ -1,8 +1,9 @@
 from enum import Enum
 from typing import TYPE_CHECKING, List, Union, Any
+from abc import ABC, abstractmethod
 
 from .Cfunction import CFunction
-from .Ctypes import CGenericType, CVoidType, CNoType
+from .Ctypes import CGenericType, CVoidType, CNoType, CGenericItem
 from .Cusing import CUsing
 from .Cvariable import CVariable
 from .style import Style, default_style
@@ -19,7 +20,18 @@ class CClassAccess(Enum):
     private = 2
 
 
-class CClassAttribute(CVariable):
+class CClassMember(ABC):
+
+    def __init__(self, access: CClassAccess = CClassAccess.private):
+        self.access = access
+
+    @abstractmethod
+    def declaration(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+        """All Class Members should inherit from a CGenericItem that contains a Declaration"""
+        raise NotImplemented
+
+
+class CClassAttribute(CVariable, CClassMember):
 
     def __init__(self,
                  name: str,
@@ -29,19 +41,20 @@ class CClassAttribute(CVariable):
                  static: bool = False, const: bool = False, constexpr: bool = False,
                  auto_hungarize: bool = False
                  ):
-        super(CClassAttribute, self).__init__(
-            name=name,
-            c_type=c_type,
-            initial_value=initial_value,
-            static=static,
-            const=const,
-            constexpr=constexpr,
-            auto_hungarize=auto_hungarize
-        )
-        self.access = access
+        CVariable.__init__(self,
+                           name=name,
+                           c_type=c_type,
+                           initial_value=initial_value,
+                           static=static,
+                           const=const,
+                           constexpr=constexpr,
+                           auto_hungarize=auto_hungarize
+                           )
+
+        CClassMember.__init__(self, access)
 
 
-class CClassMethod(CFunction):
+class CClassMethod(CFunction, CClassMember):
 
     def __init__(self,
                  name: str,
@@ -51,53 +64,52 @@ class CClassMethod(CFunction):
                  access: CClassAccess = CClassAccess.private,
                  static: bool = False
                  ):
-        super(CClassMethod, self).__init__(
-            name=name,
-            return_type=return_type,
-            arguments=arguments,
-            content=content,
-            static=static
-        )
-        self.access = access
+        CFunction.__init__(self,
+                           name=name,
+                           return_type=return_type,
+                           arguments=arguments,
+                           content=content,
+                           static=static
+                           )
+        CClassMember.__init__(self, access)
 
 
 class CClassConstructor(CClassMethod):
 
     def __init__(self,
-                 arguments: Union[List['CFunctionArgument'], None] = None,  # TODO Static initialization of attributes
+                 arguments: Union[List['CFunctionArgument'], None] = None,
                  content=None,
                  access: CClassAccess = CClassAccess.private
                  ):
-        super(CClassMethod, self).__init__(
-            name='',  # Name of the function is injected by Cclass TODO
-            return_type=CNoType,  # Ensure no type is placed here
-            arguments=arguments,
-            content=content
-        )
-        self.access = access
+        CClassMethod.__init__(self,
+                              name='',  # Name of the function is injected by Cclass
+                              return_type=CNoType,  # Ensure no type is placed here
+                              arguments=arguments,
+                              content=content,
+                              access=access
+                              )
 
 
-class ClassTypeMember:
+class ClassTypeMember(CClassMember):
     def __init__(self,
                  member: CGenericType,
                  access: CClassAccess = CClassAccess.private
                  ):
+        CClassMember.__init__(self, access)
         self.member = member
-        self.access = access
-        pass
 
     def declaration(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return self.member.typedef(style=style, from_space=from_space)
 
 
-class CClassUsing(CUsing):
+class CClassUsing(CUsing, CClassMember):
 
     def __init__(self,
                  item: 'CGenericItem',
                  access: CClassAccess = CClassAccess.private
                  ):
-        super(CClassUsing, self).__init__(item)
-        self.access = access
+        CUsing.__init__(self, item)
+        CClassMember.__init__(self, access)
 
 
 class CClassInheritance:
@@ -118,8 +130,7 @@ class CClass(CGenericType):
 
     def __init__(self,
                  name: str,
-                 members: List[Union[CClassConstructor, CClassAttribute, CClassMethod, TypeMember, CClassUsing]] = None,
-                 # TODO Unify types
+                 members: List[CClassMember] = None,
                  inherit_from: Union['CClassInheritance', List['CClassInheritance'], None] = None
                  ):
         super(CClass, self).__init__(
@@ -197,7 +208,7 @@ class CClass(CGenericType):
             member.definition()
             for member
             in self.members
-            if not isinstance(member, CClassAttribute)
+            if isinstance(member, CClassConstructor) or isinstance(member, CClassMethod)
         ]
 
     def style_checks(self, style: 'Style') -> None:

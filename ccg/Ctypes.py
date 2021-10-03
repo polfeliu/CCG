@@ -27,7 +27,7 @@ class CGenericItem(CSpace, ABC):
             render_function=self.declaration
         )
 
-    @abstractmethod  # TODO Some inheriting methods do not have the same order of arguments
+    @abstractmethod
     def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
         raise NotImplemented
 
