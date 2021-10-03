@@ -5,15 +5,15 @@ from .style import default_style
 if TYPE_CHECKING:
     from .style import Style
 
+RenderFunction = Callable[['Style'], str]
 
-# TODO propagate styles
 
 class CStatement:
-    def __init__(self, render_function: Callable):
+    def __init__(self, render_function: RenderFunction):
         self.render_function = render_function
 
     def render(self, style: 'Style' = default_style) -> str:
-        return self.render_function()
+        return self.render_function(style)
 
 
 class Cdeclaration(CStatement):
@@ -32,7 +32,7 @@ class CStatements(CStatement):
         content = ""
         for statement in self.statements:
             content += f"{statement.render()}\n"
-        return content
+        return content.rstrip('\n')
 
 
 class CDeclarations(CStatements):
