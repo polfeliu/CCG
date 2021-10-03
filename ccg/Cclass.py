@@ -130,8 +130,8 @@ class CClass(CGenericType):
 
     def __init__(self,
                  name: str,
-                 members: List[CClassMember] = None,
-                 inherit_from: Union['CClassInheritance', List['CClassInheritance'], None] = None
+                 inherit_from: Union['CClassInheritance', List['CClassInheritance'], None] = None,
+                 members: List[CClassMember] = None
                  ):
         super(CClass, self).__init__(
             name=name,

@@ -11,13 +11,8 @@ if TYPE_CHECKING:
 
 class CUsing:
 
-    def __init__(self, item: CGenericItem):  # TODO or generic type??
+    def __init__(self, item: CGenericItem):
         self.item = item
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = False, from_space: 'CSpace' = None) -> str:
-        if isinstance(self.item, CFunction):  # TODO remove types from attributes and functions
-            return f"using {self.item.declaration(without_arguments=True, style=style, semicolon=semicolon, from_space=from_space)}"
-        else:
-            return f"using {self.item.declaration(style=style, semicolon=semicolon, from_space=from_space)}"
-
-# TODO Move to namespace
+    def declaration(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+        return f"using {self.item.space_def(from_space)}{self.item.name}"
