@@ -14,4 +14,4 @@ class CUsing:
         self.item = item
 
     def declaration(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
-        return f"using {self.item.space_def(from_space)}{self.item.name}"
+        return f"using {self.item.space_def(from_space)}{self.item.name};"
