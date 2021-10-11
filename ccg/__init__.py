@@ -3,7 +3,7 @@ __version__ = "0.0.1dev"
 from .style import Style
 
 from .Ctypes import Cbool, Cfloat, Cdouble, Cint8, Cint16, Cint32, Cint64, Cuint8, Cuint16, Cuint32, Cuint64, \
-    std_types, CGenericType, CIntegerType
+    std_types, CGenericType, CIntegerType, CVoidType
 from .Cvariable import CVariable
 from .Carray import CArray
 from .Cstruct import CStructDef
