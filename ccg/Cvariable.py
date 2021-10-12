@@ -45,6 +45,9 @@ class CVariable(CGenericItem):
                     f"{self.name} doesn't doesn't have the hungarian prefix {self.c_type.hungarian_prefixes} "
                     f"or the first letter is not uppercase")
 
+    def doxygen_doc(self):
+        raise NotImplemented
+
     def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
         self.style_checks(style)
 

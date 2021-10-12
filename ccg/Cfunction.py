@@ -8,12 +8,23 @@ from .style import default_style
 if TYPE_CHECKING:
     from .style import Style
     from .Cnamespace import CSpace
+    from .doc import Doc
 
 
 class CFunctionArgument(CVariable):
 
-    def __init__(self, name: str, c_type: 'CGenericType', default: Any = None, auto_hungarize: bool = False):
-        super(CFunctionArgument, self).__init__(name, c_type, auto_hungarize=auto_hungarize)
+    def __init__(self,
+                 name: str,
+                 c_type: 'CGenericType',
+                 default: Any = None,
+                 auto_hungarize: bool = False,
+                 doc: Union['Doc', None] = None):
+        super(CFunctionArgument, self).__init__(
+            name=name,
+            c_type=c_type,
+            auto_hungarize=auto_hungarize
+        )
+        self.doc = doc
         self.default = default
         if default is not None:
             if self.c_type.check_value(self._initial_value) is not True:
@@ -29,12 +40,14 @@ class CFunction(CGenericType):
                  arguments: Union[List[CFunctionArgument], None] = None,
                  content=None,
                  in_space: Union['CSpace', None] = None,
-                 static: bool = False
+                 static: bool = False,
+                 doc: Union['Doc', None] = None
                  ):
         super(CFunction, self).__init__(
             name=name,
             hungarian_prefixes=[],
-            in_space=in_space
+            in_space=in_space,
+            doc=doc
         )
         if arguments is None:
             self.arguments = []
@@ -87,8 +100,28 @@ class CFunction(CGenericType):
             f"{';' if semicolon else ''}"
         )
 
+    def doxygen_doc(self, style: 'Style'):
+        if self.doc is None:
+            return ""
+
+        content = []
+        for argument in self.arguments:
+            content.append(
+                f"{style.doxygen_command('param')} "
+                f"{argument.name} "
+                f"{argument.doc.brief}"
+            )
+        if self.return_type != CVoidType:
+            if self.doc.ret is None:
+                raise AttributeError(f"Missing return value documentation for function with non void return value")
+            else:
+                content.append(f"{style.doxygen_command('return')} {self.doc.ret}")
+
+        return self.doc.doxygen_doc(style, content=content)
+
     def definition(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return (
+            f"{self.doxygen_doc(style)}"
             f"{'static ' if self.static else ''}"
             f"{self.return_type.name}"
             f"{' ' if self.return_type is not CNoType else ''}"

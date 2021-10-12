@@ -8,6 +8,7 @@ from .style import default_style
 
 if TYPE_CHECKING:
     from .style import Style
+    from .doc import Doc
 
 
 class HungarianNotationError(Exception):
@@ -16,11 +17,12 @@ class HungarianNotationError(Exception):
 
 class CGenericItem(CSpace, ABC):
 
-    def __init__(self, name, in_space: Union['CSpace', None] = None):
+    def __init__(self, name, in_space: Union['CSpace', None] = None, doc: Union['Doc', None] = None):
         super(CGenericItem, self).__init__(
             name=name,
             in_space=in_space
         )
+        self.doc = doc
 
     def declare(self) -> CStatement:
         return CStatement(
@@ -40,10 +42,12 @@ class CGenericType(CGenericItem):
                  hungarian_prefixes: Union[List[str], str] = "t",
                  derived_from: Union['CGenericType', None] = None,
                  in_space: Union['CSpace', None] = None,
+                 doc: Union['Doc', None] = None
                  ):
         super(CGenericType, self).__init__(
             name=name,
-            in_space=in_space
+            in_space=in_space,
+            doc=doc
         )
         self.hungarian_prefixes = hungarian_prefixes
         if not isinstance(self.hungarian_prefixes, list):

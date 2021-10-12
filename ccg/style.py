@@ -125,5 +125,21 @@ class Style:
 
         return False
 
+    def doxygen_format(self, lines: List[str]) -> str:
+        if len(lines) == 0:
+            return ""
+        elif len(lines) == 1:
+            return f"/** {lines[0]} */\n"
+        else:
+            content = ''.join([f" * {line}\n" for line in lines])
+            return (
+                f"/**\n"
+                f"{content}"
+                f" */\n"
+            )
+
+    def doxygen_command(self, command_name: str) -> str:
+        return f"@{command_name}"
+
 
 default_style = Style()
