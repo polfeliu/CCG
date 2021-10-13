@@ -89,6 +89,7 @@ class CFunction(CGenericType):
     def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None,
                     without_arguments: bool = False) -> str:
         return (
+            f"{self.doxygen_doc(style)}"
             f"{'static ' if self.static else ''}"
             f"{self.return_type.name}"
             f"{' ' if self.return_type is not CNoType else ''}"
@@ -121,7 +122,6 @@ class CFunction(CGenericType):
 
     def definition(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return (
-            f"{self.doxygen_doc(style)}"
             f"{'static ' if self.static else ''}"
             f"{self.return_type.name}"
             f"{' ' if self.return_type is not CNoType else ''}"
