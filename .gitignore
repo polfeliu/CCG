@@ -2,3 +2,4 @@
 /build/*
 /dist/*
 /ccg.egg-info/*
+/.ipynb_checkpoints/*
