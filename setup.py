@@ -11,7 +11,7 @@ from ccg import __version__
 import random
 
 if 'dev' in __version__:
-    __version__ += random.randint(0, 0xFFFFFFFF)
+    __version__ += str(random.randint(0, 0xFFFFFFFF))
 
 setup(
     name='ccg',
