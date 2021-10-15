@@ -11,6 +11,7 @@ from ccg import __version__
 import random
 
 if 'dev' in __version__:
+    # Development versions cache busting
     __version__ += str(random.randint(0, 0xFFFFFFFF))
 
 setup(
