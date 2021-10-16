@@ -125,23 +125,28 @@ class Style:
 
         return False
 
-    @staticmethod
-    def doxygen_format(lines: List[str]) -> str:
+    # Doxygen
+    doc_doxygen_start_block = "/**"
+    doc_doxygen_line_block = " * "
+    doc_doxygen_end_block = " */"
+
+    doc_doxygen_command_token = "@"
+
+    def doxygen_format(self, lines: List[str]) -> str:
         if len(lines) == 0:
             return ""
         elif len(lines) == 1:
-            return f"/** {lines[0]} */\n"
+            return f"{self.doc_doxygen_start_block} {lines[0]}{self.doc_doxygen_end_block}\n"
         else:
-            content = ''.join([f" * {line}\n" for line in lines])
+            content = ''.join([f"{self.doc_doxygen_line_block}{line}\n" for line in lines])
             return (
-                f"/**\n"
+                f"{self.doc_doxygen_start_block}\n"
                 f"{content}"
-                f" */\n"
+                f"{self.doc_doxygen_end_block}\n"
             )
 
-    @staticmethod
-    def doxygen_command(command_name: str) -> str:
-        return f"@{command_name}"
+    def doxygen_command(self, command_name: str) -> str:
+        return f"{self.doc_doxygen_command_token}{command_name}"
 
 
 default_style = Style()
