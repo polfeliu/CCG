@@ -18,7 +18,8 @@ class CFunctionArgument(CVariable):
                  c_type: 'CGenericType',
                  default: Any = None,
                  auto_hungarize: bool = False,
-                 doc: Union['Doc', None] = None):
+                 doc: Union['Doc', None] = None
+                 ):
         super(CFunctionArgument, self).__init__(
             name=name,
             c_type=c_type,

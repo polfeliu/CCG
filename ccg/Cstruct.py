@@ -7,12 +7,19 @@ if TYPE_CHECKING:
     from .style import Style
     from .Cvariable import CVariable
     from .Cnamespace import CSpace
+    from .doc import Doc
 
 
 class CStructDefMember:
 
-    def __init__(self, variable: 'CVariable', bitfield: Union[int, None] = None):
+    def __init__(self,
+                 variable: 'CVariable',
+                 bitfield: Union[int, None] = None,
+                 doc: Union['Doc', None] = None
+                 ):
         self.variable = variable
+        if doc is not None:
+            self.variable.doc = doc
         self.bitfield = bitfield
         if bitfield is not None:
             if bitfield > self.variable.bit_size:
@@ -55,7 +62,9 @@ class CStructDef(CGenericType):
     def __init__(self,
                  name: Union[str, None] = None,
                  is_packed: bool = False,
-                 members: Union[List[CStructDefMember], None] = None):
+                 members: Union[List[CStructDefMember], None] = None,
+                 doc: Union['Doc', None] = None
+                 ):
         if name is None:
             self.struct_name = ''
             self.is_anonymous = True
@@ -64,7 +73,8 @@ class CStructDef(CGenericType):
             self.is_anonymous = False
 
         super(CStructDef, self).__init__(
-            name=f"struct {self.struct_name}"
+            name=f"struct {self.struct_name}",
+            doc=doc
         )
 
         if members is None or len(members) < 1:
@@ -99,6 +109,7 @@ class CStructDef(CGenericType):
                 members += style.vspace_struct_members
 
         return (
+            f"{self.doxygen_doc(style)}"
             f"{self.name}"
             f"{style.attribute_packed if self.is_packed else ''}"
             f"{style.bracket_open('struct')}"
