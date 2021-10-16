@@ -95,7 +95,7 @@ class CFunction(CGenericType):
                     without_arguments: bool = False
                     ) -> str:
         return (
-            f"{self.doxygen_doc(style) if doc else ''}"
+            f"{self.doc_render(style) if doc else ''}"
             f"{'static ' if self.static else ''}"
             f"{self.return_type.name}"
             f"{' ' if self.return_type is not CNoType else ''}"
@@ -107,7 +107,7 @@ class CFunction(CGenericType):
             f"{';' if semicolon else ''}"
         )
 
-    def doxygen_doc(self, style: 'Style'):
+    def doc_render(self, style: 'Style'):
         if self.doc is None:
             return ""
 
@@ -124,7 +124,7 @@ class CFunction(CGenericType):
             else:
                 content.append(f"{style.doxygen_command('return')} {self.doc.ret}")
 
-        return self.doc.doxygen_doc(style, content=content)
+        return self.doc.render(style, content=content)
 
     def definition(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return (

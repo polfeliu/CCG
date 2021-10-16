@@ -109,7 +109,7 @@ class CStructDef(CGenericType):
                 members += style.vspace_struct_members
 
         return (
-            f"{self.doxygen_doc(style) if doc else ''}"
+            f"{self.doc_render(style) if doc else ''}"
             f"{self.name}"
             f"{style.attribute_packed if self.is_packed else ''}"
             f"{style.bracket_open('struct')}"

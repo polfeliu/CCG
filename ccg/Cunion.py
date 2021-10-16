@@ -73,7 +73,7 @@ class CUnionDef(CGenericType):
                 members += style.vnew_line_union_members
                 members += style.vspace_union_members
         return (
-            f"{self.doxygen_doc(style) if doc else ''}"
+            f"{self.doc_render(style) if doc else ''}"
             f"{self.name}"
             f"{style.bracket_open('union')}"
             f"{members}"

@@ -38,11 +38,11 @@ class CGenericItem(CSpace, ABC):
                     ) -> str:
         raise NotImplemented
 
-    def doxygen_doc(self, style: 'Style'):
+    def doc_render(self, style: 'Style'):
         if self.doc is None:
             return ""
 
-        return self.doc.doxygen_doc(style, content=None)
+        return self.doc.render(style, content=None)
 
 
 class CGenericType(CGenericItem):

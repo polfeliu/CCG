@@ -65,7 +65,7 @@ class CVariable(CGenericItem):
         self.style_checks(style)
 
         return (
-            f"{self.doxygen_doc(style) if doc else ''}"
+            f"{self.doc_render(style) if doc else ''}"
             f"{'static ' if self.static else ''}"
             f"{'const ' if self.const else ''}"
             f"{'constexpr ' if self.constexpr else ''}"

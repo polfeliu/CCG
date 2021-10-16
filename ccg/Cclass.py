@@ -204,7 +204,7 @@ class CClass(CGenericType):
         self.style_checks(style)
 
         return (
-            f"{self.doxygen_doc(style)}"
+            f"{self.doc_render(style)}"
             f"{self.declaration(style=style, semicolon=False)}"
             f"{self._inheritance_definition}"
             f"{style.bracket_open('class')}"

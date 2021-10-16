@@ -11,7 +11,7 @@ class Doc:
         self.body = body
         self.ret = ret
 
-    def doxygen_doc(self, style: 'Style', content: Union[List[str], None] = None):
+    def render(self, style: 'Style', content: Union[List[str], None] = None):
         lines = []
 
         if self.body is not None:

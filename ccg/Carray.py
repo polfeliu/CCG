@@ -34,7 +34,7 @@ class CArray(CVariable):
         self.style_checks(style)
 
         return (
-            f"{self.doxygen_doc(style) if doc else ''}"
+            f"{self.doc_render(style) if doc else ''}"
             f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)} "
             f"{self.name}[{self.length}]"
             f"{';' if semicolon else ''}"
