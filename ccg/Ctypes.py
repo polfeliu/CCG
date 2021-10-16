@@ -33,6 +33,12 @@ class CGenericItem(CSpace, ABC):
     def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
         raise NotImplemented
 
+    def doxygen_doc(self, style: 'Style'):
+        if self.doc is None:
+            return ""
+
+        return self.doc.doxygen_doc(style, content=None)
+
 
 class CGenericType(CGenericItem):
 
@@ -92,12 +98,6 @@ class CGenericType(CGenericItem):
         return (f"typedef "
                 f"{self.derived_from.declaration(style=style, semicolon=False, from_space=from_space)} "
                 f"{self.name};")
-
-    def doxygen_doc(self, style: 'Style'):
-        if self.doc is None:
-            return ""
-
-        return self.doc.doxygen_doc(style)
 
 
 class CIntegerType(CGenericType):

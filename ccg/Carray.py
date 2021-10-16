@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from .Cvariable import CVariable
 from .style import default_style
@@ -7,20 +7,33 @@ if TYPE_CHECKING:
     from .style import Style
     from .Ctypes import CGenericType
     from .Cnamespace import CSpace
+    from .doc import Doc
 
 
 class CArray(CVariable):
 
-    def __init__(self, name: str, c_type: 'CGenericType', length: int):
-        super().__init__(name, c_type)
+    def __init__(self,
+                 name: str,
+                 c_type: 'CGenericType',
+                 length: int,
+                 doc: Union['Doc', None] = None
+                 ):
+        super().__init__(
+            name=name,
+            c_type=c_type,
+            doc=doc
+        )
         self.length = length
 
     def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
         self.style_checks(style)
 
-        return f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)} " \
-               f"{self.name}[{self.length}]" \
-               f"{';' if semicolon else ''}"
+        return (
+            f"{self.doxygen_doc(style)}"
+            f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)} "
+            f"{self.name}[{self.length}]"
+            f"{';' if semicolon else ''}"
+        )
 
     @property
     def hungarian_prefixes(self):
