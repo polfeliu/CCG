@@ -26,7 +26,11 @@ class CUnion(CGenericType):
 
 class CUnionDef(CGenericType):
 
-    def __init__(self, name: Union[str, None] = None, members: List[CVariable] = None):
+    def __init__(self,
+                 name: Union[str, None] = None,
+                 members: List[CVariable] = None,
+                 doc: Union['Doc', None] = None
+                 ):
         if name is None:
             self.name = ''
             self.is_anonymous = True
@@ -35,7 +39,8 @@ class CUnionDef(CGenericType):
             self.is_anonymous = False
 
         super(CUnionDef, self).__init__(
-            name=f"union {self.name}"
+            name=f"union {self.name}",
+            doc=doc
         )
 
         if members is None or len(members) < 1:
@@ -68,6 +73,7 @@ class CUnionDef(CGenericType):
                 members += style.vnew_line_union_members
                 members += style.vspace_union_members
         return (
+            f"{self.doxygen_doc(style)}"
             f"{self.name}"
             f"{style.bracket_open('union')}"
             f"{members}"
