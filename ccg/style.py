@@ -125,7 +125,8 @@ class Style:
 
         return False
 
-    def doxygen_format(self, lines: List[str]) -> str:
+    @staticmethod
+    def doxygen_format(lines: List[str]) -> str:
         if len(lines) == 0:
             return ""
         elif len(lines) == 1:
@@ -138,7 +139,8 @@ class Style:
                 f" */\n"
             )
 
-    def doxygen_command(self, command_name: str) -> str:
+    @staticmethod
+    def doxygen_command(command_name: str) -> str:
         return f"@{command_name}"
 
 
