@@ -1,5 +1,4 @@
-from ccg import CClass, CFunction
-from ccg.Ctypes import *
+from ccg import *
 
 
 def test_class():
@@ -11,7 +10,7 @@ def test_class():
     )
 
     my_class = CClass(
-        name="InheritedClass",
+        name="InheritingClass",
         inherit_from=CClass.Inherit(base_class, access=CClass.Access.public),
         members=[
             CClass.Using(base_class.constructor, access=CClass.Access.public),
@@ -20,7 +19,8 @@ def test_class():
             CClass.Attribute('u8My_attr', Cuint8, initial_value=3, access=CClass.Access.private, static=True,
                              constexpr=True),
             CClass.TypeMember(Cuint8.type('NewType'), access=CClass.Access.public),
-        ]
+        ],
+        doc=Doc("Class Example", "This class holds methods and attributes to represent objects")
     )
 
     print(my_class.declaration())

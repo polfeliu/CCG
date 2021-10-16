@@ -1,7 +1,5 @@
 from ccg import *
 
-from common_style import style
-
 
 def test_function():
     f = CFunction(
@@ -15,13 +13,13 @@ def test_function():
                 ret="returns a lucky number")
     )
 
-    print(f.declaration(style))
-    print(f.definition(style))
+    print(f.declaration())
+    print(f.definition())
 
     f.static = True
 
-    print(f.declaration(style))
-    print(f.definition(style))
+    print(f.declaration())
+    print(f.definition())
 
 
 if __name__ == "__main__":

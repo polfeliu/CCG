@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
     from .Cnamespace import CSpace
     from .Ctypes import CGenericItem
+    from .doc import Doc
 
 
 class CClassAccess(Enum):
@@ -131,10 +132,12 @@ class CClass(CGenericType):
     def __init__(self,
                  name: str,
                  inherit_from: Union['CClassInheritance', List['CClassInheritance'], None] = None,
-                 members: List[CClassMember] = None
+                 members: List[CClassMember] = None,
+                 doc: Union['Doc', None] = None
                  ):
         super(CClass, self).__init__(
             name=name,
+            doc=doc
         )
         if members is None:
             self.members = []
@@ -196,6 +199,7 @@ class CClass(CGenericType):
         self.style_checks(style)
 
         return (
+            f"{self.doxygen_doc(style)}"
             f"{self.declaration(style=style, semicolon=False)}"
             f"{self._inheritance_definition}"
             f"{style.bracket_open('class')}"
