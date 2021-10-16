@@ -156,7 +156,12 @@ class CClass(CGenericType):
                 member.name = self.name
             member.in_space = self
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None
+                    ) -> str:
         self.style_checks(style)
         return f"class {self.name}{';' if semicolon else ''}"
 

@@ -1,7 +1,5 @@
 from ccg import *
 
-import sys
-
 
 def test_struct():
     # Struct definition

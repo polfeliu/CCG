@@ -60,7 +60,7 @@ class CUnionDef(CGenericType):
     def union(self) -> CUnion:
         return self._union
 
-    def definition(self, style: 'Style' = default_style) -> str:
+    def definition(self, style: 'Style' = default_style, doc: bool = True) -> str:
         self.style_checks(style)
 
         members = ""
@@ -73,12 +73,18 @@ class CUnionDef(CGenericType):
                 members += style.vnew_line_union_members
                 members += style.vspace_union_members
         return (
-            f"{self.doxygen_doc(style)}"
+            f"{self.doxygen_doc(style) if doc else ''}"
             f"{self.name}"
             f"{style.bracket_open('union')}"
             f"{members}"
             f"{style.bracket_close('union')}"
         )
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = False, from_space: 'CSpace' = None) -> str:
-        return self.definition(style) + (';' if semicolon else '')
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None,
+                    without_arguments: bool = False
+                    ) -> str:
+        return self.definition(style, doc) + (';' if semicolon else '')

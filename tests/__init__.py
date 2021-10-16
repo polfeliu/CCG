@@ -1,10 +1,10 @@
-from test_function import test_function
-from test_struct import test_struct
-from test_types import test_types
-from test_union import test_union
-from test_class import test_class
-from test_namespace import test_namespace
-from test_statement import test_statement
+from .test_function import test_function
+from .test_struct import test_struct
+from .test_types import test_types
+from .test_union import test_union
+from .test_class import test_class
+from .test_namespace import test_namespace
+from .test_statement import test_statement
 
 test_function()
 test_struct()

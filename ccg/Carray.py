@@ -25,11 +25,16 @@ class CArray(CVariable):
         )
         self.length = length
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None
+                    ) -> str:
         self.style_checks(style)
 
         return (
-            f"{self.doxygen_doc(style)}"
+            f"{self.doxygen_doc(style) if doc else ''}"
             f"{self.c_type.declaration(semicolon=False, style=style, from_space=from_space)} "
             f"{self.name}[{self.length}]"
             f"{';' if semicolon else ''}"

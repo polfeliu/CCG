@@ -95,7 +95,7 @@ class CStructDef(CGenericType):
     def struct(self) -> CStruct:
         return self._struct
 
-    def definition(self, style: 'Style' = default_style) -> str:
+    def definition(self, style: 'Style' = default_style, doc: bool = True) -> str:
         self.style_checks(style)
 
         members = ""
@@ -109,7 +109,7 @@ class CStructDef(CGenericType):
                 members += style.vspace_struct_members
 
         return (
-            f"{self.doxygen_doc(style)}"
+            f"{self.doxygen_doc(style) if doc else ''}"
             f"{self.name}"
             f"{style.attribute_packed if self.is_packed else ''}"
             f"{style.bracket_open('struct')}"
@@ -117,8 +117,14 @@ class CStructDef(CGenericType):
             f"{style.bracket_close('struct')}"
         )
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = False, from_space: 'CSpace' = None) -> str:
-        return self.definition(style) + (';' if semicolon else '')
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None,
+                    without_arguments: bool = False
+                    ) -> str:
+        return self.definition(style, doc) + (';' if semicolon else '')
 
     @property
     def bit_size(self) -> int:

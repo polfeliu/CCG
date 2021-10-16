@@ -55,11 +55,17 @@ class CVariable(CGenericItem):
                     f"{self.name} doesn't doesn't have the hungarian prefix {self.c_type.hungarian_prefixes} "
                     f"or the first letter is not uppercase")
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None,
+                    without_arguments: bool = False
+                    ) -> str:
         self.style_checks(style)
 
         return (
-            f"{self.doxygen_doc(style)}"
+            f"{self.doxygen_doc(style) if doc else ''}"
             f"{'static ' if self.static else ''}"
             f"{'const ' if self.const else ''}"
             f"{'constexpr ' if self.constexpr else ''}"

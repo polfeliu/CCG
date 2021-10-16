@@ -30,7 +30,12 @@ class CGenericItem(CSpace, ABC):
         )
 
     @abstractmethod
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None
+                    ) -> str:
         raise NotImplemented
 
     def doxygen_doc(self, style: 'Style'):
@@ -61,7 +66,13 @@ class CGenericType(CGenericItem):
         self.derived_from = derived_from
         self.bit_size = bit_size
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = False, from_space: 'CSpace' = None) -> str:
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None,
+                    without_arguments: bool = False
+                    ) -> str:
         return self.name + (';' if semicolon else '')
 
     def check_value(self, value: Any) -> bool:
@@ -96,7 +107,7 @@ class CGenericType(CGenericItem):
 
     def typedef(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
         return (f"typedef "
-                f"{self.derived_from.declaration(style=style, semicolon=False, from_space=from_space)} "
+                f"{self.derived_from.declaration(style=style, semicolon=False, doc=False, from_space=from_space)} "
                 f"{self.name};")
 
 

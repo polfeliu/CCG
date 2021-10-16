@@ -25,19 +25,19 @@ def test_union():
         ])
 
     # Declaration of union definition
-    # print(example_union_def.declaration())
+    print(example_union_def.declaration())
 
     # Can declare a union with a variable in the same sentence
-    # print(CVariable("tInst", c_type=example_union_def).declaration())
+    print(CVariable("tInst", c_type=example_union_def).declaration())
 
     # Or assume the union is already declared and use it as type
-    # print(CVariable("tInst", c_type=example_union_def.union).declaration())
+    print(CVariable("tInst", c_type=example_union_def.union).declaration())
 
     # Can do a typedef of the union with the declaration of the union inplace
-    # print(example_union_def.type("TMyStruct").typedef())
+    print(example_union_def.type("TMyStruct").typedef())
 
     # Or the union is already declared and can be typedefed afterwards
-    # print(example_union_def.union.type("TMyStruct").typedef())
+    print(example_union_def.union.type("TMyStruct").typedef())
 
 
 if __name__ == "__main__":
