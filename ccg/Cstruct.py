@@ -53,7 +53,10 @@ class CStruct(CGenericType, CItemDefinable):
                    ) -> str:
         self.style_checks(style)
 
-        return f"{self.name}"  # TODO From space
+        return (
+            f"{self.space_def(from_space)}"
+            f"{self.name}"
+        )
 
     def style_checks(self, style: 'Style') -> None:
         # Name of the struct type is not checked by hungarian
@@ -116,8 +119,9 @@ class CStructDef(CGenericType, CItemDefinable):
                 members += style.vnew_line_struct_members
                 members += style.vspace_struct_members
 
-        return (  # TODO from space
+        return (
             f"{self.doc_render(style) if doc else ''}"
+            f"{self.space_def(from_space)}"
             f"{self.name}"
             f"{style.attribute_packed if self.is_packed else ''}"
             f"{style.bracket_open('struct')}"

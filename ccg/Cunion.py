@@ -24,7 +24,10 @@ class CUnion(CGenericType, CItemDefinable):
                    ) -> str:
         self.style_checks(style)
 
-        return f"{self.name}"  # TODO From space
+        return (
+            f"{self.space_def(from_space)}"
+            f"{self.name}"
+        )
 
     def style_checks(self, style: 'Style') -> None:
         # Name of the union type is not checked by hungarian
@@ -83,8 +86,9 @@ class CUnionDef(CGenericType, CItemDefinable):
             if member != self.members[-1]:  # Is not last member
                 members += style.vnew_line_union_members
                 members += style.vspace_union_members
-        return (  # TODO From space
+        return (
             f"{self.doc_render(style) if doc else ''}"
+            f"{self.space_def(from_space)}"
             f"{self.name}"
             f"{style.bracket_open('union')}"
             f"{members}"
