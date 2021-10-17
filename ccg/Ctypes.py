@@ -121,7 +121,7 @@ class CGenericType(CGenericItem):
             f"{self.name};"
         )
 
-    def typedef(self, doc: 'Doc') -> CStatement:
+    def typedef(self, doc: Union['Doc', None] = None) -> CStatement:
         return CStatement(
             render_function=self.typedef_render,
             doc=doc
