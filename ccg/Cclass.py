@@ -224,9 +224,14 @@ class CClass(CGenericType):
                 if len(access_members) > 0:
                     access_content = f"{access.name}:\n"
 
-                    for member in access_members:
-                        access_content += style.indent(member.declaration(from_space=self) + '\n', "class_member")
-                    access_content = access_content.rstrip('\n')
+                    for i, member in enumerate(access_members):
+                        access_content += style.indent(
+                            value=(
+                                f"{member.declaration(from_space=self)}"
+                                f"{style.new_line_token * 2 if i < len(access_members) - 1 else ''}"
+                            ),
+                            obj="class_member"
+                        )
 
                     access_content = style.indent(access_content, "class_access")
                     access_contents.append(access_content)
