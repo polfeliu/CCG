@@ -34,10 +34,10 @@ def test_union():
     print(CVariable("tInst", c_type=example_union_def.union).declaration())
 
     # Can do a typedef of the union with the declaration of the union inplace
-    print(example_union_def.type("TMyStruct").typedef())
+    print(example_union_def.type("TMyStruct").typedef().render())
 
     # Or the union is already declared and can be typedefed afterwards
-    print(example_union_def.union.type("TMyStruct").typedef())
+    print(example_union_def.union.type("TMyStruct").typedef().render())
 
 
 if __name__ == "__main__":

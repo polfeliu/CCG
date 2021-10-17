@@ -42,10 +42,10 @@ def test_struct():
     print(CVariable("tInst", c_type=example_struct_def.struct).declaration())
 
     # Can do a typedef of the struct with the declaration of the struct inplace
-    print(example_struct_def.type("TMyStruct").typedef())
+    print(example_struct_def.type("TMyStruct").typedef().render())
 
     # Or the struct is already declared and can be typedefed afterwards
-    print(example_struct_def.struct.type("TMyStruct").typedef())
+    print(example_struct_def.struct.type("TMyStruct").typedef().render())
 
     # Third member is the packed anonymous struct, can be reobtained
     packed_struct = example_struct_def.members[3].variable.c_type
