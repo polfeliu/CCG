@@ -103,6 +103,7 @@ class Style:
         else:
             return super(Style, self).__getattribute__(item)
 
+    new_line_token = '\n'
     indent_token = '\t'
 
     def indent(self, value: str, obj: Union[str, None] = None) -> str:

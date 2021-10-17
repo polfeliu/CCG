@@ -107,7 +107,7 @@ class CFunction(CGenericType):
             f"{';' if semicolon else ''}"
         )
 
-    def doc_render(self, style: 'Style'):
+    def doc_render(self, style: 'Style') -> str:
         if self.doc is None:
             return ""
 

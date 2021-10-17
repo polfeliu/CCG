@@ -27,9 +27,21 @@ class CClassMember(ABC):
         self.access = access
 
     @abstractmethod
-    def declaration(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None
+                    ) -> str:
         """All Class Members should inherit from a CGenericItem that contains a Declaration"""
         raise NotImplemented
+
+    @abstractmethod
+    def doc_render(self, style: 'Style') -> str:
+        """All Class members should have a doc_render method"""
+        raise NotImplemented
+
+    doc = None
 
 
 class CClassAttribute(CVariable, CClassMember):
@@ -103,8 +115,16 @@ class ClassTypeMember(CClassMember):
         CClassMember.__init__(self, access)
         self.member = member
 
-    def declaration(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None
+                    ) -> str:
         return self.member.typedef(style=style, from_space=from_space)
+
+    def doc_render(self, style: 'Style') -> str:
+        return ""  # TODO
 
 
 class CClassUsing(CUsing, CClassMember):
@@ -173,11 +193,14 @@ class CClass(CGenericType):
     def _member_definition(self, style: 'Style') -> str:
         content = ""
         if style.class_members == Style.ClassMembers.inline_access_preserve_order:
-            for member in self.members:
+            for i, member in enumerate(self.members):
                 content += style.indent(
+                    f"{style.new_line_token if i != 0 else ''}"
+                    f"{member.doc_render(style)}"
                     f"{member.access.name}: "
-                    f"{member.declaration(from_space=self)}",
-                    "class_member"
+                    f"{member.declaration(style, from_space=self, doc=False)}"
+                    f"{style.new_line_token if i < len(self.members) - 1 else ''}",
+                    obj="class_member"
                 )
         if style.class_members == Style.ClassMembers.group_by_access_specified:
             access_contents = []

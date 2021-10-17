@@ -17,7 +17,11 @@ class HungarianNotationError(Exception):
 
 class CGenericItem(CSpace, ABC):
 
-    def __init__(self, name, in_space: Union['CSpace', None] = None, doc: Union['Doc', None] = None):
+    def __init__(self,
+                 name: str,
+                 in_space: Union['CSpace', None] = None,
+                 doc: Union['Doc', None] = None
+                 ):
         super(CGenericItem, self).__init__(
             name=name,
             in_space=in_space
@@ -38,7 +42,7 @@ class CGenericItem(CSpace, ABC):
                     ) -> str:
         raise NotImplemented
 
-    def doc_render(self, style: 'Style'):
+    def doc_render(self, style: 'Style') -> str:
         if self.doc is None:
             return ""
 
