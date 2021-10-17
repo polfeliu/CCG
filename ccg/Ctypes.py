@@ -83,7 +83,11 @@ class CGenericType(CGenericItem):
         if not isinstance(self.hungarian_prefixes, list):
             self.hungarian_prefixes = [self.hungarian_prefixes]
         self.derived_from = derived_from
-        self.bit_size = bit_size
+        self._bit_size = bit_size
+
+    @property
+    def bit_size(self):
+        return self._bit_size
 
     def declaration(self,
                     style: 'Style' = default_style,
@@ -150,7 +154,8 @@ class CIntegerType(CGenericType):
     def __init__(self, name: str, hungarian_prefixes: Union[List[str], str], bits: int, is_signed: bool):
         super(CIntegerType, self).__init__(
             name=name,
-            hungarian_prefixes=hungarian_prefixes
+            hungarian_prefixes=hungarian_prefixes,
+            bit_size=bits
         )
         if is_signed:
             self.minimum = -2 ** (bits - 1)
@@ -158,7 +163,6 @@ class CIntegerType(CGenericType):
         else:
             self.minimum = 0
             self.maximum = 2 ** bits - 1
-        self.bit_size = bits
 
     def check_value(self, value: Any) -> bool:
         return value in range(self.minimum, self.maximum + 1)

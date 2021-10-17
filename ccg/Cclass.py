@@ -26,6 +26,8 @@ class CClassMember(ABC):
 
     def __init__(self, access: CClassAccess = CClassAccess.private):
         self.access = access
+        self.doc: Union['Doc', None]  # Expected from generic item
+        self.in_space: Union['CSpace', None]  # Expected from space
 
     @abstractmethod
     def declaration(self,
@@ -41,8 +43,6 @@ class CClassMember(ABC):
     def doc_render(self, style: 'Style') -> str:
         """All Class members should have a doc_render method"""
         raise NotImplemented
-
-    doc = None
 
 
 class CClassAttribute(CVariable, CClassMember):
@@ -131,8 +131,14 @@ class ClassTypeMember(CClassMember):
         )
 
     @property
-    def doc(self) -> 'Doc':
+    def doc(self) -> Union['Doc', None]:  # type: ignore
         return self.member.doc
+
+    """
+    @doc.setter
+    def doc(self, value):
+        self.member.doc = value
+    """
 
     def doc_render(self, style: 'Style') -> str:
         return self.member.doc_render(style)
