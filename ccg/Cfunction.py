@@ -116,7 +116,7 @@ class CFunction(CGenericType):
             content.append(
                 f"{style.doxygen_command('param')} "
                 f"{argument.name} "
-                f"{argument.doc.brief}"
+                f"{argument.doc.brief if argument.doc is not None else ''}"
             )
         if self.return_type != CVoidType:
             if self.doc.ret is None:

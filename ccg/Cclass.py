@@ -40,7 +40,8 @@ class CClassAttribute(CVariable, CClassMember):
                  initial_value: Any = None,
                  access: CClassAccess = CClassAccess.private,
                  static: bool = False, const: bool = False, constexpr: bool = False,
-                 auto_hungarize: bool = False
+                 auto_hungarize: bool = False,
+                 doc: Union['Doc', None] = None
                  ):
         CVariable.__init__(self,
                            name=name,
@@ -49,7 +50,8 @@ class CClassAttribute(CVariable, CClassMember):
                            static=static,
                            const=const,
                            constexpr=constexpr,
-                           auto_hungarize=auto_hungarize
+                           auto_hungarize=auto_hungarize,
+                           doc=doc
                            )
 
         CClassMember.__init__(self, access)
@@ -63,14 +65,16 @@ class CClassMethod(CFunction, CClassMember):
                  arguments: Union[List['CFunctionArgument'], None] = None,
                  content=None,
                  access: CClassAccess = CClassAccess.private,
-                 static: bool = False
+                 static: bool = False,
+                 doc: Union['Doc', None] = None
                  ):
         CFunction.__init__(self,
                            name=name,
                            return_type=return_type,
                            arguments=arguments,
                            content=content,
-                           static=static
+                           static=static,
+                           doc=doc
                            )
         CClassMember.__init__(self, access)
 

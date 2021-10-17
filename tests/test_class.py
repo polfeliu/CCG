@@ -15,9 +15,9 @@ def test_class():
         members=[
             CClass.Using(base_class.constructor, access=CClass.Access.public),
             CClass.Method('my_method', arguments=[CFunction.Argument('hello', Cuint8)], access=CClass.Access.protected,
-                          static=True),
+                          static=True, doc=Doc("My Method")),
             CClass.Attribute('u8My_attr', Cuint8, initial_value=3, access=CClass.Access.private, static=True,
-                             constexpr=True),
+                             constexpr=True, doc=Doc("My Attribute")),
             CClass.TypeMember(Cuint8.type('NewType'), access=CClass.Access.public),
         ],
         doc=Doc("Class Example", "This class holds methods and attributes to represent objects")
