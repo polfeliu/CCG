@@ -49,6 +49,21 @@ class CGenericItem(CSpace, ABC):
         return self.doc.render(style, content=None)
 
 
+class CItemDefinable(ABC):
+    @abstractmethod
+    def definition(self,
+                   style: 'Style' = default_style,
+                   from_space: 'CSpace' = None,
+                   doc: bool = False
+                   ) -> str:
+        raise NotImplemented(f"")
+
+    def define(self) -> CStatement:
+        return CStatement(
+            render_function=self.definition
+        )
+
+
 class CGenericType(CGenericItem):
 
     def __init__(self,

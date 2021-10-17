@@ -1,12 +1,15 @@
-from .Ctypes import *
+from typing import TYPE_CHECKING, Union, List
+from .Ctypes import CGenericType, CItemDefinable
 from .Cvariable import CVariable
 from .style import default_style
 
 if TYPE_CHECKING:
-    pass
+    from .style import Style
+    from .Cnamespace import CSpace
+    from .doc import Doc
 
 
-class CUnion(CGenericType):
+class CUnion(CGenericType, CItemDefinable):
 
     def __init__(self, union_def: 'CUnionDef'):
         super(CUnion, self).__init__(
@@ -14,17 +17,21 @@ class CUnion(CGenericType):
         )
         self.union_def = union_def
 
-    def definition(self, style: 'Style' = default_style) -> str:
+    def definition(self,
+                   style: 'Style' = default_style,
+                   from_space: 'CSpace' = None,
+                   doc: bool = False
+                   ) -> str:
         self.style_checks(style)
 
-        return f"{self.name}"
+        return f"{self.name}"  # TODO From space
 
     def style_checks(self, style: 'Style') -> None:
         # Name of the union type is not checked by hungarian
         pass
 
 
-class CUnionDef(CGenericType):
+class CUnionDef(CGenericType, CItemDefinable):
 
     def __init__(self,
                  name: Union[str, None] = None,
@@ -60,7 +67,11 @@ class CUnionDef(CGenericType):
     def union(self) -> CUnion:
         return self._union
 
-    def definition(self, style: 'Style' = default_style, doc: bool = True) -> str:
+    def definition(self,
+                   style: 'Style' = default_style,
+                   from_space: 'CSpace' = None,
+                   doc: bool = False
+                   ) -> str:
         self.style_checks(style)
 
         members = ""
@@ -72,7 +83,7 @@ class CUnionDef(CGenericType):
             if member != self.members[-1]:  # Is not last member
                 members += style.vnew_line_union_members
                 members += style.vspace_union_members
-        return (
+        return (  # TODO From space
             f"{self.doc_render(style) if doc else ''}"
             f"{self.name}"
             f"{style.bracket_open('union')}"
@@ -87,4 +98,4 @@ class CUnionDef(CGenericType):
                     from_space: 'CSpace' = None,
                     without_arguments: bool = False
                     ) -> str:
-        return self.definition(style, doc) + (';' if semicolon else '')
+        return self.definition(style=style, from_space=from_space, doc=doc) + (';' if semicolon else '')

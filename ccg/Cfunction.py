@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, List, Union, Any
 
 from ccg import CVariable
 from .Cstatement import CDeclaration
-from .Ctypes import CGenericType, CVoidType, CNoType
+from .Ctypes import CGenericType, CVoidType, CNoType, CItemDefinable
 from .style import default_style
 
 if TYPE_CHECKING:
@@ -32,7 +32,7 @@ class CFunctionArgument(CVariable):
                 raise ValueError(f"Default value [{default}] does not fit type [{self.c_type.name}]")
 
 
-class CFunction(CGenericType):
+class CFunction(CGenericType, CItemDefinable):
     Argument = CFunctionArgument
 
     def __init__(self,
@@ -126,8 +126,13 @@ class CFunction(CGenericType):
 
         return self.doc.render(style, content=content)
 
-    def definition(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
+    def definition(self,
+                   style: 'Style' = default_style,
+                   from_space: 'CSpace' = None,
+                   doc: bool = False
+                   ) -> str:
         return (
+            f"{self.doc_render(style) if doc else ''}"
             f"{'static ' if self.static else ''}"
             f"{self.return_type.name}"
             f"{' ' if self.return_type is not CNoType else ''}"

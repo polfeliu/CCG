@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, List, Union
 
-from .Ctypes import CGenericType
+from .Ctypes import CGenericType, CItemDefinable
 from .style import default_style
 
 if TYPE_CHECKING:
@@ -38,7 +38,7 @@ class CStructDefMember:
             return self.variable.bit_size
 
 
-class CStruct(CGenericType):
+class CStruct(CGenericType, CItemDefinable):
 
     def __init__(self, struct_def: 'CStructDef'):
         super(CStruct, self).__init__(
@@ -46,17 +46,21 @@ class CStruct(CGenericType):
         )
         self.struct_def = struct_def
 
-    def definition(self, style: 'Style' = default_style) -> str:
+    def definition(self,
+                   style: 'Style' = default_style,
+                   from_space: 'CSpace' = None,
+                   doc: bool = False
+                   ) -> str:
         self.style_checks(style)
 
-        return f"{self.name}"
+        return f"{self.name}"  # TODO From space
 
     def style_checks(self, style: 'Style') -> None:
         # Name of the struct type is not checked by hungarian
         pass
 
 
-class CStructDef(CGenericType):
+class CStructDef(CGenericType, CItemDefinable):
     Member = CStructDefMember
 
     def __init__(self,
@@ -95,7 +99,11 @@ class CStructDef(CGenericType):
     def struct(self) -> CStruct:
         return self._struct
 
-    def definition(self, style: 'Style' = default_style, doc: bool = True) -> str:
+    def definition(self,
+                   style: 'Style' = default_style,
+                   from_space: 'CSpace' = None,
+                   doc: bool = False
+                   ) -> str:
         self.style_checks(style)
 
         members = ""
@@ -108,7 +116,7 @@ class CStructDef(CGenericType):
                 members += style.vnew_line_struct_members
                 members += style.vspace_struct_members
 
-        return (
+        return (  # TODO from space
             f"{self.doc_render(style) if doc else ''}"
             f"{self.name}"
             f"{style.attribute_packed if self.is_packed else ''}"
@@ -124,7 +132,7 @@ class CStructDef(CGenericType):
                     from_space: 'CSpace' = None,
                     without_arguments: bool = False
                     ) -> str:
-        return self.definition(style, doc) + (';' if semicolon else '')
+        return self.definition(style=style, from_space=from_space, doc=doc) + (';' if semicolon else '')
 
     @property
     def bit_size(self) -> int:

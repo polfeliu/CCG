@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, List, Union, Any
 from abc import ABC, abstractmethod
 
 from .Cfunction import CFunction
-from .Ctypes import CGenericType, CVoidType, CNoType, CGenericItem
+from .Ctypes import CGenericType, CVoidType, CNoType, CGenericItem, CItemDefinable
 from .Cusing import CUsing
 from .Cvariable import CVariable
 from .style import Style, default_style
@@ -159,7 +159,7 @@ class CClassInheritance:
         self.access = access
 
 
-class CClass(CGenericType):
+class CClass(CGenericType, CItemDefinable):
     Access = CClassAccess
     Attribute = CClassAttribute
     Method = CClassMethod
@@ -248,19 +248,23 @@ class CClass(CGenericType):
 
         return content.rstrip(",")
 
-    def definition(self, style: 'Style' = default_style) -> str:
+    def definition(self,
+                   style: 'Style' = default_style,
+                   from_space: 'CSpace' = None,
+                   doc: bool = True
+                   ) -> str:
         self.style_checks(style)
 
         return (
-            f"{self.doc_render(style)}"
-            f"{self.declaration(style=style, semicolon=False)}"
+            f"{self.doc_render(style) if doc else ''}"
+            f"{self.declaration(style=style, semicolon=False, from_space=from_space)}"
             f"{self._inheritance_definition}"
             f"{style.bracket_open('class')}"
             f"{self._member_definition(style)}"
             f"{style.bracket_close('class')};"
         )
 
-    def all_members_definition(self) -> List[str]:
+    def all_members_definition(self) -> List[str]:  # TODO Replace for statements
         return [
             member.definition()
             for member
