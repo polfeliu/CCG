@@ -109,7 +109,7 @@ class Style:
     def indent(self, value: str, obj: Union[str, None] = None) -> str:
         style_set = True
         if obj is not None:
-            style_set = self.__getattribute__(f"indent_{obj}")
+            style_set = bool(self.__getattribute__(f"indent_{obj}"))
 
         if style_set:
             return indent(value, self.indent_token)
@@ -117,7 +117,10 @@ class Style:
             return value
 
     @staticmethod
-    def check_hungarian_variable(variable_name: str, hungarian_prefixes: List[str]) -> bool:
+    def check_hungarian_variable(variable_name: str, hungarian_prefixes: Union[List[str], str]) -> bool:
+        if isinstance(hungarian_prefixes, str):
+            hungarian_prefixes = [str(hungarian_prefixes)]
+
         for hungarian_prefix in hungarian_prefixes:
             if variable_name.startswith(hungarian_prefix):
                 start_letter = variable_name[len(hungarian_prefix)]

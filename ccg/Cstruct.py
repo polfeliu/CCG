@@ -116,8 +116,8 @@ class CStructDef(CGenericType, CItemDefinable):
                 member_declaration = style.indent(member_declaration, 'struct_member')
             members += member_declaration
             if member != self.members[-1]:  # Is not last member
-                members += style.vnew_line_struct_members
-                members += style.vspace_struct_members
+                members += str(style.vnew_line_struct_members)
+                members += str(style.vspace_struct_members)
 
         return (
             f"{self.doc_render(style) if doc else ''}"

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Callable
+from typing import TYPE_CHECKING, List, Callable, Sequence
 
 from .style import default_style
 
@@ -26,7 +26,7 @@ class CDeclaration(CStatement):
 class CStatements(CStatement):
     """Statements Collection"""
 
-    def __init__(self, statements: List[CStatement]):
+    def __init__(self, statements: Sequence[CStatement]):
         super(CStatements, self).__init__(
             render_function=self.render
         )

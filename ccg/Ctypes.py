@@ -56,7 +56,7 @@ class CItemDefinable(ABC):
                    from_space: 'CSpace' = None,
                    doc: bool = False
                    ) -> str:
-        raise NotImplemented(f"")
+        return ""
 
     def define(self) -> CStatement:
         return CStatement(
@@ -129,6 +129,8 @@ class CGenericType(CGenericItem):
                        from_space: 'CSpace' = None,
                        doc: Union['Doc', None] = None
                        ) -> str:
+        if self.derived_from is None:
+            raise TypeError(f"Cannot typedef type {self.name} that is not derived from another type")
         return (
             f"{doc.render(style) if doc is not None else ''}"
             f"typedef "

@@ -84,8 +84,8 @@ class CUnionDef(CGenericType, CItemDefinable):
                 member_declaration = style.indent(member_declaration)
             members += member_declaration
             if member != self.members[-1]:  # Is not last member
-                members += style.vnew_line_union_members
-                members += style.vspace_union_members
+                members += str(style.vnew_line_union_members)
+                members += str(style.vspace_union_members)
         return (
             f"{self.doc_render(style) if doc else ''}"
             f"{self.space_def(from_space)}"
