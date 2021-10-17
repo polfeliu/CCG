@@ -18,7 +18,7 @@ class CStatement:
         return self.render_function(style)
 
 
-class Cdeclaration(CStatement):
+class CDeclaration(CStatement):
     """Declaration
 
     Definitions are considered as a type of declaration"""
@@ -43,7 +43,7 @@ class CStatements(CStatement):
 class CDeclarations(CStatements):
     """Declarations Collection"""
 
-    def __init__(self, declarations: List[Cdeclaration]):
+    def __init__(self, declarations: List[CDeclaration]):
         super(CDeclarations, self).__init__(
             statements=declarations
         )

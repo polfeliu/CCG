@@ -99,7 +99,7 @@ class CClassConstructor(CClassMethod):
                  access: CClassAccess = CClassAccess.private
                  ):
         CClassMethod.__init__(self,
-                              name='',  # Name of the function is injected by Cclass
+                              name='',  # Name of the function is injected by CClass
                               return_type=CNoType,  # Ensure no type is placed here
                               arguments=arguments,
                               content=content,

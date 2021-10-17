@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, List, Union, Any
 
 from ccg import CVariable
-from .Cstatement import Cdeclaration
+from .Cstatement import CDeclaration
 from .Ctypes import CGenericType, CVoidType, CNoType
 from .style import default_style
 
@@ -72,20 +72,20 @@ class CFunction(CGenericType):
                                       f"on function [{self.name}]")
 
     def _argument_list(self, style: 'Style', include_defaults: bool = False) -> str:
-        argumentlist = ""
+        argument_list = ""
         if len(self.arguments) > 0:
-            argumentlist = ""
+            argument_list = ""
             for argument in self.arguments:
                 default = ''
                 if argument.default is not None and include_defaults:
                     default = f" = {argument.default}"
-                argumentlist += f"{argument.c_type.name} {argument.name}{default}, "
-            argumentlist = argumentlist.rstrip(", ")
+                argument_list += f"{argument.c_type.name} {argument.name}{default}, "
+            argument_list = argument_list.rstrip(", ")
         else:
             if style.function_void_when_no_arguments:
-                argumentlist = "void"
+                argument_list = "void"
 
-        return argumentlist
+        return argument_list
 
     def declaration(self,
                     style: 'Style' = default_style,
@@ -140,12 +140,12 @@ class CFunction(CGenericType):
             f"{style.bracket_close('function')};"
         )
 
-    def declare(self) -> Cdeclaration:
-        return Cdeclaration(
+    def declare(self) -> CDeclaration:
+        return CDeclaration(
             render_function=self.declaration
         )
 
-    def define(self) -> Cdeclaration:
-        return Cdeclaration(
+    def define(self) -> CDeclaration:
+        return CDeclaration(
             render_function=self.definition
         )
