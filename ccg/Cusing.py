@@ -29,7 +29,12 @@ class CUsing(CGenericItem):
                     doc: bool = True,
                     from_space: 'CSpace' = None
                     ) -> str:
-        return f"using {self.item.space_def(from_space)}{self.item.name};"
+        return (
+            f"{self.doc_render(style) if doc else ''}"
+            f"using "
+            f"{self.item.space_def(from_space)}{self.item.name}"
+            f"{';' if semicolon else ''}"
+        )
 
     def doc_render(self, style: 'Style') -> str:
         if self.doc is None:

@@ -110,10 +110,12 @@ class CClassConstructor(CClassMethod):
 class ClassTypeMember(CClassMember):
     def __init__(self,
                  member: CGenericType,
-                 access: CClassAccess = CClassAccess.private
+                 access: CClassAccess = CClassAccess.private,
+                 doc: Union['Doc', None] = None
                  ):
         CClassMember.__init__(self, access)
         self.member = member
+        self.member.doc = doc
 
     def declaration(self,
                     style: 'Style' = default_style,
@@ -121,10 +123,18 @@ class ClassTypeMember(CClassMember):
                     doc: bool = True,
                     from_space: 'CSpace' = None
                     ) -> str:
-        return self.member.typedef_render(style=style, from_space=from_space)
+        return self.member.typedef_render(
+            style=style,
+            from_space=from_space,
+            doc=self.doc if doc else None
+        )
+
+    @property
+    def doc(self) -> 'Doc':
+        return self.member.doc
 
     def doc_render(self, style: 'Style') -> str:
-        return ""  # TODO
+        return self.member.doc_render(style)
 
 
 class CClassUsing(CUsing, CClassMember):
