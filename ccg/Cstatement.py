@@ -35,8 +35,8 @@ class CStatements(CStatement):
     def render(self, style: 'Style' = default_style):
         content = ""
         for statement in self.statements:
-            content += f"{statement.render(style)}\n"
-        return content.rstrip('\n')
+            content += f"{statement.render(style)}{style.new_line_token}"
+        return content.rstrip(style.new_line_token)
 
 
 class CDeclarations(CStatements):

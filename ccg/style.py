@@ -96,7 +96,7 @@ class Style:
     def __getattribute__(self, item) -> object:
         if item.startswith('vnew_line'):
             style_set = super(Style, self).__getattribute__(item[1:])
-            return '\n' if style_set else ''
+            return self.new_line_token if style_set else ''
         elif item.startswith('vspace'):
             style_set = super(Style, self).__getattribute__(item[1:])
             return ' ' if style_set else ''
@@ -137,13 +137,13 @@ class Style:
         if len(lines) == 0:
             return ""
         elif len(lines) == 1:
-            return f"{self.doc_doxygen_start_block} {lines[0]}{self.doc_doxygen_end_block}\n"
+            return f"{self.doc_doxygen_start_block} {lines[0]}{self.doc_doxygen_end_block}{self.new_line_token}"
         else:
-            content = ''.join([f"{self.doc_doxygen_line_block}{line}\n" for line in lines])
+            content = ''.join([f"{self.doc_doxygen_line_block}{line}{self.new_line_token}" for line in lines])
             return (
-                f"{self.doc_doxygen_start_block}\n"
+                f"{self.doc_doxygen_start_block}{self.new_line_token}"
                 f"{content}"
-                f"{self.doc_doxygen_end_block}\n"
+                f"{self.doc_doxygen_end_block}{self.new_line_token}"
             )
 
     def doxygen_command(self, command_name: str) -> str:

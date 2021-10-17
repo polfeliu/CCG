@@ -222,7 +222,7 @@ class CClass(CGenericType):
             for access in CClassAccess:
                 access_members = [member for member in self.members if member.access.value == access.value]
                 if len(access_members) > 0:
-                    access_content = f"{access.name}:\n"
+                    access_content = f"{access.name}:{style.new_line_token}"
 
                     for i, member in enumerate(access_members):
                         access_content += style.indent(
@@ -236,7 +236,7 @@ class CClass(CGenericType):
                     access_content = style.indent(access_content, "class_access")
                     access_contents.append(access_content)
             for access_content in access_contents:
-                content += access_content + ('\n' if access_content is not access_contents[-1] else '')
+                content += access_content + (style.new_line_token if access_content is not access_contents[-1] else '')
 
         return content
 
