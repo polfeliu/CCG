@@ -164,7 +164,8 @@ class CClass(CGenericType):
                     style: 'Style' = default_style,
                     semicolon: bool = True,
                     doc: bool = True,
-                    from_space: 'CSpace' = None
+                    from_space: 'CSpace' = None,
+                    without_arguments: bool = False
                     ) -> str:
         self.style_checks(style)
         return f"class {self.name}{';' if semicolon else ''}"
