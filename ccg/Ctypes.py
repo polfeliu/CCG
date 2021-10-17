@@ -109,16 +109,22 @@ class CGenericType(CGenericItem):
 
         return new_type
 
-    def typedef(self,
-                style: 'Style' = default_style,
-                from_space: 'CSpace' = None,
-                doc: Union['Doc', None] = None
-                ) -> str:
+    def typedef_render(self,
+                       style: 'Style' = default_style,
+                       from_space: 'CSpace' = None,
+                       doc: Union['Doc', None] = None
+                       ) -> str:
         return (
             f"{doc.render(style) if doc is not None else ''}"
             f"typedef "
             f"{self.derived_from.declaration(style=style, semicolon=False, doc=False, from_space=from_space)} "
             f"{self.name};"
+        )
+
+    def typedef(self, doc: 'Doc') -> CStatement:
+        return CStatement(
+            render_function=self.typedef_render,
+            doc=doc
         )
 
 

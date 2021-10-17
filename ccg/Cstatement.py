@@ -11,11 +11,12 @@ RenderFunction = Callable[['Style'], str]
 class CStatement:
     """Statement"""
 
-    def __init__(self, render_function: RenderFunction):
+    def __init__(self, render_function: RenderFunction, **kwargs):
         self.render_function = render_function
+        self.kwargs = kwargs
 
     def render(self, style: 'Style' = default_style) -> str:
-        return self.render_function(style)
+        return self.render_function(style, **self.kwargs)
 
 
 class CDeclaration(CStatement):

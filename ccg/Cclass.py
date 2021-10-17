@@ -121,7 +121,7 @@ class ClassTypeMember(CClassMember):
                     doc: bool = True,
                     from_space: 'CSpace' = None
                     ) -> str:
-        return self.member.typedef(style=style, from_space=from_space)
+        return self.member.typedef_render(style=style, from_space=from_space)
 
     def doc_render(self, style: 'Style') -> str:
         return ""  # TODO
