@@ -5,7 +5,7 @@ from .style import default_style
 if TYPE_CHECKING:
     from .style import Style
 
-RenderFunction = Callable[['Style'], str]
+RenderFunction = Callable[['Style', ...], str]
 
 
 class CStatement:
