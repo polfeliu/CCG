@@ -33,8 +33,7 @@ def test_class():
     style.class_members = Style.ClassMembers.inline_access_preserve_order
     print(my_class.definition(style))
 
-    for definition in my_class.all_members_definition():
-        print(definition)
+    print(my_class.all_members_definition().render())
 
 
 if __name__ == "__main__":

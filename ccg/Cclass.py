@@ -7,6 +7,7 @@ from .Ctypes import CGenericType, CVoidType, CNoType, CGenericItem, CItemDefinab
 from .Cusing import CUsing
 from .Cvariable import CVariable
 from .style import Style, default_style
+from .Cstatement import CStatement, CStatements
 
 if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
@@ -264,13 +265,13 @@ class CClass(CGenericType, CItemDefinable):
             f"{style.bracket_close('class')};"
         )
 
-    def all_members_definition(self) -> List[str]:  # TODO Replace for statements
-        return [
-            member.definition()
+    def all_members_definition(self) -> CStatements:
+        return CStatements([
+            member.define()
             for member
             in self.members
             if isinstance(member, CClassConstructor) or isinstance(member, CClassMethod)
-        ]
+        ])
 
     def style_checks(self, style: 'Style') -> None:
         pass
