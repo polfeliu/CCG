@@ -131,9 +131,14 @@ class CClassUsing(CUsing, CClassMember):
 
     def __init__(self,
                  item: 'CGenericItem',
-                 access: CClassAccess = CClassAccess.private
+                 access: CClassAccess = CClassAccess.private,
+                 doc: Union['Doc', None] = None
                  ):
-        CUsing.__init__(self, item)
+        CUsing.__init__(self,
+                        item=item,
+                        in_space=None,
+                        doc=doc
+                        )
         CClassMember.__init__(self, access)
 
 

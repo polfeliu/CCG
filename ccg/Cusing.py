@@ -32,4 +32,7 @@ class CUsing(CGenericItem):
         return f"using {self.item.space_def(from_space)}{self.item.name};"
 
     def doc_render(self, style: 'Style') -> str:
-        return ""  # TODO
+        if self.doc is None:
+            return ""
+
+        return self.doc.render(style, content=None)
