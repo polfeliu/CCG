@@ -1,1 +1,1 @@
-pipenv run mypy -m ccg
+pipenv run mypy -m ccg --config-file mypy.ini
