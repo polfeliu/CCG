@@ -5,18 +5,16 @@ from .style import default_style
 if TYPE_CHECKING:
     from .style import Style
 
-RenderFunction = Callable[['Style', ...], str]
-
 
 class CStatement:
     """Statement"""
 
-    def __init__(self, render_function: RenderFunction, **kwargs):
+    def __init__(self, render_function: Callable[..., str], **kwargs):
         self.render_function = render_function
         self.kwargs = kwargs
 
     def render(self, style: 'Style' = default_style) -> str:
-        return self.render_function(style, **self.kwargs)
+        return self.render_function(style=style, **self.kwargs)
 
 
 class CDeclaration(CStatement):
