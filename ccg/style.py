@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Optional
 from enum import Enum
 
 from textwrap import indent
@@ -106,7 +106,7 @@ class Style:
     new_line_token = '\n'
     indent_token = '\t'
 
-    def indent(self, value: str, obj: Union[str, None] = None) -> str:
+    def indent(self, value: str, obj: Optional[str] = None) -> str:
         style_set = True
         if obj is not None:
             style_set = bool(self.__getattribute__(f"indent_{obj}"))

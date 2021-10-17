@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Optional
 
 from .Ctypes import CGenericItem
 from .style import default_style
@@ -13,8 +13,8 @@ class CUsing(CGenericItem):
 
     def __init__(self,
                  item: CGenericItem,
-                 in_space: Union['CSpace', None] = None,
-                 doc: Union['Doc', None] = None
+                 in_space: Optional['CSpace'] = None,
+                 doc: Optional['Doc'] = None
                  ):
         super(CUsing, self).__init__(
             name="",

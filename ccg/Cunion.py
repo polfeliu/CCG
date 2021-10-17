@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union, List
+from typing import TYPE_CHECKING, List, Optional
 from .Ctypes import CGenericType, CItemDefinable
 from .Cvariable import CVariable
 from .style import default_style
@@ -37,9 +37,9 @@ class CUnion(CGenericType, CItemDefinable):
 class CUnionDef(CGenericType, CItemDefinable):
 
     def __init__(self,
-                 name: Union[str, None] = None,
+                 name: Optional[str] = None,
                  members: List[CVariable] = None,
-                 doc: Union['Doc', None] = None
+                 doc: Optional['Doc'] = None
                  ):
         if name is None:
             self.name = ''

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any, Optional
 
 from .Ctypes import CGenericItem
 from .Ctypes import HungarianNotationError
@@ -25,7 +25,7 @@ class CVariable(CGenericItem):
                  const: bool = False,
                  constexpr: bool = False,
                  auto_hungarize: bool = False,
-                 doc: Union['Doc', None] = None
+                 doc: Optional['Doc'] = None
                  ):
         if auto_hungarize:
             name = hungarize(name, c_type)

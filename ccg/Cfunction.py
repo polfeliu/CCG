@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Union, Any
+from typing import TYPE_CHECKING, List, Any, Optional
 
 from ccg import CVariable
 from .Cstatement import CDeclaration
@@ -18,7 +18,7 @@ class CFunctionArgument(CVariable):
                  c_type: 'CGenericType',
                  default: Any = None,
                  auto_hungarize: bool = False,
-                 doc: Union['Doc', None] = None
+                 doc: Optional['Doc'] = None
                  ):
         super(CFunctionArgument, self).__init__(
             name=name,
@@ -38,11 +38,11 @@ class CFunction(CGenericType, CItemDefinable):
     def __init__(self,
                  name: str,
                  return_type: CGenericType = CVoidType,
-                 arguments: Union[List[CFunctionArgument], None] = None,
+                 arguments: Optional[List[CFunctionArgument]] = None,
                  content=None,
-                 in_space: Union['CSpace', None] = None,
+                 in_space: Optional['CSpace'] = None,
                  static: bool = False,
-                 doc: Union['Doc', None] = None
+                 doc: Optional['Doc'] = None
                  ):
         super(CFunction, self).__init__(
             name=name,

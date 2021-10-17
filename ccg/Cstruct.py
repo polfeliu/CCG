@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, List, Optional
 
 from .Ctypes import CGenericType, CItemDefinable
 from .style import default_style
@@ -14,8 +14,8 @@ class CStructDefMember:
 
     def __init__(self,
                  variable: 'CVariable',
-                 bitfield: Union[int, None] = None,
-                 doc: Union['Doc', None] = None
+                 bitfield: Optional[int] = None,
+                 doc: Optional['Doc'] = None
                  ):
         self.variable = variable
         if doc is not None:
@@ -67,10 +67,10 @@ class CStructDef(CGenericType, CItemDefinable):
     Member = CStructDefMember
 
     def __init__(self,
-                 name: Union[str, None] = None,
+                 name: Optional[str] = None,
                  is_packed: bool = False,
-                 members: Union[List[CStructDefMember], None] = None,
-                 doc: Union['Doc', None] = None
+                 members: Optional[List[CStructDefMember]] = None,
+                 doc: Optional['Doc'] = None
                  ):
         if name is None:
             self.struct_name = ''

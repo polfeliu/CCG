@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union, List
+from typing import TYPE_CHECKING, List, Optional
 
 if TYPE_CHECKING:
     from .style import Style
@@ -6,12 +6,16 @@ if TYPE_CHECKING:
 
 class Doc:
 
-    def __init__(self, brief: Union[str, None] = "", body: Union[str, None] = None, ret: Union[str, None] = None):
+    def __init__(self,
+                 brief: Optional[str] = None,
+                 body: Optional[str] = None,
+                 ret: Optional[str] = None
+                 ):
         self.brief = brief
         self.body = body
         self.ret = ret
 
-    def render(self, style: 'Style', content: Union[List[str], None] = None):
+    def render(self, style: 'Style', content: Optional[List[str]] = None):
         lines = []
 
         if self.body is not None:

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Optional
 
 from .Cvariable import CVariable
 from .style import default_style
@@ -16,7 +16,7 @@ class CArray(CVariable):
                  name: str,
                  c_type: 'CGenericType',
                  length: int,
-                 doc: Union['Doc', None] = None
+                 doc: Optional['Doc'] = None
                  ):
         super().__init__(
             name=name,

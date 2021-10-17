@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import TYPE_CHECKING, List, Union, Any
+from typing import TYPE_CHECKING, List, Union, Any, Optional
 
 from .Cfunction import CFunction
 from .Cstatement import CStatements
@@ -26,8 +26,8 @@ class CClassMember(ABC):
 
     def __init__(self, access: CClassAccess = CClassAccess.private):
         self.access = access
-        self.doc: Union['Doc', None]  # Expected from generic item
-        self.in_space: Union['CSpace', None]  # Expected from space
+        self.doc: Optional['Doc']  # Expected from generic item
+        self.in_space: Optional['CSpace']  # Expected from space
 
     @abstractmethod
     def declaration(self,
@@ -54,7 +54,7 @@ class CClassAttribute(CVariable, CClassMember):
                  access: CClassAccess = CClassAccess.private,
                  static: bool = False, const: bool = False, constexpr: bool = False,
                  auto_hungarize: bool = False,
-                 doc: Union['Doc', None] = None
+                 doc: Optional['Doc'] = None
                  ):
         CVariable.__init__(self,
                            name=name,
@@ -75,11 +75,11 @@ class CClassMethod(CFunction, CClassMember):
     def __init__(self,
                  name: str,
                  return_type: CGenericType = CVoidType,
-                 arguments: Union[List['CFunctionArgument'], None] = None,
+                 arguments: Optional[List['CFunctionArgument']] = None,
                  content=None,
                  access: CClassAccess = CClassAccess.private,
                  static: bool = False,
-                 doc: Union['Doc', None] = None
+                 doc: Optional['Doc'] = None
                  ):
         CFunction.__init__(self,
                            name=name,
@@ -95,7 +95,7 @@ class CClassMethod(CFunction, CClassMember):
 class CClassConstructor(CClassMethod):
 
     def __init__(self,
-                 arguments: Union[List['CFunctionArgument'], None] = None,
+                 arguments: Optional[List['CFunctionArgument']] = None,
                  content=None,
                  access: CClassAccess = CClassAccess.private
                  ):
@@ -112,7 +112,7 @@ class ClassTypeMember(CClassMember):
     def __init__(self,
                  member: CGenericType,
                  access: CClassAccess = CClassAccess.private,
-                 doc: Union['Doc', None] = None
+                 doc: Optional['Doc'] = None
                  ):
         CClassMember.__init__(self, access)
         self.member = member
@@ -131,7 +131,7 @@ class ClassTypeMember(CClassMember):
         )
 
     @property
-    def doc(self) -> Union['Doc', None]:  # type: ignore
+    def doc(self) -> Optional['Doc']:  # type: ignore
         return self.member.doc
 
     """
@@ -149,7 +149,7 @@ class CClassUsing(CUsing, CClassMember):
     def __init__(self,
                  item: 'CGenericItem',
                  access: CClassAccess = CClassAccess.private,
-                 doc: Union['Doc', None] = None
+                 doc: Optional['Doc'] = None
                  ):
         CUsing.__init__(self,
                         item=item,
@@ -177,9 +177,9 @@ class CClass(CGenericType, CItemDefinable):
 
     def __init__(self,
                  name: str,
-                 inherit_from: Union['CClassInheritance', List['CClassInheritance'], None] = None,
+                 inherit_from: Optional[Union['CClassInheritance', List['CClassInheritance']]] = None,
                  members: List[CClassMember] = None,
-                 doc: Union['Doc', None] = None
+                 doc: Optional['Doc'] = None
                  ):
         super(CClass, self).__init__(
             name=name,

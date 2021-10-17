@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from copy import copy
-from typing import TYPE_CHECKING, Union, List, Any
+from typing import TYPE_CHECKING, Union, List, Any, Optional
 
 from .Cnamespace import CSpace
 from .Cstatement import CStatement
@@ -19,8 +19,8 @@ class CGenericItem(CSpace, ABC):
 
     def __init__(self,
                  name: str,
-                 in_space: Union['CSpace', None] = None,
-                 doc: Union['Doc', None] = None
+                 in_space: Optional['CSpace'] = None,
+                 doc: Optional['Doc'] = None
                  ):
         super(CGenericItem, self).__init__(
             name=name,
@@ -70,9 +70,9 @@ class CGenericType(CGenericItem):
                  name: str,
                  bit_size: int = None,
                  hungarian_prefixes: Union[List[str], str] = "t",
-                 derived_from: Union['CGenericType', None] = None,
-                 in_space: Union['CSpace', None] = None,
-                 doc: Union['Doc', None] = None
+                 derived_from: Optional['CGenericType'] = None,
+                 in_space: Optional['CSpace'] = None,
+                 doc: Optional['Doc'] = None
                  ):
         super(CGenericType, self).__init__(
             name=name,
@@ -131,7 +131,7 @@ class CGenericType(CGenericItem):
     def typedef_render(self,
                        style: 'Style' = default_style,
                        from_space: 'CSpace' = None,
-                       doc: Union['Doc', None] = None
+                       doc: Optional['Doc'] = None
                        ) -> str:
         if self.derived_from is None:
             raise TypeError(f"Cannot typedef type {self.name} that is not derived from another type")
@@ -142,7 +142,7 @@ class CGenericType(CGenericItem):
             f"{self.name};"
         )
 
-    def typedef(self, doc: Union['Doc', None] = None) -> CStatement:
+    def typedef(self, doc: Optional['Doc'] = None) -> CStatement:
         return CStatement(
             render_function=self.typedef_render,
             doc=doc
