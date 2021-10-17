@@ -1,13 +1,13 @@
+from abc import ABC, abstractmethod
 from enum import Enum
 from typing import TYPE_CHECKING, List, Union, Any
-from abc import ABC, abstractmethod
 
 from .Cfunction import CFunction
+from .Cstatement import CStatements
 from .Ctypes import CGenericType, CVoidType, CNoType, CGenericItem, CItemDefinable
 from .Cusing import CUsing
 from .Cvariable import CVariable
 from .style import Style, default_style
-from .Cstatement import CStatement, CStatements
 
 if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
