@@ -35,7 +35,7 @@ def test_types():
         name="tMyVar"
     )
 
-    print(custom.typedef())
+    print(custom.typedef(doc=Doc("My Custom Type", "This type is awesome because I have created it")))
     print(var.declaration())
 
     # Static
