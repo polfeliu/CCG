@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, List
 
 from .Cvariable import CVariable
 from .style import default_style
@@ -42,9 +42,9 @@ class CArray(CVariable):
         )
 
     @property
-    def hungarian_prefixes(self):
+    def hungarian_prefixes(self) -> List[str]:
         return self.c_type.hungarian_prefixes
 
     @property
-    def bit_size(self):
+    def bit_size(self) -> int:
         return self.c_type.bit_size * self.length

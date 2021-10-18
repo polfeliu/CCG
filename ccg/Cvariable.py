@@ -44,7 +44,7 @@ class CVariable(CGenericItem):
         self.const = const
         self.constexpr = constexpr
 
-    def style_checks(self, style: 'Style'):
+    def style_checks(self, style: 'Style') -> None:
         self.c_type.style_checks(style)
         if style.check_hungarian:
             if not style.check_hungarian_variable(
@@ -76,5 +76,7 @@ class CVariable(CGenericItem):
         )
 
     @property
-    def bit_size(self):
+    def bit_size(self) -> int:
+        if self.c_type.bit_size is None:
+            raise ValueError("Cannot determine bit_size")
         return self.c_type.bit_size

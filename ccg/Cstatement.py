@@ -32,7 +32,7 @@ class CStatements(CStatement):
         )
         self.statements = statements
 
-    def render(self, style: 'Style' = default_style):
+    def render(self, style: 'Style' = default_style) -> str:
         content = ""
         for statement in self.statements:
             content += f"{statement.render(style)}{style.new_line_token}"

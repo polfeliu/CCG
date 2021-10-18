@@ -15,7 +15,7 @@ class Doc:
         self.body = body
         self.ret = ret
 
-    def render(self, style: 'Style', content: Optional[List[str]] = None):
+    def render(self, style: 'Style', content: Optional[List[str]] = None) -> str:
         lines = []
 
         if self.body is not None:

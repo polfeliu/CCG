@@ -35,6 +35,8 @@ class CStructDefMember:
         if self.bitfield is not None:
             return self.bitfield
         else:
+            if self.variable.bit_size is None:
+                raise ValueError("Cannot determine bit_size")
             return self.variable.bit_size
 
 
@@ -150,6 +152,6 @@ class CStructDef(CGenericType, CItemDefinable):
             )
 
     @bit_size.setter
-    def bit_size(self, value):
+    def bit_size(self, value) -> None:
         # Parent CGenericType will try to set bit_size. Ignore it
         pass

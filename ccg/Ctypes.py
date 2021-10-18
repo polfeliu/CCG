@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from copy import copy
-from typing import TYPE_CHECKING, Union, List, Any, Optional
+from typing import TYPE_CHECKING, List, Any, Optional
 
 from .Cnamespace import CSpace
 from .Cstatement import CStatement
@@ -68,8 +68,8 @@ class CGenericType(CGenericItem):
 
     def __init__(self,
                  name: str,
-                 bit_size: int = None,
-                 hungarian_prefixes: Union[List[str], str] = "t",
+                 bit_size: Optional[int] = None,
+                 hungarian_prefixes: Optional[List[str]] = None,
                  derived_from: Optional['CGenericType'] = None,
                  in_space: Optional['CSpace'] = None,
                  doc: Optional['Doc'] = None
@@ -79,14 +79,16 @@ class CGenericType(CGenericItem):
             in_space=in_space,
             doc=doc
         )
+        if hungarian_prefixes is None:
+            hungarian_prefixes = ["t"]
         self.hungarian_prefixes = hungarian_prefixes
-        if not isinstance(self.hungarian_prefixes, list):
-            self.hungarian_prefixes = [self.hungarian_prefixes]
         self.derived_from = derived_from
         self._bit_size = bit_size
 
     @property
-    def bit_size(self):
+    def bit_size(self) -> int:
+        if self._bit_size is None:
+            raise ValueError("Cannot determine bit_size")
         return self._bit_size
 
     def declaration(self,
@@ -151,7 +153,12 @@ class CGenericType(CGenericItem):
 
 class CIntegerType(CGenericType):
 
-    def __init__(self, name: str, hungarian_prefixes: Union[List[str], str], bits: int, is_signed: bool):
+    def __init__(self,
+                 name: str,
+                 hungarian_prefixes: Optional[List[str]],
+                 bits: int,
+                 is_signed: bool
+                 ):
         super(CIntegerType, self).__init__(
             name=name,
             hungarian_prefixes=hungarian_prefixes,
@@ -170,69 +177,69 @@ class CIntegerType(CGenericType):
 
 Cint8 = CIntegerType(
     name="int8_t",
-    hungarian_prefixes="i8",
+    hungarian_prefixes=["i8"],
     bits=8,
     is_signed=True
 )
 
 Cuint8 = CIntegerType(
     name="uint8_t",
-    hungarian_prefixes="u8",
+    hungarian_prefixes=["u8"],
     bits=8,
     is_signed=False
 )
 
 Cint16 = CIntegerType(
     name="int16_t",
-    hungarian_prefixes="i16",
+    hungarian_prefixes=["i16"],
     bits=16,
     is_signed=True
 )
 
 Cuint16 = CIntegerType(
     name="uint16_t",
-    hungarian_prefixes="u16",
+    hungarian_prefixes=["u16"],
     bits=16,
     is_signed=False
 )
 
 Cint32 = CIntegerType(
     name="int32_t",
-    hungarian_prefixes="i32",
+    hungarian_prefixes=["i32"],
     bits=32,
     is_signed=True
 )
 
 Cuint32 = CIntegerType(
     name="uint32_t",
-    hungarian_prefixes="u32",
+    hungarian_prefixes=["u32"],
     bits=32,
     is_signed=False
 )
 
 Cint64 = CIntegerType(
     name="int8_t",
-    hungarian_prefixes="i64",
+    hungarian_prefixes=["i64"],
     bits=64,
     is_signed=True
 )
 
 Cuint64 = CIntegerType(
     name="uint64_t",
-    hungarian_prefixes="u64",
+    hungarian_prefixes=["u64"],
     bits=64,
     is_signed=False
 )
 
 Cfloat = CGenericType(
     name="float",
-    hungarian_prefixes="f",
+    hungarian_prefixes=["f"],
     bit_size=32
 )
 
 Cdouble = CGenericType(
     name="double",
-    hungarian_prefixes="db",
+    hungarian_prefixes=["db"],
     bit_size=64
 )
 
