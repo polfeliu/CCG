@@ -134,12 +134,6 @@ class ClassTypeMember(CClassMember):
     def doc(self) -> Optional['Doc']:  # type: ignore
         return self.member.doc
 
-    """
-    @doc.setter
-    def doc(self, value):
-        self.member.doc = value
-    """
-
     def doc_render(self, style: 'Style') -> str:
         return self.member.doc_render(style)
 
