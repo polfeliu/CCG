@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Optional
 
 from .Ctypes import CGenericItem
 from .Ctypes import HungarianNotationError
@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from .Ctypes import CGenericType
     from .style import Style
     from .Cnamespace import CSpace
+    from .doc import Doc
 
 
 def hungarize(name: str, c_type: 'CGenericType'):
@@ -16,14 +17,23 @@ def hungarize(name: str, c_type: 'CGenericType'):
 
 class CVariable(CGenericItem):
 
-    def __init__(self, name: str, c_type: 'CGenericType', initial_value: Any = None,
-                 static: bool = False, const: bool = False, constexpr: bool = False,
-                 auto_hungarize: bool = False
+    def __init__(self,
+                 name: str,
+                 c_type: 'CGenericType',
+                 initial_value: Any = None,
+                 static: bool = False,
+                 const: bool = False,
+                 constexpr: bool = False,
+                 auto_hungarize: bool = False,
+                 doc: Optional['Doc'] = None
                  ):
         if auto_hungarize:
             name = hungarize(name, c_type)
 
-        super(CVariable, self).__init__(name=name)
+        super(CVariable, self).__init__(
+            name=name,
+            doc=doc
+        )
         self.c_type = c_type
         self._initial_value = initial_value
         if initial_value is not None:
@@ -34,7 +44,7 @@ class CVariable(CGenericItem):
         self.const = const
         self.constexpr = constexpr
 
-    def style_checks(self, style: 'Style'):
+    def style_checks(self, style: 'Style') -> None:
         self.c_type.style_checks(style)
         if style.check_hungarian:
             if not style.check_hungarian_variable(
@@ -45,10 +55,17 @@ class CVariable(CGenericItem):
                     f"{self.name} doesn't doesn't have the hungarian prefix {self.c_type.hungarian_prefixes} "
                     f"or the first letter is not uppercase")
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None,
+                    without_arguments: bool = False
+                    ) -> str:
         self.style_checks(style)
 
         return (
+            f"{self.doc_render(style) if doc else ''}"
             f"{'static ' if self.static else ''}"
             f"{'const ' if self.const else ''}"
             f"{'constexpr ' if self.constexpr else ''}"
@@ -59,5 +76,7 @@ class CVariable(CGenericItem):
         )
 
     @property
-    def bit_size(self):
+    def bit_size(self) -> int:
+        if self.c_type.bit_size is None:
+            raise ValueError("Cannot determine bit_size")
         return self.c_type.bit_size

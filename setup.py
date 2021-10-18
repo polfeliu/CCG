@@ -1,12 +1,15 @@
-from setuptools import setup, find_packages
-
-# read the contents of your README file
 from os import path
+import random
+from setuptools import setup, find_packages
+from ccg import __version__
 
 this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
-from ccg import __version__
+
+if 'dev' in __version__:
+    # Development versions cache busting
+    __version__ += str(random.randint(0, 0xFFFFFFFF))
 
 setup(
     name='ccg',

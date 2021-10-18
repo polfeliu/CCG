@@ -5,12 +5,13 @@ name = "pypi"
 
 [packages]
 
-
 [dev-packages]
 sphinx = "==4.0.2"
 sphinx-rtd-theme = "==0.5.2"
 pytest = "*"
 myst-nb = "==0.13.0"
+jupyter = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.6"

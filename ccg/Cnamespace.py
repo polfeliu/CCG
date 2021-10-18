@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, List, Optional
 
 if TYPE_CHECKING:
     pass
@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 class CSpace:
 
-    def __init__(self, name: str, in_space: Union['CSpace', None] = None):
+    def __init__(self, name: str, in_space: Optional['CSpace'] = None):
         self.name = name
         self.in_space = in_space
 

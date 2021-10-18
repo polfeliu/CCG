@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from copy import copy
-from typing import TYPE_CHECKING, Union, List, Any
+from typing import TYPE_CHECKING, List, Any, Optional
 
 from .Cnamespace import CSpace
 from .Cstatement import CStatement
@@ -8,6 +8,7 @@ from .style import default_style
 
 if TYPE_CHECKING:
     from .style import Style
+    from .doc import Doc
 
 
 class HungarianNotationError(Exception):
@@ -16,11 +17,16 @@ class HungarianNotationError(Exception):
 
 class CGenericItem(CSpace, ABC):
 
-    def __init__(self, name, in_space: Union['CSpace', None] = None):
+    def __init__(self,
+                 name: str,
+                 in_space: Optional['CSpace'] = None,
+                 doc: Optional['Doc'] = None
+                 ):
         super(CGenericItem, self).__init__(
             name=name,
             in_space=in_space
         )
+        self.doc = doc
 
     def declare(self) -> CStatement:
         return CStatement(
@@ -28,30 +34,70 @@ class CGenericItem(CSpace, ABC):
         )
 
     @abstractmethod
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = True, from_space: 'CSpace' = None) -> str:
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None
+                    ) -> str:
         raise NotImplemented
+
+    def doc_render(self, style: 'Style') -> str:
+        if self.doc is None:
+            return ""
+
+        return self.doc.render(style, content=None)
+
+
+class CItemDefinable(ABC):
+    @abstractmethod
+    def definition(self,
+                   style: 'Style' = default_style,
+                   from_space: 'CSpace' = None,
+                   doc: bool = False
+                   ) -> str:
+        return ""
+
+    def define(self) -> CStatement:
+        return CStatement(
+            render_function=self.definition
+        )
 
 
 class CGenericType(CGenericItem):
 
     def __init__(self,
                  name: str,
-                 bit_size: int = None,
-                 hungarian_prefixes: Union[List[str], str] = "t",
-                 derived_from: Union['CGenericType', None] = None,
-                 in_space: Union['CSpace', None] = None,
+                 bit_size: Optional[int] = None,
+                 hungarian_prefixes: Optional[List[str]] = None,
+                 derived_from: Optional['CGenericType'] = None,
+                 in_space: Optional['CSpace'] = None,
+                 doc: Optional['Doc'] = None
                  ):
         super(CGenericType, self).__init__(
             name=name,
-            in_space=in_space
+            in_space=in_space,
+            doc=doc
         )
+        if hungarian_prefixes is None:
+            hungarian_prefixes = ["t"]
         self.hungarian_prefixes = hungarian_prefixes
-        if not isinstance(self.hungarian_prefixes, list):
-            self.hungarian_prefixes = [self.hungarian_prefixes]
         self.derived_from = derived_from
-        self.bit_size = bit_size
+        self._bit_size = bit_size
 
-    def declaration(self, style: 'Style' = default_style, semicolon: bool = False, from_space: 'CSpace' = None) -> str:
+    @property
+    def bit_size(self) -> int:
+        if self._bit_size is None:
+            raise ValueError("Cannot determine bit_size")
+        return self._bit_size
+
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None,
+                    without_arguments: bool = False
+                    ) -> str:
         return self.name + (';' if semicolon else '')
 
     def check_value(self, value: Any) -> bool:
@@ -84,18 +130,39 @@ class CGenericType(CGenericItem):
 
         return new_type
 
-    def typedef(self, style: 'Style' = default_style, from_space: 'CSpace' = None) -> str:
-        return (f"typedef "
-                f"{self.derived_from.declaration(style=style, semicolon=False, from_space=from_space)} "
-                f"{self.name};")
+    def typedef_render(self,
+                       style: 'Style' = default_style,
+                       from_space: 'CSpace' = None,
+                       doc: Optional['Doc'] = None
+                       ) -> str:
+        if self.derived_from is None:
+            raise TypeError(f"Cannot typedef type {self.name} that is not derived from another type")
+        return (
+            f"{doc.render(style) if doc is not None else ''}"
+            f"typedef "
+            f"{self.derived_from.declaration(style=style, semicolon=False, doc=False, from_space=from_space)} "
+            f"{self.name};"
+        )
+
+    def typedef(self, doc: Optional['Doc'] = None) -> CStatement:
+        return CStatement(
+            render_function=self.typedef_render,
+            doc=doc
+        )
 
 
 class CIntegerType(CGenericType):
 
-    def __init__(self, name: str, hungarian_prefixes: Union[List[str], str], bits: int, is_signed: bool):
+    def __init__(self,
+                 name: str,
+                 hungarian_prefixes: Optional[List[str]],
+                 bits: int,
+                 is_signed: bool
+                 ):
         super(CIntegerType, self).__init__(
             name=name,
-            hungarian_prefixes=hungarian_prefixes
+            hungarian_prefixes=hungarian_prefixes,
+            bit_size=bits
         )
         if is_signed:
             self.minimum = -2 ** (bits - 1)
@@ -103,7 +170,6 @@ class CIntegerType(CGenericType):
         else:
             self.minimum = 0
             self.maximum = 2 ** bits - 1
-        self.bit_size = bits
 
     def check_value(self, value: Any) -> bool:
         return value in range(self.minimum, self.maximum + 1)
@@ -111,69 +177,69 @@ class CIntegerType(CGenericType):
 
 Cint8 = CIntegerType(
     name="int8_t",
-    hungarian_prefixes="i8",
+    hungarian_prefixes=["i8"],
     bits=8,
     is_signed=True
 )
 
 Cuint8 = CIntegerType(
     name="uint8_t",
-    hungarian_prefixes="u8",
+    hungarian_prefixes=["u8"],
     bits=8,
     is_signed=False
 )
 
 Cint16 = CIntegerType(
     name="int16_t",
-    hungarian_prefixes="i16",
+    hungarian_prefixes=["i16"],
     bits=16,
     is_signed=True
 )
 
 Cuint16 = CIntegerType(
     name="uint16_t",
-    hungarian_prefixes="u16",
+    hungarian_prefixes=["u16"],
     bits=16,
     is_signed=False
 )
 
 Cint32 = CIntegerType(
     name="int32_t",
-    hungarian_prefixes="i32",
+    hungarian_prefixes=["i32"],
     bits=32,
     is_signed=True
 )
 
 Cuint32 = CIntegerType(
     name="uint32_t",
-    hungarian_prefixes="u32",
+    hungarian_prefixes=["u32"],
     bits=32,
     is_signed=False
 )
 
 Cint64 = CIntegerType(
     name="int8_t",
-    hungarian_prefixes="i64",
+    hungarian_prefixes=["i64"],
     bits=64,
     is_signed=True
 )
 
 Cuint64 = CIntegerType(
     name="uint64_t",
-    hungarian_prefixes="u64",
+    hungarian_prefixes=["u64"],
     bits=64,
     is_signed=False
 )
 
 Cfloat = CGenericType(
     name="float",
-    hungarian_prefixes="f",
+    hungarian_prefixes=["f"],
     bit_size=32
 )
 
 Cdouble = CGenericType(
     name="double",
-    hungarian_prefixes="db",
+    hungarian_prefixes=["db"],
     bit_size=64
 )
 

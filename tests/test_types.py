@@ -1,32 +1,32 @@
-from ccg import CVariable, CArray
-from ccg.Ctypes import *
-from common_style import style
+from ccg import *
 
 
 def test_types():
     var = CVariable(
         c_type=Cint8,
         name="i8Mycustomint",
-        initial_value=4
+        initial_value=4,
+        doc=Doc("My Custom Int8")
     )
-    print(var.declaration(style=style))
+    print(var.declaration())
 
     try:
         var = CVariable(
             c_type=Cuint8,
             name="i8Mycustomint_invalid",
-            initial_value=500
+            initial_value=500,
         )
     except Exception as ex:
         print(ex)
 
     array = CArray(
         c_type=Cint8,
-        name="i8Asdf",
-        length=10
+        name="i8Array",
+        length=10,
+        doc=Doc("My Custom Int8 Array", "This array is awesome because it can hold 10 int8")
     )
 
-    print(array.declaration(style=style))
+    print(array.declaration())
 
     # New type
     custom = Cint8.type('TMyCustomType')
@@ -35,8 +35,8 @@ def test_types():
         name="tMyVar"
     )
 
-    print(custom.typedef(style=style))
-    print(var.declaration(style=style))
+    print(custom.typedef(doc=Doc("My Custom Type", "Awesome type because I have defined it")).render())
+    print(var.declaration())
 
     # Static
     var = CVariable(c_type=Cuint8, name="u8Var", static=True)

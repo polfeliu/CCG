@@ -1,6 +1,4 @@
-from ccg import CVariable, CArray, CFunction
-from ccg import CStatements, CDeclarations
-from ccg.Ctypes import *
+from ccg import *
 
 
 def test_statement():

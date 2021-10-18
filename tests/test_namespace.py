@@ -1,5 +1,4 @@
-from ccg import CNamespace, CFunction
-from common_style import style
+from ccg import *
 
 
 def test_namespace():
@@ -10,15 +9,15 @@ def test_namespace():
     fun = CFunction(name='my_fun', in_space=ns2)
 
     # When doing the definition, typically is done indicating namespace inline
-    print(fun.definition(style=style))
+    print(fun.definition())
 
     # On the declaration it can have the same format
-    print(fun.declaration(style=style))
+    print(fun.declaration())
     
     # But typically the namespace is indicated with a namespace section,
     # So we can omit inline namespace by saying that we are on a namespace
-    print(fun.declaration(from_space=ns1, style=style))
-    print(fun.declaration(from_space=ns2, style=style))
+    print(fun.declaration(from_space=ns1))
+    print(fun.declaration(from_space=ns2))
 
 
 if __name__ == "__main__":

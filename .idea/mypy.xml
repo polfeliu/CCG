@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MypyConfigService">
+    <option name="mypyArguments" value="ccg" />
+    <option name="mypyConfigFilePath" value="C:\GIT\CCG\mypy.ini" />
+  </component>
+</project>

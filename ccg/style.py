@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Optional
 from enum import Enum
 
 from textwrap import indent
@@ -96,19 +96,20 @@ class Style:
     def __getattribute__(self, item) -> object:
         if item.startswith('vnew_line'):
             style_set = super(Style, self).__getattribute__(item[1:])
-            return '\n' if style_set else ''
+            return self.new_line_token if style_set else ''
         elif item.startswith('vspace'):
             style_set = super(Style, self).__getattribute__(item[1:])
             return ' ' if style_set else ''
         else:
             return super(Style, self).__getattribute__(item)
 
+    new_line_token = '\n'
     indent_token = '\t'
 
-    def indent(self, value: str, obj: Union[str, None] = None) -> str:
+    def indent(self, value: str, obj: Optional[str] = None) -> str:
         style_set = True
         if obj is not None:
-            style_set = self.__getattribute__(f"indent_{obj}")
+            style_set = bool(self.__getattribute__(f"indent_{obj}"))
 
         if style_set:
             return indent(value, self.indent_token)
@@ -116,7 +117,10 @@ class Style:
             return value
 
     @staticmethod
-    def check_hungarian_variable(variable_name: str, hungarian_prefixes: List[str]) -> bool:
+    def check_hungarian_variable(variable_name: str, hungarian_prefixes: Union[List[str], str]) -> bool:
+        if isinstance(hungarian_prefixes, str):
+            hungarian_prefixes = [str(hungarian_prefixes)]
+
         for hungarian_prefix in hungarian_prefixes:
             if variable_name.startswith(hungarian_prefix):
                 start_letter = variable_name[len(hungarian_prefix)]
@@ -124,6 +128,29 @@ class Style:
                     return True
 
         return False
+
+    # Doxygen
+    doc_doxygen_start_block = "/**"
+    doc_doxygen_line_block = " * "
+    doc_doxygen_end_block = " */"
+
+    doc_doxygen_command_token = "@"
+
+    def doxygen_format(self, lines: List[str]) -> str:
+        if len(lines) == 0:
+            return ""
+        elif len(lines) == 1:
+            return f"{self.doc_doxygen_start_block} {lines[0]}{self.doc_doxygen_end_block}{self.new_line_token}"
+        else:
+            content = ''.join([f"{self.doc_doxygen_line_block}{line}{self.new_line_token}" for line in lines])
+            return (
+                f"{self.doc_doxygen_start_block}{self.new_line_token}"
+                f"{content}"
+                f"{self.doc_doxygen_end_block}{self.new_line_token}"
+            )
+
+    def doxygen_command(self, command_name: str) -> str:
+        return f"{self.doc_doxygen_command_token}{command_name}"
 
 
 default_style = Style()

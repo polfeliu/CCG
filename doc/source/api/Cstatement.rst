@@ -4,8 +4,8 @@ Cstatement
 .. inheritance-diagram:: ccg.Cstatement.CStatement
 .. autoclass:: ccg.Cstatement.CStatement
 
-.. inheritance-diagram:: ccg.Cstatement.Cdeclaration
-.. autoclass:: ccg.Cstatement.Cdeclaration
+.. inheritance-diagram:: ccg.Cstatement.CDeclaration
+.. autoclass:: ccg.Cstatement.CDeclaration
 
 .. inheritance-diagram:: ccg.Cstatement.CStatements
 .. autoclass:: ccg.Cstatement.CStatements
