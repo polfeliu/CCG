@@ -77,6 +77,12 @@ class Style:
     # Functions
     function_void_when_no_arguments = True
 
+    # Literals
+    literal_unsigned_token = "U"
+    literal_long_token = "L"
+    literal_boolean_true_token = "true"
+    litearl_boolean_false_token = "false"
+
     def bracket_open(self, obj) -> str:
         return (
                 str(self.__getattribute__(f"vnew_line_{obj}_bracket_open_before")) +

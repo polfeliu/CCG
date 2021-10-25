@@ -5,7 +5,7 @@ def test_types():
     var = CVariable(
         c_type=Cint8,
         name="i8Mycustomint",
-        initial_value=CCast(Cuint8, CExpressionFreeStyle("1")),
+        initial_value=CCast(Cuint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.binary)),
         doc=Doc("My Custom Int8")
     )
     print(var.declaration())

@@ -164,12 +164,30 @@ class CIntegerType(CGenericType):
             hungarian_prefixes=hungarian_prefixes,
             bit_size=bits
         )
-        if is_signed:
+        self.is_signed = is_signed
+        if self.is_signed:
             self.minimum = -2 ** (bits - 1)
             self.maximum = 2 ** (bits - 1) - 1
         else:
             self.minimum = 0
             self.maximum = 2 ** bits - 1
+
+    def literal_suffix(self, style: 'Style'):
+        suffix = ""
+
+        if not self.is_signed:
+            suffix += style.literal_unsigned_token
+
+        if self.bit_size in [8, 16]:
+            pass
+        elif self.bit_size == 32:
+            suffix += style.literal_long_token
+        elif self.bit_size == 64:
+            suffix += style.literal_long_token * 2
+        else:
+            raise TypeError
+
+        return suffix
 
     def check_value(self, value: Any) -> bool:
         return value in range(self.minimum, self.maximum + 1)
