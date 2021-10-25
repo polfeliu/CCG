@@ -65,14 +65,19 @@ And print the definition:
    :caption: Api:
 
    api/Carray
+   api/Ccast
    api/Cclass
+   api/Cexpression
    api/Cfunction
+   api/Cliteral
    api/Cnamespace
    api/Cstatement
    api/Cstruct
    api/Ctypes
    api/Cunion
+   api/Cusing
    api/Cvariable
+   api/doc
    api/style
 
 .. toctree::

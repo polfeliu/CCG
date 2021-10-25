@@ -30,7 +30,7 @@ class CLiteral(CExpression):
             if isinstance(literal, int):
                 self.literal_format = self.Format.decimal
             elif isinstance(literal, float):
-                self.literal_format = self.Format.float
+                self.literal_format = self.Format.float_decimals
             else:
                 raise TypeError
 
