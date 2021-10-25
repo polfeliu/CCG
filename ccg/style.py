@@ -57,6 +57,8 @@ class Style:
     space_class_bracket_close_before = False
     space_class_bracket_close_after = False
 
+    space_after_cast = True
+
     # Indentation
     indent_class_member = True
     indent_class_access = False

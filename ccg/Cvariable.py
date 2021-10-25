@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from .style import Style
     from .Cnamespace import CSpace
     from .doc import Doc
+    from .Cexpression import CExpression
 
 
 def hungarize(name: str, c_type: 'CGenericType'):
@@ -20,7 +21,7 @@ class CVariable(CGenericItem):
     def __init__(self,
                  name: str,
                  c_type: 'CGenericType',
-                 initial_value: Any = None,
+                 initial_value: 'CExpression' = None,
                  static: bool = False,
                  const: bool = False,
                  constexpr: bool = False,
@@ -35,10 +36,7 @@ class CVariable(CGenericItem):
             doc=doc
         )
         self.c_type = c_type
-        self._initial_value = initial_value
-        if initial_value is not None:
-            if self.c_type.check_value(self._initial_value) is not True:
-                raise ValueError(f"Initial value [{initial_value}] does not fit type [{self.c_type.name}]")
+        self.initial_value = initial_value
 
         self.static = static
         self.const = const
@@ -71,7 +69,7 @@ class CVariable(CGenericItem):
             f"{'constexpr ' if self.constexpr else ''}"
             f"{self.c_type.declaration(style=style, semicolon=False, from_space=from_space)}"
             f" {self.name}"
-            f"{' = ' + str(self._initial_value) if self._initial_value is not None else ''}"
+            f"{' = ' + str(self.initial_value.render()) if self.initial_value is not None else ''}"
             f"{';' if semicolon else ''}"
         )
 

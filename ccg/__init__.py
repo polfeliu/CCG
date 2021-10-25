@@ -14,3 +14,4 @@ from .Cclass import CClass
 from .Cnamespace import CNamespace
 from .Cusing import CUsing
 from .Cstatement import CStatements, CDeclarations
+from .Cexpression import CExpression, CCast, CExpressionFreeStyle

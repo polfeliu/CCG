@@ -28,7 +28,7 @@ class CFunctionArgument(CVariable):
         self.doc = doc
         self.default = default
         if default is not None:
-            if self.c_type.check_value(self._initial_value) is not True:
+            if self.c_type.check_value(self.initial_value) is not True:
                 raise ValueError(f"Default value [{default}] does not fit type [{self.c_type.name}]")
 
 
