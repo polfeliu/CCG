@@ -14,6 +14,8 @@ class CLiteral(CExpression):
         octal = 8
         hexadecimal = 16
         binary = 2
+        float_decimals = -1
+        float_scientific = -2
 
     def __init__(self,
                  literal: Union[int, float],
@@ -22,7 +24,23 @@ class CLiteral(CExpression):
                  ):
         self.literal = literal
         self.c_type = c_type
-        self.literal_format = literal_format
+        if literal_format is not None:
+            self.literal_format = literal_format
+        else:
+            if isinstance(literal, int):
+                self.literal_format = self.Format.decimal
+            elif isinstance(literal, float):
+                self.literal_format = self.Format.float
+            else:
+                raise TypeError
+
+        if isinstance(literal, int):
+            if self.literal_format not in [self.Format.decimal, self.Format.octal, self.Format.hexadecimal,
+                                           self.Format.binary]:
+                raise TypeError(f"Cannot format integer with {self.literal_format}")
+        elif isinstance(literal, float):
+            if self.literal_format not in [self.Format.float_decimals, self.Format.float_scientific]:
+                raise TypeError(f"Cannot format float with {self.literal_format}")
 
     def format_prefix(self):
         if self.literal_format == self.Format.decimal:
@@ -33,6 +51,10 @@ class CLiteral(CExpression):
             return "0x"
         elif self.literal_format == self.Format.binary:
             return "0b"
+        elif self.literal_format == self.Format.float_decimals:
+            return ""
+        elif self.literal_format == self.Format.float_scientific:
+            return ""
         else:
             raise NotImplemented
 
@@ -48,10 +70,18 @@ class CLiteral(CExpression):
                 return f"{self.literal:b}"
             else:
                 raise NotImplemented
+        if isinstance(self.literal, float):
+            if self.literal_format == self.Format.float_decimals:
+                return str(float(f"{self.literal:g}"))
+            elif self.literal_format == self.Format.float_scientific:
+                return f"{self.literal:e}"
+            else:
+                raise NotImplemented
         else:
             raise NotImplemented
 
     def render(self, style: 'Style' = default_style) -> str:
+        print("")
         return (
             f"{self.format_prefix()}"
             f"{self.format_literal()}"

@@ -151,7 +151,20 @@ class CGenericType(CGenericItem):
         )
 
 
-class CIntegerType(CGenericType):
+class CStdType(CGenericType):
+
+    def literal_suffix(self, style: 'Style'):
+        if self is Cfloat:
+            return style.literal_float_token
+        elif self is Cdouble:
+            return style.literal_double_token
+        elif self is Cbool:
+            return ""
+        else:
+            raise NotImplemented
+
+
+class CIntegerType(CStdType):
 
     def __init__(self,
                  name: str,
@@ -249,19 +262,19 @@ Cuint64 = CIntegerType(
     is_signed=False
 )
 
-Cfloat = CGenericType(
+Cfloat = CStdType(
     name="float",
     hungarian_prefixes=["f"],
     bit_size=32
 )
 
-Cdouble = CGenericType(
+Cdouble = CStdType(
     name="double",
     hungarian_prefixes=["db"],
     bit_size=64
 )
 
-Cbool = CGenericType(
+Cbool = CStdType(
     name="bool",
     hungarian_prefixes=["b", "is"],
 )

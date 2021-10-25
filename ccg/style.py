@@ -80,8 +80,11 @@ class Style:
     # Literals
     literal_unsigned_token = "U"
     literal_long_token = "L"
+    literal_float_token = "f"
+    literal_double_token = "d"
     literal_boolean_true_token = "true"
-    litearl_boolean_false_token = "false"
+    literal_boolean_false_token = "false"
+
 
     def bracket_open(self, obj) -> str:
         return (
