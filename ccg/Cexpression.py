@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING
+
 from .style import default_style
 
 if TYPE_CHECKING:
-    from .Ctypes import CGenericType
     from .style import Style
 
 

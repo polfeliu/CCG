@@ -2,7 +2,7 @@ from ccg import *
 
 
 def test_statement():
-    var = CVariable("u32My_var", Cuint32, initial_value=5)
+    var = CVariable("u32My_var", Cuint32, initial_value=CLiteral(3))
     array = CArray("u8My_array", Cuint8, length=10)
     statements = CStatements([
         var.declare(),
@@ -10,7 +10,7 @@ def test_statement():
 
         # Statements can also contain other statements
         CStatements([
-            CVariable("u8Var", Cuint8, initial_value=3).declare()
+            CVariable("u8Var", Cuint8, initial_value=CLiteral(3)).declare()
         ])
     ])
 

@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
     from .Cnamespace import CSpace
     from .Ctypes import CGenericItem
+    from .Cexpression import CExpression
     from .doc import Doc
 
 
@@ -50,7 +51,7 @@ class CClassAttribute(CVariable, CClassMember):
     def __init__(self,
                  name: str,
                  c_type: 'CGenericType',
-                 initial_value: Any = None,
+                 initial_value: 'CExpression' = None,
                  access: CClassAccess = CClassAccess.private,
                  static: bool = False, const: bool = False, constexpr: bool = False,
                  auto_hungarize: bool = False,

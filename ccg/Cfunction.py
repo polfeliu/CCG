@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Any, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from ccg import CVariable
 from .Cstatement import CDeclaration
@@ -8,6 +8,7 @@ from .style import default_style
 if TYPE_CHECKING:
     from .style import Style
     from .Cnamespace import CSpace
+    from .Cexpression import CExpression
     from .doc import Doc
 
 
@@ -16,7 +17,7 @@ class CFunctionArgument(CVariable):
     def __init__(self,
                  name: str,
                  c_type: 'CGenericType',
-                 default: Any = None,
+                 default: 'CExpression' = None,
                  auto_hungarize: bool = False,
                  doc: Optional['Doc'] = None
                  ):
@@ -27,9 +28,6 @@ class CFunctionArgument(CVariable):
         )
         self.doc = doc
         self.default = default
-        if default is not None:
-            if self.c_type.check_value(self.initial_value) is not True:
-                raise ValueError(f"Default value [{default}] does not fit type [{self.c_type.name}]")
 
 
 class CFunction(CGenericType, CItemDefinable):

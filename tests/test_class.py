@@ -17,7 +17,7 @@ def test_class():
                          doc=Doc("Constructor", "Reusing constructor from base class")),
             CClass.Method('my_method', arguments=[CFunction.Argument('hello', Cuint8)], access=CClass.Access.protected,
                           static=True, doc=Doc("My Method")),
-            CClass.Attribute('u8My_attr', Cuint8, initial_value=3, access=CClass.Access.private, static=True,
+            CClass.Attribute('u8My_attr', Cuint8, initial_value=CLiteral(3), access=CClass.Access.private, static=True,
                              constexpr=True, doc=Doc("My Attribute")),
             CClass.TypeMember(Cuint8.type('NewType'), access=CClass.Access.public,
                               doc=Doc("New Type", "Defining types inside classes is awesome")),

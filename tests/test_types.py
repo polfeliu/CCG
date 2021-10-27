@@ -5,19 +5,10 @@ def test_types():
     var = CVariable(
         c_type=Cint8,
         name="i8Mycustomint",
-        initial_value=4,
+        initial_value=CLiteral(1),
         doc=Doc("My Custom Int8")
     )
     print(var.declaration())
-
-    try:
-        var = CVariable(
-            c_type=Cuint8,
-            name="i8Mycustomint_invalid",
-            initial_value=500,
-        )
-    except Exception as ex:
-        print(ex)
 
     array = CArray(
         c_type=Cint8,

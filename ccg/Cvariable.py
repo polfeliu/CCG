@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Optional
 
 from .Ctypes import CGenericItem
 from .Ctypes import HungarianNotationError

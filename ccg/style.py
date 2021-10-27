@@ -1,7 +1,6 @@
-from typing import List, Union, Optional
 from enum import Enum
-
 from textwrap import indent
+from typing import List, Union, Optional
 
 
 class Style:
@@ -84,7 +83,6 @@ class Style:
     literal_double_token = "d"
     literal_boolean_true_token = "true"
     literal_boolean_false_token = "false"
-
 
     def bracket_open(self, obj) -> str:
         return (
