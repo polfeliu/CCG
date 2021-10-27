@@ -76,7 +76,7 @@ class CFunction(CGenericType, CItemDefinable):
             for argument in self.arguments:
                 default = ''
                 if argument.default is not None and include_defaults:
-                    default = f" = {argument.default}"
+                    default = f" = {argument.default.render()}"
                 argument_list += f"{argument.c_type.name} {argument.name}{default}, "
             argument_list = argument_list.rstrip(", ")
         else:

@@ -85,6 +85,7 @@ And print the definition:
    :caption: Examples:
 
    examples/class
+   examples/expression
    examples/function
    examples/namespace
    examples/statement
