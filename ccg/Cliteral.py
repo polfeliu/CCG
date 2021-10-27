@@ -1,8 +1,9 @@
-from typing import TYPE_CHECKING, Union, Optional
 from enum import Enum
+from typing import TYPE_CHECKING, Union, Optional
+
 from .Cexpression import CExpression
-from .style import default_style
 from .Ctypes import CIntegerType
+from .style import default_style
 
 if TYPE_CHECKING:
     from .style import Style
@@ -37,8 +38,12 @@ class CLiteral(CExpression):
         if isinstance(literal, int):
             if self.literal_format not in [self.Format.decimal, self.Format.octal, self.Format.hexadecimal,
                                            self.Format.binary]:
-                raise TypeError(f"Cannot format integer with {self.literal_format}")
-        elif isinstance(literal, float):
+                if self.literal_format in [self.Format.float_decimals, self.Format.float_scientific]:
+                    self.literal = float(self.literal)
+                else:
+                    raise TypeError(f"Cannot format integer with {self.literal_format}")
+
+        if isinstance(literal, float):
             if self.literal_format not in [self.Format.float_decimals, self.Format.float_scientific]:
                 raise TypeError(f"Cannot format float with {self.literal_format}")
 
