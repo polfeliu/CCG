@@ -17,7 +17,7 @@ Declare an C/C++ object, for instance, a function:
         return_type=Cuint32,
         arguments=[
             CFunction.Argument(name="first", c_type=Cuint32, doc=Doc("First argument")),
-            CFunction.Argument(name="second", c_type=Cdouble, default=2, doc=Doc("Second Argument"))
+            CFunction.Argument(name="second", c_type=Cdouble, default=CLiteral(2), doc=Doc("Second Argument"))
         ],
         doc=Doc("Awesome function", "This function is awesome because it does marvellous things",
                 ret="returns a lucky number")
