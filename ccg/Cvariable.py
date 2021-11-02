@@ -66,7 +66,7 @@ class CVariable(CGenericItem):
             f"{'static ' if self.static else ''}"
             f"{'const ' if self.const else ''}"
             f"{'constexpr ' if self.constexpr else ''}"
-            f"{self.c_type.declaration(style=style, semicolon=False, from_space=from_space)}"
+            f"{self.c_type.declaration(style=style, semicolon=False, from_space=from_space, for_variable=True)}"
             f" {self.name}"
             f"{' = ' + str(self.initial_value.render()) if self.initial_value is not None else ''}"
             f"{';' if semicolon else ''}"
