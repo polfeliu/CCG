@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
     from .Cnamespace import CSpace
     from .Ctypes import CGenericItem
-    from .Cexpression import CExpression
+    from ccg import CExpression
     from .doc import Doc
 
 

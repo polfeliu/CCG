@@ -1,11 +1,9 @@
 from typing import TYPE_CHECKING
 
-from .Cexpression import CExpression
-from .style import default_style
+from ccg import CExpression, default_style
 
 if TYPE_CHECKING:
-    from .Ctypes import CGenericType
-    from .style import Style
+    from ccg import CGenericType, Style
 
 
 class CCast(CExpression):

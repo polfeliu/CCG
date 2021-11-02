@@ -8,7 +8,7 @@ from .style import default_style
 if TYPE_CHECKING:
     from .style import Style
     from .Cnamespace import CSpace
-    from .Cexpression import CExpression
+    from ccg import CExpression
     from .doc import Doc
 
 

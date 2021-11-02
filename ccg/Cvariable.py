@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from .style import Style
     from .Cnamespace import CSpace
     from .doc import Doc
-    from .Cexpression import CExpression
+    from ccg import CExpression
 
 
 def hungarize(name: str, c_type: 'CGenericType'):
