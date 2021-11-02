@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING, List, Optional
 
-from ccg import CVariable
-from .Cstatement import CDeclaration
+from ..Cvariable import CVariable
+from ..Cstatement import CDeclaration
 from .Ctypes import CGenericType, CVoidType, CNoType, CItemDefinable
-from .style import default_style
+from ..style import default_style
 
 if TYPE_CHECKING:
-    from .style import Style
-    from .Cnamespace import CSpace
-    from ccg import CExpression
-    from .doc import Doc
+    from ..style import Style
+    from ..Cnamespace import CSpace
+    from ..expressions import CExpression
+    from ..doc import Doc
 
 
 class CFunctionArgument(CVariable):

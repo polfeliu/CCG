@@ -14,4 +14,4 @@ test_union()
 test_class()
 test_namespace()
 test_statement()
-test_expression
+test_expression()

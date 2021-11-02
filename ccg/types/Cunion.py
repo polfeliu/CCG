@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING, List, Optional
 from .Ctypes import CGenericType, CItemDefinable
-from .Cvariable import CVariable
-from .style import default_style
+from ..Cvariable import CVariable
+from ..style import default_style
 
 if TYPE_CHECKING:
-    from .style import Style
-    from .Cnamespace import CSpace
-    from .doc import Doc
+    from ..style import Style
+    from ..Cnamespace import CSpace
+    from ..doc import Doc
 
 
 class CUnion(CGenericType, CItemDefinable):

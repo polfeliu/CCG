@@ -5,7 +5,7 @@ from .style import default_style
 
 if TYPE_CHECKING:
     from .style import Style
-    from .Ctypes import CGenericType
+    from .types.Ctypes import CGenericType
     from .Cnamespace import CSpace
     from .doc import Doc
 

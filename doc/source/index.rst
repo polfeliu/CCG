@@ -64,20 +64,15 @@ And print the definition:
    :maxdepth: 4
    :caption: Api:
 
-   api/Carray
-   api/Cclass
-   api/Cfunction
+   api/types/index
+   api/expressions/index
    api/Cnamespace
    api/Cstatement
-   api/Cstruct
-   api/Ctypes
-   api/Cunion
    api/Cusing
    api/Cvariable
+   api/Carray
    api/doc
    api/style
-
-   api/expressions/index
 
 
 .. toctree::

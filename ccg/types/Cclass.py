@@ -3,18 +3,18 @@ from enum import Enum
 from typing import TYPE_CHECKING, List, Union, Any, Optional
 
 from .Cfunction import CFunction
-from .Cstatement import CStatements
+from ..Cstatement import CStatements
 from .Ctypes import CGenericType, CVoidType, CNoType, CGenericItem, CItemDefinable
-from .Cusing import CUsing
-from .Cvariable import CVariable
-from .style import Style, default_style
+from ..Cusing import CUsing
+from ..Cvariable import CVariable
+from ..style import Style, default_style
 
 if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
-    from .Cnamespace import CSpace
+    from ..Cnamespace import CSpace
     from .Ctypes import CGenericItem
-    from ccg import CExpression
-    from .doc import Doc
+    from ..expressions import CExpression
+    from ..doc import Doc
 
 
 class CClassAccess(Enum):

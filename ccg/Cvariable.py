@@ -1,15 +1,14 @@
 from typing import TYPE_CHECKING, Optional
 
-from .Ctypes import CGenericItem
-from .Ctypes import HungarianNotationError
+from .types.Ctypes import CGenericType, CGenericItem, HungarianNotationError
 from .style import default_style
 
 if TYPE_CHECKING:
-    from .Ctypes import CGenericType
+    from .types.Ctypes import CGenericType
     from .style import Style
     from .Cnamespace import CSpace
     from .doc import Doc
-    from ccg import CExpression
+    from .expressions.Cexpression import CExpression
 
 
 def hungarize(name: str, c_type: 'CGenericType'):

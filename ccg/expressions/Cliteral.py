@@ -2,10 +2,11 @@ from enum import Enum
 from typing import TYPE_CHECKING, Union, Optional
 
 from .Cexpression import CExpression
-from ccg import CIntegerType, default_style
+from ..types.Ctypes import CIntegerType
+from ..style import default_style
 
 if TYPE_CHECKING:
-    from ccg import Style
+    from ..style import Style
 
 
 class CLiteral(CExpression):

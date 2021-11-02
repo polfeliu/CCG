@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from ccg import default_style
+from ..style import default_style
 
 if TYPE_CHECKING:
-    from ccg import Style
+    from ..style import Style
 
 
 class CExpression(ABC):
