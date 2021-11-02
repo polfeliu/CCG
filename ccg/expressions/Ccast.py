@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
-from ccg import CExpression, default_style
+from .Cexpression import CExpression
+from ccg import default_style
 
 if TYPE_CHECKING:
     from ccg import CGenericType, Style

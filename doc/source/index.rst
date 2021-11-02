@@ -61,15 +61,12 @@ And print the definition:
    };
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 4
    :caption: Api:
 
    api/Carray
-   api/Ccast
    api/Cclass
-   api/Cexpression
    api/Cfunction
-   api/Cliteral
    api/Cnamespace
    api/Cstatement
    api/Cstruct
@@ -79,6 +76,9 @@ And print the definition:
    api/Cvariable
    api/doc
    api/style
+
+   api/expressions/index
+
 
 .. toctree::
    :maxdepth: 1

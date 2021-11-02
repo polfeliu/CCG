@@ -1,7 +1,8 @@
 from enum import Enum
 from typing import TYPE_CHECKING, Union, Optional
 
-from ccg import CExpression, CIntegerType, default_style
+from .Cexpression import CExpression
+from ccg import CIntegerType, default_style
 
 if TYPE_CHECKING:
     from ccg import Style
