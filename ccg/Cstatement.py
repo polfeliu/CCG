@@ -23,6 +23,20 @@ class CDeclaration(CStatement):
     Definitions are considered as a type of declaration"""
 
 
+class CStatementFreeStyle(CStatement):
+
+    def __init__(self, content: str):
+        super(CStatementFreeStyle, self).__init__(self.content_render)
+        self.content = content
+
+    def content_render(self, style: 'Style' = default_style) -> str:
+        return self.content
+
+
+class CDeclarationFreeStyle(CDeclaration, CStatementFreeStyle):
+    pass
+
+
 class CStatements(CStatement):
     """Statements Collection"""
 
