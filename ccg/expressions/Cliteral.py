@@ -86,7 +86,6 @@ class CLiteral(CExpression):
             raise NotImplemented
 
     def render(self, style: 'Style' = default_style) -> str:
-        print("")
         return (
             f"{self.format_prefix()}"
             f"{self.format_literal()}"

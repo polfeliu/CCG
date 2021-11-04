@@ -1,11 +1,14 @@
 from typing import TYPE_CHECKING, Callable
 from enum import Enum
 
-from .Cexpression import CExpressionFreeStyle
+from .Cexpression import CExpression, CExpressionFreeStyle
+from ..style import default_style
 
 if TYPE_CHECKING:
-    from .Cexpression import CExpression
+    from ..style import Style
 
+
+# TODO Styling, mainly spaces
 
 class COperator:
     pass
@@ -15,6 +18,17 @@ class CUnaryOperator(COperator):
     def __init__(self, generator_function: Callable[['CExpression'], CExpression]):
         self.operate = generator_function
 
+    def __call__(self, a: 'CExpression') -> 'CExpression':
+        return self.operate(a)
+
+
+class CBinaryOperator(COperator):
+    def __init__(self, generator_function: Callable[['CExpression', 'CExpression'], CExpression]):
+        self.operate = generator_function
+
+    def __call__(self, a: 'CExpression', b: 'CExpression') -> 'CExpression':
+        return self.operate(a, b)
+
 
 class CUnaryOperatorToken(CUnaryOperator):
     class Order(Enum):
@@ -22,34 +36,38 @@ class CUnaryOperatorToken(CUnaryOperator):
         After = 1
 
     def __init__(self, operator_token: str, order: Order):
-        super(CUnaryOperatorToken, self).__init__(
-            lambda a: CExpressionFreeStyle("")  # TODO
-        )
+        self.operator_token = operator_token
+        self.order = order
 
-    def operate(self, a: 'CExpression') -> 'CExpression':
-        raise NotImplemented
+        if self.order == self.Order.Before:
+            def generator(a: 'CExpression') -> 'CExpression':
+                return CExpressionFreeStyle(f"{operator_token}{a.render()}")
+        elif self.order == self.Order.After:
+            def generator(a: 'CExpression') -> 'CExpression':
+                return CExpressionFreeStyle(f"{a.render()}{operator_token}")
+        else:
+            raise ValueError
 
-
-class CBinaryOperator(COperator):
-    def __init__(self, generator_function: Callable[['CExpression', 'CExpression'], CExpression]):
-        self.operate = generator_function
+        super(CUnaryOperatorToken, self).__init__(generator)
 
 
 class CBinaryOperatorToken(CBinaryOperator):
     def __init__(self, operator_token: str):
         super(CBinaryOperatorToken, self).__init__(
-            lambda a, b: CExpressionFreeStyle("")  # TODO
+            lambda a, b: CExpressionFreeStyle(
+                f"{a.render()}{operator_token}{b.render()}"
+            )
         )
 
 
 class COperators:
-    class CIncrementDecrementOperators:
+    class IncrementDecrementOperators:
         CPreIncrementOperator = CUnaryOperatorToken("++", order=CUnaryOperatorToken.Order.Before)
         CPreDecrementOperator = CUnaryOperatorToken("--", order=CUnaryOperatorToken.Order.Before)
         CPostIncrementOperator = CUnaryOperatorToken("++", order=CUnaryOperatorToken.Order.After)
         CPostDecrementOperator = CUnaryOperatorToken("--", order=CUnaryOperatorToken.Order.After)
 
-    class CArithmeticOperators:
+    class ArithmeticOperators:
         CSumOperator = CBinaryOperatorToken("+")
         CSubtractOperator = CBinaryOperatorToken("-")
         CMultiplyOperator = CBinaryOperatorToken("*")
@@ -63,7 +81,7 @@ class COperators:
         CBitWiseLeftShiftOperator = CBinaryOperatorToken("<<")
         CBitWiseRightShiftOperator = CBinaryOperatorToken(">>")
 
-    class CAssignmentOperators:
+    class AssignmentOperators:
         CAssignOperator = CBinaryOperatorToken("=")
         CSumAssignmentOperator = CBinaryOperatorToken("+=")
         CSubtractAssignmentOperator = CBinaryOperatorToken("-=")
@@ -77,7 +95,7 @@ class COperators:
         CBitWiseLeftShiftAssignmentOperator = CBinaryOperatorToken("<<=")
         CBitWiseRightShiftAssignmentOperator = CBinaryOperatorToken(">>=")
 
-    class CLogicOperators:
+    class LogicOperators:
         # TODO style with not, and and or operator tokens??
         CNegateOperator = CUnaryOperatorToken("!", order=CUnaryOperatorToken.Order.Before)
         CANDOperator = CBinaryOperatorToken("&&")
