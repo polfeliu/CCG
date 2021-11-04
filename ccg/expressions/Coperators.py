@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable
 from enum import Enum
 
@@ -10,24 +11,61 @@ if TYPE_CHECKING:
 
 # TODO Styling, mainly spaces
 
+
+class COperation(CExpression):
+
+    @abstractmethod
+    def render(self, style: 'Style' = default_style) -> str:
+        raise NotImplementedError
+
+
+class CUnaryOperation(COperation):
+
+    def __init__(self,
+                 render_function: Callable[['Style', 'CExpression'], str],
+                 a: 'CExpression'
+                 ):
+        self.render_function = render_function
+        self.a = a
+
+    def render(self, style: 'Style' = default_style) -> str:
+        return self.render_function(style, self.a)
+
+
+class CBinaryOperation(COperation):
+
+    def __init__(self,
+                 render_function: Callable[['Style', 'CExpression', 'CExpression'], str],
+                 a: 'CExpression',
+                 b: 'CExpression'
+                 ):
+        self.render_function = render_function
+        self.a = a
+        self.b = b
+
+    def render(self, style: 'Style' = default_style) -> str:
+        return self.render_function(style, self.a, self.b)
+
+
 class COperator:
     pass
 
 
 class CUnaryOperator(COperator):
-    def __init__(self, generator_function: Callable[['CExpression'], CExpression]):
-        self.operate = generator_function
+    def __init__(self, render_function: Callable[['Style', 'CExpression'], str]):
+        self.render_function = render_function
 
-    def __call__(self, a: 'CExpression') -> 'CExpression':
-        return self.operate(a)
+    def __call__(self, a: 'CExpression') -> 'CUnaryOperation':
+        return CUnaryOperation(self.render_function, a)
 
 
 class CBinaryOperator(COperator):
-    def __init__(self, generator_function: Callable[['CExpression', 'CExpression'], CExpression]):
-        self.operate = generator_function
 
-    def __call__(self, a: 'CExpression', b: 'CExpression') -> 'CExpression':
-        return self.operate(a, b)
+    def __init__(self, render_function: Callable[['Style', 'CExpression', 'CExpression'], str]):
+        self.render_function = render_function
+
+    def __call__(self, a: 'CExpression', b: 'CExpression') -> 'COperation':
+        return CBinaryOperation(self.render_function, a, b)
 
 
 class CUnaryOperatorToken(CUnaryOperator):
@@ -40,11 +78,11 @@ class CUnaryOperatorToken(CUnaryOperator):
         self.order = order
 
         if self.order == self.Order.Before:
-            def generator(a: 'CExpression') -> 'CExpression':
-                return CExpressionFreeStyle(f"{operator_token}{a.render()}")
+            def generator(style: 'Style', a: 'CExpression') -> 'str':
+                return f"{operator_token}{a.render(style)}"  # TODO Spaces
         elif self.order == self.Order.After:
-            def generator(a: 'CExpression') -> 'CExpression':
-                return CExpressionFreeStyle(f"{a.render()}{operator_token}")
+            def generator(style: 'Style', a: 'CExpression') -> 'str':
+                return f"{a.render(style)}{operator_token}"  # TODO Spaces
         else:
             raise ValueError
 
@@ -53,11 +91,10 @@ class CUnaryOperatorToken(CUnaryOperator):
 
 class CBinaryOperatorToken(CBinaryOperator):
     def __init__(self, operator_token: str):
-        super(CBinaryOperatorToken, self).__init__(
-            lambda a, b: CExpressionFreeStyle(
-                f"{a.render()}{operator_token}{b.render()}"
-            )
-        )
+        def generator(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
+            return f"{a.render(style)}{operator_token}{b.render(style)}"  # TODO Spaces
+
+        super(CBinaryOperatorToken, self).__init__(generator)
 
 
 class COperators:
@@ -110,7 +147,11 @@ class COperators:
         CGreatherThanOrEqualToOperator = CBinaryOperatorToken(">=")
 
     class MemberAccessOperators:
-        CSubScriptOperator = CBinaryOperator(lambda a, b: CExpressionFreeStyle(f"{a}[{b}]"))
+        @staticmethod
+        def _subscriptoperator(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
+            return f"{a.render()}[{b.render()}]"
+
+        CSubScriptOperator = CBinaryOperator(_subscriptoperator)
         CIndirectionOperator = CUnaryOperatorToken("*", order=CUnaryOperatorToken.Order.Before)
         CAddressOfOperator = CUnaryOperatorToken('&', order=CUnaryOperatorToken.Order.Before)
         CMemberOfObjectOperator = CBinaryOperatorToken('.')
