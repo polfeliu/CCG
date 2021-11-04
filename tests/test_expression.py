@@ -28,11 +28,16 @@ def test_expression():
     print(var.declaration())
 
     # Operators
-    SUM = COperators.ArithmeticOperators.CSumOperator
-    print(SUM(CLiteral(2), CLiteral(3)).render())
-
-    NOT = COperators.LogicOperators.CNegateOperator
+    NOT = COperators.Logic.Not
     print(NOT(CLiteral(1)).render())  # TODO Boolean literals
+
+    SUM = COperators.Arithmetic.Sum
+    PARENTHESES = COperators.Parentheses
+    print(
+        PARENTHESES(
+            SUM(CLiteral(2), CLiteral(3))
+        ).render()
+    )
 
 
 if __name__ == "__main__":

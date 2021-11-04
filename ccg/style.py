@@ -58,6 +58,12 @@ class Style:
 
     space_after_cast = False
 
+    space_unary_operator = False
+    space_before_binary_operator = True
+    space_after_binary_operator = True
+    space_before_parentheses_operator = False
+    space_after_parentheses_operator = False
+
     # Indentation
     indent_class_member = True
     indent_class_access = False
