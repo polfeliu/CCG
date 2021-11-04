@@ -1,70 +1,101 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 from enum import Enum
+
+from .Cexpression import CExpressionFreeStyle
 
 if TYPE_CHECKING:
     from .Cexpression import CExpression
 
 
 class COperator:
-    def __init__(self, operator_token: str):
-        self.operator_token = operator_token
+    pass
 
 
 class CUnaryOperator(COperator):
+    def __init__(self, generator_function: Callable[['CExpression'], CExpression]):
+        self.operate = generator_function
+
+
+class CUnaryOperatorToken(CUnaryOperator):
     class Order(Enum):
         Before = 0
         After = 1
 
     def __init__(self, operator_token: str, order: Order):
-        super(CUnaryOperator, self).__init__(operator_token)
-        self.order = order
+        super(CUnaryOperatorToken, self).__init__(
+            lambda a: CExpressionFreeStyle("")  # TODO
+        )
 
-    def operate(self, a: CExpression) -> CExpression:
+    def operate(self, a: 'CExpression') -> 'CExpression':
         raise NotImplemented
 
 
 class CBinaryOperator(COperator):
-    def operate(self, a: CExpression, b: CExpression) -> CExpression:
-        raise NotImplemented
+    def __init__(self, generator_function: Callable[['CExpression', 'CExpression'], CExpression]):
+        self.operate = generator_function
 
 
-CAssignOperator = CBinaryOperator("=")
+class CBinaryOperatorToken(CBinaryOperator):
+    def __init__(self, operator_token: str):
+        super(CBinaryOperatorToken, self).__init__(
+            lambda a, b: CExpressionFreeStyle("")  # TODO
+        )
 
-CPreIncrementOperator = CUnaryOperator("++", order=CUnaryOperator.Order.Before)
-CPreDecrementOperator = CUnaryOperator("--", order=CUnaryOperator.Order.Before)
-CPostIncrementOperator = CUnaryOperator("++", order=CUnaryOperator.Order.After)
-CPostDecrementOperator = CUnaryOperator("--", order=CUnaryOperator.Order.After)
 
-CSumOperator = CBinaryOperator("+")
-CSubtractOperator = CBinaryOperator("-")
-CMultiplyOperator = CBinaryOperator("*")
-CDivideOperator = CBinaryOperator("/")
-CModulusOperator = CBinaryOperator("%")
+class COperators:
+    class CIncrementDecrementOperators:
+        CPreIncrementOperator = CUnaryOperatorToken("++", order=CUnaryOperatorToken.Order.Before)
+        CPreDecrementOperator = CUnaryOperatorToken("--", order=CUnaryOperatorToken.Order.Before)
+        CPostIncrementOperator = CUnaryOperatorToken("++", order=CUnaryOperatorToken.Order.After)
+        CPostDecrementOperator = CUnaryOperatorToken("--", order=CUnaryOperatorToken.Order.After)
 
-CBitWiseNotOperator = CUnaryOperator("~", order=CUnaryOperator.Order.Before)
-CBitWiseANDOperator = CBinaryOperator("&")
-CBitWiseOROperator = CBinaryOperator("|")
-CBitWiseXOROperator = CBinaryOperator("^")
-CBitWiseLeftShiftOperator = CBinaryOperator("<<")
-CBitWiseRightShiftOperator = CBinaryOperator(">>")
+    class CArithmeticOperators:
+        CSumOperator = CBinaryOperatorToken("+")
+        CSubtractOperator = CBinaryOperatorToken("-")
+        CMultiplyOperator = CBinaryOperatorToken("*")
+        CDivideOperator = CBinaryOperatorToken("/")
+        CModulusOperator = CBinaryOperatorToken("%")
 
-CSumAssignmentOperator = CBinaryOperator("+=")
-CSubtractAssignmentOperator = CBinaryOperator("-=")
-CMultiplyAssignmentOperator = CBinaryOperator("*=")
-CDivideAssignmentOperator = CBinaryOperator("/=")
-CModulusAssignmentOperator = CBinaryOperator("%=")
+        CBitWiseNotOperator = CUnaryOperatorToken("~", order=CUnaryOperatorToken.Order.Before)
+        CBitWiseANDOperator = CBinaryOperatorToken("&")
+        CBitWiseOROperator = CBinaryOperatorToken("|")
+        CBitWiseXOROperator = CBinaryOperatorToken("^")
+        CBitWiseLeftShiftOperator = CBinaryOperatorToken("<<")
+        CBitWiseRightShiftOperator = CBinaryOperatorToken(">>")
 
-CBitWiseANDAssignmentOperator = CBinaryOperator("&=")
-CBitWiseORAssignmentOperator = CBinaryOperator("|=")
-CBitWiseXORAssignmentOperator = CBinaryOperator("^=")
-CBitWiseLeftShiftAssignmentOperator = CBinaryOperator("<<=")
-CBitWiseRightShiftAssignmentOperator = CBinaryOperator(">>=")
+    class CAssignmentOperators:
+        CAssignOperator = CBinaryOperatorToken("=")
+        CSumAssignmentOperator = CBinaryOperatorToken("+=")
+        CSubtractAssignmentOperator = CBinaryOperatorToken("-=")
+        CMultiplyAssignmentOperator = CBinaryOperatorToken("*=")
+        CDivideAssignmentOperator = CBinaryOperatorToken("/=")
+        CModulusAssignmentOperator = CBinaryOperatorToken("%=")
 
-# TODO style with not, and and or operator tokens??
-CNegateOperator = CUnaryOperator("!", order=CUnaryOperator.Order.Before)
-CANDOperator = CBinaryOperator("&&")
-COROperator = CBinaryOperator("||")
+        CBitWiseANDAssignmentOperator = CBinaryOperatorToken("&=")
+        CBitWiseORAssignmentOperator = CBinaryOperatorToken("|=")
+        CBitWiseXORAssignmentOperator = CBinaryOperatorToken("^=")
+        CBitWiseLeftShiftAssignmentOperator = CBinaryOperatorToken("<<=")
+        CBitWiseRightShiftAssignmentOperator = CBinaryOperatorToken(">>=")
 
-# TODO Comparisson
+    class CLogicOperators:
+        # TODO style with not, and and or operator tokens??
+        CNegateOperator = CUnaryOperatorToken("!", order=CUnaryOperatorToken.Order.Before)
+        CANDOperator = CBinaryOperatorToken("&&")
+        COROperator = CBinaryOperatorToken("||")
 
-# TODO Member access
+    class ComparissonOperators:
+        CEqualToOperator = CBinaryOperatorToken("==")
+        CNotEqualToOperator = CBinaryOperatorToken("!=")
+        CLessThanOperator = CBinaryOperatorToken("<")
+        CGreaterThanOperator = CBinaryOperatorToken(">")
+        CLessThanOrEqualToOperator = CBinaryOperatorToken("<=")
+        CGreatherThanOrEqualToOperator = CBinaryOperatorToken(">=")
+
+    class MemberAccessOperators:
+        CSubScriptOperator = CBinaryOperator(lambda a, b: CExpressionFreeStyle(f"{a}[{b}]"))
+        CIndirectionOperator = CUnaryOperatorToken("*", order=CUnaryOperatorToken.Order.Before)
+        CAddressOfOperator = CUnaryOperatorToken('&', order=CUnaryOperatorToken.Order.Before)
+        CMemberOfObjectOperator = CBinaryOperatorToken('.')
+        CMemberOfPointerOperator = CBinaryOperatorToken('->')
+        CPointerToMemberOfObject = CBinaryOperatorToken('.*')
+        CPointerToMemberOfPointer = CBinaryOperatorToken('->*')
