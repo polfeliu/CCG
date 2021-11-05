@@ -81,6 +81,8 @@ class CLiteral(CExpression):
                     return style.literal_boolean_true_token
                 else:
                     return style.literal_boolean_false_token
+            else:
+                raise NotImplemented
 
         elif isinstance(self.literal, int):
             if self.literal_format == self.Format.decimal:

@@ -125,7 +125,7 @@ def not_render(style: 'Style', a: 'CExpression') -> str:
         # Space before expression is important to not merge "not" with variables
         space = " "
     else:
-        space = style.vspace_unary_operator
+        space = str(style.vspace_unary_operator)
 
     return (
         f"{style.not_operator_style.value}"
@@ -139,8 +139,8 @@ def and_render(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
         before_space = " "
         after_space = " "
     else:
-        before_space = style.vspace_before_binary_operator
-        after_space = style.vspace_after_binary_operator
+        before_space = str(style.vspace_before_binary_operator)
+        after_space = str(style.vspace_after_binary_operator)
 
     return (
         f"{a.render()}"
@@ -156,8 +156,8 @@ def or_render(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
         before_space = " "
         after_space = " "
     else:
-        before_space = style.vspace_before_binary_operator
-        after_space = style.vspace_after_binary_operator
+        before_space = str(style.vspace_before_binary_operator)
+        after_space = str(style.vspace_after_binary_operator)
 
     return (
         f"{a.render()}"

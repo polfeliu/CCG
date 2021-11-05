@@ -29,7 +29,7 @@ def test_expression():
 
     # Operators
     NOT = COperators.Logic.Not
-    print(NOT(CLiteral(False)).render())  # TODO Boolean literals
+    print(NOT(CLiteral(False)).render())
 
     SUM = COperators.Arithmetic.Sum
     PARENTHESES = COperators.Parentheses
