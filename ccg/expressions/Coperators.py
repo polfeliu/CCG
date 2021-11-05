@@ -3,20 +3,31 @@ from enum import Enum
 from typing import TYPE_CHECKING, Callable
 
 from .Cexpression import CExpression
+from ..Cstatement import CStatement
 from ..style import default_style
 
 if TYPE_CHECKING:
     from ..style import Style
 
 
-class COperation(CExpression):
+class CExpressionOperation(CExpression):
+    """Operation that yields and expression"""
 
     @abstractmethod
     def render(self, style: 'Style' = default_style) -> str:
         raise NotImplementedError
 
 
-class CUnaryOperation(COperation):
+class CStatementOperation(CStatement):
+    """Operation that yields a statement"""
+
+    @abstractmethod
+    def render(self, style: 'Style' = default_style) -> str:
+        raise NotImplementedError
+
+
+class CUnaryOperation:
+    """Operation to one element"""
 
     def __init__(self,
                  render_function: Callable[['Style', 'CExpression'], str],
@@ -29,7 +40,16 @@ class CUnaryOperation(COperation):
         return self.render_function(style, self.a)
 
 
-class CBinaryOperation(COperation):
+class CExpressionUnaryOperation(CUnaryOperation, CExpressionOperation):
+    pass
+
+
+class CStatementUnaryOperation(CUnaryOperation, CStatementOperation):
+    pass
+
+
+class CBinaryOperation(CExpressionOperation):
+    """Operation between two elements"""
 
     def __init__(self,
                  render_function: Callable[['Style', 'CExpression', 'CExpression'], str],
@@ -44,68 +64,118 @@ class CBinaryOperation(COperation):
         return self.render_function(style, self.a, self.b)
 
 
-class COperator:
+class CExpressionBinaryOperation(CBinaryOperation, CExpressionOperation):
     pass
 
 
-class CUnaryOperator(COperator):
+class CStatementBinaryOperation(CBinaryOperation, CStatementOperation):
+    pass
+
+
+class COperator:
+    """Operator. Object that can operate between one or more expressions and create a new operation object"""
+    pass
+
+
+class CExpressionUnaryOperator(COperator):
+    """Unary Operator that outputs an expression"""
+
     def __init__(self, render_function: Callable[['Style', 'CExpression'], str]):
         self.render_function = render_function
 
-    def __call__(self, a: 'CExpression') -> 'CUnaryOperation':
-        return CUnaryOperation(self.render_function, a)
+    def __call__(self, a: 'CExpression') -> 'CExpressionUnaryOperation':
+        return CExpressionUnaryOperation(self.render_function, a)
 
 
-class CBinaryOperator(COperator):
+class CExpressionBinaryOperator(COperator):
+    """Binary Operator that outputs an expression"""
 
     def __init__(self, render_function: Callable[['Style', 'CExpression', 'CExpression'], str]):
         self.render_function = render_function
 
-    def __call__(self, a: 'CExpression', b: 'CExpression') -> 'COperation':
-        return CBinaryOperation(self.render_function, a, b)
+    def __call__(self, a: 'CExpression', b: 'CExpression') -> 'CExpressionOperation':
+        return CExpressionBinaryOperation(self.render_function, a, b)
 
 
-class CUnaryOperatorToken(CUnaryOperator):
-    class Order(Enum):
-        Before = 0
-        After = 1
+class CStatementBinaryOperator(COperator):
+    """Binary Operator that outputs a statement"""
 
-    def __init__(self, operator_token: str, order: Order):
-        self.operator_token = operator_token
-        self.order = order
+    def __init__(self, render_function: Callable[['Style', 'CExpression', 'CExpression'], str]):
+        self.render_function = render_function
 
-        if self.order == self.Order.Before:
-            def generator(style: 'Style', a: 'CExpression') -> 'str':
-                return (
-                    f"{operator_token}"
-                    f"{style.vspace_unary_operator}"
-                    f"{a.render(style)}"
-                )
-        elif self.order == self.Order.After:
-            def generator(style: 'Style', a: 'CExpression') -> 'str':
-                return (
-                    f"{a.render(style)}"
-                    f"{style.vspace_unary_operator}"
-                    f"{operator_token}"
-                )
-        else:
-            raise ValueError
-
-        super(CUnaryOperatorToken, self).__init__(generator)
+    def __call__(self, a: 'CExpression', b: 'CExpression') -> 'CStatement':
+        return CStatementBinaryOperation(self.render_function, a, b)
 
 
-class CBinaryOperatorToken(CBinaryOperator):
-    def __init__(self, operator_token: str):
-        def generator(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
+class Order(Enum):
+    Before = 0
+    After = 1
+
+
+def unary_operator_token_curry(operator_token: str, order: Order) -> Callable[['Style', 'CExpression'], str]:
+    """Currying function to construct render functions"""
+
+    if order == Order.Before:
+        def unary_operator_render(style: 'Style', a: 'CExpression') -> 'str':
+            return (
+                f"{operator_token}"
+                f"{style.vspace_unary_operator}"
+                f"{a.render(style)}"
+            )
+    elif order == Order.After:
+        def unary_operator_render(style: 'Style', a: 'CExpression') -> 'str':
             return (
                 f"{a.render(style)}"
-                f"{style.vspace_before_binary_operator}"
+                f"{style.vspace_unary_operator}"
                 f"{operator_token}"
-                f"{style.vspace_after_binary_operator}"
-                f"{b.render(style)}"
             )
+    else:
+        raise ValueError
 
-        super(CBinaryOperatorToken, self).__init__(generator)
+    return unary_operator_render
+
+
+class CExpressionUnaryOperatorToken(CExpressionUnaryOperator):
+    """Helper class to create unary operators with a token. Outputs Expression"""
+
+    def __init__(self, operator_token: str, order: Order):
+        super(CExpressionUnaryOperatorToken, self).__init__(unary_operator_token_curry(operator_token, order))
+
+
+class CStatementUnaryOperatorToken(CExpressionUnaryOperator):
+    """Helper class to create unary operators with a token. Outputs Statement"""
+
+    def __init__(self, operator_token: str, order: Order):
+        super(CStatementUnaryOperatorToken, self).__init__(unary_operator_token_curry(operator_token, order))
+
+
+def binary_operator_token_curry(operator_token: str) -> Callable[['Style', 'CExpression', 'CExpression'], str]:
+    """Currying function to construct render functions"""
+
+    def binary_operator_render(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
+        return (
+            f"{a.render(style)}"
+            f"{style.vspace_before_binary_operator}"
+            f"{operator_token}"
+            f"{style.vspace_after_binary_operator}"
+            f"{b.render(style)}"
+        )
+
+    return binary_operator_render
+
+
+class CExpressionBinaryOperatorToken(CExpressionBinaryOperator):
+    """Helper class to create binary operators with a token. Outputs Expression"""
+
+    def __init__(self, operator_token: str):
+        super(CExpressionBinaryOperatorToken, self).__init__(binary_operator_token_curry(operator_token))
+
+
+class CStatementBinaryOperatorToken(CStatementBinaryOperator):
+    """Helper class to create binary operators with a token. Outputs Statement"""
+
+    def __init__(self, operator_token: str):
+        super(CStatementBinaryOperatorToken, self).__init__(binary_operator_token_curry(operator_token))
 
 
 def subscript_render(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
@@ -170,59 +240,64 @@ def or_render(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
 
 class COperators:
     class IncrementDecrement:
-        PreIncrement = CUnaryOperatorToken("++", order=CUnaryOperatorToken.Order.Before)
-        PreDecrement = CUnaryOperatorToken("--", order=CUnaryOperatorToken.Order.Before)
-        PostIncrement = CUnaryOperatorToken("++", order=CUnaryOperatorToken.Order.After)
-        PostDecrement = CUnaryOperatorToken("--", order=CUnaryOperatorToken.Order.After)
+        PreIncrementExpression = CExpressionUnaryOperatorToken("++", order=Order.Before)
+        PreDecrementExpression = CExpressionUnaryOperatorToken("--", order=Order.Before)
+        PostIncrementExpression = CExpressionUnaryOperatorToken("++", order=Order.After)
+        PostDecrementExpression = CExpressionUnaryOperatorToken("--", order=Order.After)
+
+        PreIncrementStatement = CStatementUnaryOperatorToken("++", order=Order.Before)
+        PreDecrementStatement = CStatementUnaryOperatorToken("--", order=Order.Before)
+        PostIncrementStatement = CStatementUnaryOperatorToken("++", order=Order.After)
+        PostDecrementStatement = CStatementUnaryOperatorToken("--", order=Order.After)
 
     class Arithmetic:
-        Sum = CBinaryOperatorToken("+")
-        Subtract = CBinaryOperatorToken("-")
-        Multiply = CBinaryOperatorToken("*")
-        Divide = CBinaryOperatorToken("/")
-        Modulus = CBinaryOperatorToken("%")
+        Sum = CExpressionBinaryOperatorToken("+")
+        Subtract = CExpressionBinaryOperatorToken("-")
+        Multiply = CExpressionBinaryOperatorToken("*")
+        Divide = CExpressionBinaryOperatorToken("/")
+        Modulus = CExpressionBinaryOperatorToken("%")
 
-        BitWiseNot = CUnaryOperatorToken("~", order=CUnaryOperatorToken.Order.Before)
-        BitWiseAnd = CBinaryOperatorToken("&")
-        BitWiseOr = CBinaryOperatorToken("|")
-        BitWiseXor = CBinaryOperatorToken("^")
-        BitWiseLeftShift = CBinaryOperatorToken("<<")
-        BitWiseRightShift = CBinaryOperatorToken(">>")
+        BitWiseNot = CExpressionUnaryOperatorToken("~", order=Order.Before)
+        BitWiseAnd = CExpressionBinaryOperatorToken("&")
+        BitWiseOr = CExpressionBinaryOperatorToken("|")
+        BitWiseXor = CExpressionBinaryOperatorToken("^")
+        BitWiseLeftShift = CExpressionBinaryOperatorToken("<<")
+        BitWiseRightShift = CExpressionBinaryOperatorToken(">>")
 
     class Assignment:
-        Assign = CBinaryOperatorToken("=")
-        SumAssignment = CBinaryOperatorToken("+=")
-        SubtractAssignment = CBinaryOperatorToken("-=")
-        MultiplyAssignment = CBinaryOperatorToken("*=")
-        DivideAssignment = CBinaryOperatorToken("/=")
-        ModulusAssignment = CBinaryOperatorToken("%=")
+        Assign = CStatementBinaryOperatorToken("=")
+        SumAssignment = CStatementBinaryOperatorToken("+=")
+        SubtractAssignment = CStatementBinaryOperatorToken("-=")
+        MultiplyAssignment = CStatementBinaryOperatorToken("*=")
+        DivideAssignment = CStatementBinaryOperatorToken("/=")
+        ModulusAssignment = CStatementBinaryOperatorToken("%=")
 
-        BitWiseAndAssignment = CBinaryOperatorToken("&=")
-        BitWiseOrAssignment = CBinaryOperatorToken("|=")
-        BitWiseXorAssignment = CBinaryOperatorToken("^=")
-        BitWiseLeftShiftAssignment = CBinaryOperatorToken("<<=")
-        BitWiseRightShiftAssignment = CBinaryOperatorToken(">>=")
+        BitWiseAndAssignment = CStatementBinaryOperatorToken("&=")
+        BitWiseOrAssignment = CStatementBinaryOperatorToken("|=")
+        BitWiseXorAssignment = CStatementBinaryOperatorToken("^=")
+        BitWiseLeftShiftAssignment = CStatementBinaryOperatorToken("<<=")
+        BitWiseRightShiftAssignment = CStatementBinaryOperatorToken(">>=")
 
     class Logic:
-        Not = CUnaryOperator(not_render)
-        And = CBinaryOperator(and_render)
-        Or = CBinaryOperator(or_render)
+        Not = CExpressionUnaryOperator(not_render)
+        And = CExpressionBinaryOperator(and_render)
+        Or = CExpressionBinaryOperator(or_render)
 
     class Comparison:
-        EqualTo = CBinaryOperatorToken("==")
-        NotEqualTo = CBinaryOperatorToken("!=")
-        LessThan = CBinaryOperatorToken("<")
-        GreaterThan = CBinaryOperatorToken(">")
-        LessThanOrEqualTo = CBinaryOperatorToken("<=")
-        GreatherThanOrEqualTo = CBinaryOperatorToken(">=")
+        EqualTo = CExpressionBinaryOperatorToken("==")
+        NotEqualTo = CExpressionBinaryOperatorToken("!=")
+        LessThan = CExpressionBinaryOperatorToken("<")
+        GreaterThan = CExpressionBinaryOperatorToken(">")
+        LessThanOrEqualTo = CExpressionBinaryOperatorToken("<=")
+        GreatherThanOrEqualTo = CExpressionBinaryOperatorToken(">=")
 
     class MemberAccess:
-        SubScript = CBinaryOperator(subscript_render)
-        Indirection = CUnaryOperatorToken("*", order=CUnaryOperatorToken.Order.Before)
-        AddressOf = CUnaryOperatorToken('&', order=CUnaryOperatorToken.Order.Before)
-        MemberOfObject = CBinaryOperatorToken('.')
-        MemberOfPointer = CBinaryOperatorToken('->')
-        PointerToMemberOfObject = CBinaryOperatorToken('.*')
-        PointerToMemberOfPointer = CBinaryOperatorToken('->*')
+        SubScript = CExpressionBinaryOperator(subscript_render)
+        Indirection = CExpressionUnaryOperatorToken("*", order=Order.Before)
+        AddressOf = CExpressionUnaryOperatorToken('&', order=Order.Before)
+        MemberOfObject = CExpressionBinaryOperatorToken('.')
+        MemberOfPointer = CExpressionBinaryOperatorToken('->')
+        PointerToMemberOfObject = CExpressionBinaryOperatorToken('.*')
+        PointerToMemberOfPointer = CExpressionBinaryOperatorToken('->*')
 
-    Parentheses = CUnaryOperator(parentheses_render)
+    Parentheses = CExpressionUnaryOperator(parentheses_render)

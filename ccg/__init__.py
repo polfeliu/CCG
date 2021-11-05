@@ -8,6 +8,6 @@ from .Cvariable import CVariable
 from .Carray import CArray
 from .Cnamespace import CNamespace
 from .Cusing import CUsing
-from .Cstatement import CStatements, CDeclarations
+from .Cstatement import CStatements, CDeclarations, CStatement, CDeclaration
 
 from .expressions import *

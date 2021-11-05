@@ -39,6 +39,14 @@ def test_expression():
         ).render()
     )
 
+    ASSIGN = COperators.Assignment.Assign
+    print(
+        ASSIGN(
+            CExpressionFreeStyle("a"),
+            CLiteral(5)
+        ).render()
+    )
+
 
 if __name__ == "__main__":
     test_expression()
