@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import TYPE_CHECKING, List, Union, Any, Optional
+from typing import TYPE_CHECKING, List, Union, Optional
 
 from .Cfunction import CFunction
 from ..Cstatement import CStatements
