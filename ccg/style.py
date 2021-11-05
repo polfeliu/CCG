@@ -68,6 +68,7 @@ class Style:
     indent_class_member = True
     indent_class_access = False
     indent_struct_member = True
+    indent_function_content = True
 
     # Attributes
     attribute_packed = "__attribute__((__packed__))"

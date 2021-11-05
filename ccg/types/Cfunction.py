@@ -144,7 +144,7 @@ class CFunction(CGenericType, CItemDefinable):
             f"{style.vspace_function_after_name_definition}"
             f"({self._argument_list(style=style)})"
             f"{style.bracket_open('function')}"
-            f"{self.content.render()}"
+            f"{style.indent(self.content.render(), 'function_content')}"
             f"{style.bracket_close('function')};"
         )
 
