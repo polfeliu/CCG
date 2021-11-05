@@ -77,7 +77,7 @@ class CClassMethod(CFunction, CClassMember):
                  name: str,
                  return_type: CGenericType = CVoidType,
                  arguments: Optional[List['CFunctionArgument']] = None,
-                 content=None,
+                 content: Optional['CStatements'] = None,
                  access: CClassAccess = CClassAccess.private,
                  static: bool = False,
                  doc: Optional['Doc'] = None

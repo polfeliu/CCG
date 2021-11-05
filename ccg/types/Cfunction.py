@@ -37,7 +37,7 @@ class CFunction(CGenericType, CItemDefinable):
                  name: str,
                  return_type: CGenericType = CVoidType,
                  arguments: Optional[List[CFunctionArgument]] = None,
-                 content: Optional[CStatements] = None,
+                 content: Optional['CStatements'] = None,
                  in_space: Optional['CSpace'] = None,
                  static: bool = False,
                  doc: Optional['Doc'] = None
