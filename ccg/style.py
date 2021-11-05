@@ -58,6 +58,12 @@ class Style:
 
     space_after_cast = False
 
+    space_unary_operator = False
+    space_before_binary_operator = True
+    space_after_binary_operator = True
+    space_before_parentheses_operator = False
+    space_after_parentheses_operator = False
+
     # Indentation
     indent_class_member = True
     indent_class_access = False
@@ -83,6 +89,23 @@ class Style:
     literal_double_token = "d"
     literal_boolean_true_token = "true"
     literal_boolean_false_token = "false"
+
+    # Operators
+    class NotOperatorsStyles(Enum):
+        Exclamation = "!"
+        Explicit = "not"
+
+    class AndOperatorStyles(Enum):
+        DoubleAmpersand = "&&"
+        Explicit = "and"
+
+    class OrOperatorStyles(Enum):
+        DoubleVerticalBar = "||"
+        Explicit = "or"
+
+    not_operator_style = NotOperatorsStyles.Exclamation
+    and_operator_style = AndOperatorStyles.DoubleAmpersand
+    or_operator_style = OrOperatorStyles.Explicit
 
     def bracket_open(self, obj) -> str:
         return (

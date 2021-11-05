@@ -100,6 +100,7 @@ class CUnionDef(CGenericType, CItemDefinable):
                     semicolon: bool = True,
                     doc: bool = True,
                     from_space: 'CSpace' = None,
-                    without_arguments: bool = False
+                    without_arguments: bool = False,
+                    for_variable: bool = False
                     ) -> str:
         return self.definition(style=style, from_space=from_space, doc=doc) + (';' if semicolon else '')

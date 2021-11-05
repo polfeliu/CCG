@@ -10,6 +10,7 @@ def test_expression():
     )
     print(var.declaration())
 
+    var.c_type = Cuint8
     var.initial_value = CCast(Cuint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.octal))
     print(var.declaration())
 
@@ -19,11 +20,24 @@ def test_expression():
     var.initial_value = CCast(Cuint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.binary))
     print(var.declaration())
 
+    var.c_type = Cfloat
     var.initial_value = CCast(Cfloat, CLiteral(12, c_type=Cfloat, literal_format=CLiteral.Format.float_decimals))
     print(var.declaration())
 
     var.initial_value = CCast(Cfloat, CLiteral(12, c_type=Cfloat, literal_format=CLiteral.Format.float_scientific))
     print(var.declaration())
+
+    # Operators
+    NOT = COperators.Logic.Not
+    print(NOT(CLiteral(False)).render())
+
+    SUM = COperators.Arithmetic.Sum
+    PARENTHESES = COperators.Parentheses
+    print(
+        PARENTHESES(
+            SUM(CLiteral(2), CLiteral(3))
+        ).render()
+    )
 
 
 if __name__ == "__main__":

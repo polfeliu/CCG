@@ -202,10 +202,15 @@ class CClass(CGenericType, CItemDefinable):
                     semicolon: bool = True,
                     doc: bool = True,
                     from_space: 'CSpace' = None,
-                    without_arguments: bool = False
+                    without_arguments: bool = False,
+                    for_variable: bool = False
                     ) -> str:
         self.style_checks(style)
-        return f"class {self.name}{';' if semicolon else ''}"
+        return (
+            f"{'class ' if not for_variable else ''}"
+            f"{self.name}"
+            f"{';' if semicolon else ''}"
+        )
 
     def _member_definition(self, style: 'Style') -> str:
         content = ""

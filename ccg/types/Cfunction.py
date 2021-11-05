@@ -90,7 +90,8 @@ class CFunction(CGenericType, CItemDefinable):
                     semicolon: bool = True,
                     doc: bool = True,
                     from_space: 'CSpace' = None,
-                    without_arguments: bool = False
+                    without_arguments: bool = False,
+                    for_variable: bool = False
                     ) -> str:
         return (
             f"{self.doc_render(style) if doc else ''}"

@@ -35,6 +35,13 @@ def test_class():
 
     print(my_class.all_members_definition().render())
 
+    instance = CVariable(
+        name="my_instance",
+        c_type=my_class
+    )
+
+    print(instance.declaration())
+
 
 if __name__ == "__main__":
     test_class()

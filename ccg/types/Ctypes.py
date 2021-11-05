@@ -96,8 +96,22 @@ class CGenericType(CGenericItem):
                     semicolon: bool = True,
                     doc: bool = True,
                     from_space: 'CSpace' = None,
-                    without_arguments: bool = False
+                    without_arguments: bool = False,
+                    for_variable: bool = False
                     ) -> str:
+        """Type declaration
+
+        Args:
+            style: generating style
+            semicolon: include semicolon in declaration
+            doc: include documentation
+            from_space: relative to space
+            without_arguments: include arguments if any
+            for_variable: if the declaration is for a variable
+
+        Returns:
+
+        """
         return self.name + (';' if semicolon else '')
 
     def check_value(self, value: Any) -> bool:
