@@ -90,6 +90,23 @@ class Style:
     literal_boolean_true_token = "true"
     literal_boolean_false_token = "false"
 
+    # Operators
+    class NotOperatorsStyles(Enum):
+        Exclamation = "!"
+        Explicit = "not"
+
+    class AndOperatorStyles(Enum):
+        DoubleAmpersand = "&&"
+        Explicit = "and"
+
+    class OrOperatorStyles(Enum):
+        DoubleVerticalBar = "||"
+        Explicit = "or"
+
+    not_operator_style = NotOperatorsStyles.Exclamation
+    and_operator_style = AndOperatorStyles.DoubleAmpersand
+    or_operator_style = OrOperatorStyles.Explicit
+
     def bracket_open(self, obj) -> str:
         return (
                 str(self.__getattribute__(f"vnew_line_{obj}_bracket_open_before")) +

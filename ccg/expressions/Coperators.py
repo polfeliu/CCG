@@ -1,6 +1,6 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable
 from enum import Enum
+from typing import TYPE_CHECKING, Callable
 
 from .Cexpression import CExpression
 from ..style import default_style
@@ -120,6 +120,54 @@ def parentheses_render(style: 'Style', a: 'CExpression') -> str:
     )
 
 
+def not_render(style: 'Style', a: 'CExpression') -> str:
+    if style.not_operator_style == style.NotOperatorsStyles.Explicit:
+        # Space before expression is important to not merge "not" with variables
+        space = " "
+    else:
+        space = style.vspace_unary_operator
+
+    return (
+        f"{style.not_operator_style.value}"
+        f"{space}"
+        f"{a.render()}"
+    )
+
+
+def and_render(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
+    if style.and_operator_style == style.AndOperatorStyles.Explicit:
+        before_space = " "
+        after_space = " "
+    else:
+        before_space = style.vspace_before_binary_operator
+        after_space = style.vspace_after_binary_operator
+
+    return (
+        f"{a.render()}"
+        f"{before_space}"
+        f"{style.and_operator_style.value}"
+        f"{after_space}"
+        f"{b.render()}"
+    )
+
+
+def or_render(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
+    if style.or_operator_style == style.OrOperatorStyles.Explicit:
+        before_space = " "
+        after_space = " "
+    else:
+        before_space = style.vspace_before_binary_operator
+        after_space = style.vspace_after_binary_operator
+
+    return (
+        f"{a.render()}"
+        f"{before_space}"
+        f"{style.and_operator_style.value}"
+        f"{after_space}"
+        f"{b.render()}"
+    )
+
+
 class COperators:
     class IncrementDecrement:
         PreIncrement = CUnaryOperatorToken("++", order=CUnaryOperatorToken.Order.Before)
@@ -156,10 +204,9 @@ class COperators:
         BitWiseRightShiftAssignment = CBinaryOperatorToken(">>=")
 
     class Logic:
-        # TODO style with not, and and or operator tokens??
-        Not = CUnaryOperatorToken("!", order=CUnaryOperatorToken.Order.Before)
-        And = CBinaryOperatorToken("&&")
-        Or = CBinaryOperatorToken("||")
+        Not = CUnaryOperator(not_render)
+        And = CBinaryOperator(and_render)
+        Or = CBinaryOperator(or_render)
 
     class Comparisson:
         EqualTo = CBinaryOperatorToken("==")
