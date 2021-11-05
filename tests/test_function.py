@@ -10,7 +10,10 @@ def test_function():
             CFunction.Argument(name="second", c_type=Cdouble, default=CLiteral(2), doc=Doc("Second Argument"))
         ],
         doc=Doc("Awesome function", "This function is awesome because it does marvellous things",
-                ret="returns a lucky number")
+                ret="returns a lucky number"),
+        content=CStatements([
+            CVariable("local_var", Cint8).declare()
+        ])
     )
 
     print(f.declaration())
