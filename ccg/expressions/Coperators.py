@@ -208,7 +208,7 @@ class COperators:
         And = CBinaryOperator(and_render)
         Or = CBinaryOperator(or_render)
 
-    class Comparisson:
+    class Comparison:
         EqualTo = CBinaryOperatorToken("==")
         NotEqualTo = CBinaryOperatorToken("!=")
         LessThan = CBinaryOperatorToken("<")
