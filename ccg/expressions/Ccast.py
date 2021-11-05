@@ -10,14 +10,14 @@ if TYPE_CHECKING:
 
 class CCast(CExpression):
 
-    def __init__(self, type: 'CGenericType', expression: CExpression):
+    def __init__(self, c_type: 'CGenericType', expression: CExpression):
         super(CCast, self).__init__()
-        self.type = type
+        self.c_type = c_type
         self.expression = expression
 
     def render(self, style: 'Style' = default_style) -> str:
         return (
-            f"({self.type.name})"
+            f"({self.c_type.name})"
             f"{style.vspace_after_cast}"
             f"{self.expression.render()}"
         )
