@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING, List, Optional
 
-from ..Cvariable import CVariable
-from ..Cstatement import CDeclaration
 from .Ctypes import CGenericType, CVoidType, CNoType, CItemDefinable
+from ..Cstatement import CDeclaration, CStatements
+from ..Cvariable import CVariable
 from ..style import default_style
 
 if TYPE_CHECKING:
@@ -37,7 +37,7 @@ class CFunction(CGenericType, CItemDefinable):
                  name: str,
                  return_type: CGenericType = CVoidType,
                  arguments: Optional[List[CFunctionArgument]] = None,
-                 content=None,
+                 content: Optional['CStatements'] = None,
                  in_space: Optional['CSpace'] = None,
                  static: bool = False,
                  doc: Optional['Doc'] = None
@@ -55,7 +55,11 @@ class CFunction(CGenericType, CItemDefinable):
 
         self.return_type = return_type
 
-        self.content = content
+        if content is None:
+            self.content = CStatements([])
+        else:
+            self.content = content
+
         self.static = static
 
         # Check that non-default arguments are after default arguments
@@ -140,7 +144,7 @@ class CFunction(CGenericType, CItemDefinable):
             f"{style.vspace_function_after_name_definition}"
             f"({self._argument_list(style=style)})"
             f"{style.bracket_open('function')}"
-            f"{self.content if self.content is not None else ''}"
+            f"{style.indent(self.content.render(), 'function_content')}"
             f"{style.bracket_close('function')};"
         )
 
