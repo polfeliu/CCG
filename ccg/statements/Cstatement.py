@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING, List, Callable, Sequence
 
-from .style import default_style
+from ..style import default_style
 
 if TYPE_CHECKING:
-    from .style import Style
+    from ..style import Style
 
 
 class CStatement:

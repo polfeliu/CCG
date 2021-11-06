@@ -3,7 +3,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, List, Union, Optional
 
 from .Cfunction import CFunction
-from ..Cstatement import CStatements
+from ..statements import CStatements
 from .Ctypes import CGenericType, CVoidType, CNoType, CGenericItem, CItemDefinable
 from ..Cusing import CUsing
 from ..Cvariable import CVariable

@@ -3,7 +3,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, Callable
 
 from .Cexpression import CExpression
-from ..Cstatement import CStatement
+from ..statements import CStatement
 from ..style import default_style
 
 if TYPE_CHECKING:

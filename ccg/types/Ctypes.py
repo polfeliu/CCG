@@ -3,7 +3,7 @@ from copy import copy
 from typing import TYPE_CHECKING, List, Any, Optional
 
 from ..Cnamespace import CSpace
-from ..Cstatement import CStatement
+from ..statements import CStatement
 from ..style import default_style
 
 if TYPE_CHECKING:
