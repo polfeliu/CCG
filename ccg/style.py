@@ -30,6 +30,29 @@ class Style:
     new_line_class_bracket_close_before = True
     new_line_class_bracket_close_after = False
 
+    new_line_if_bracket_open_before = True
+    new_line_if_bracket_open_after = True
+    new_line_if_bracket_close_before = True
+    new_line_if_bracket_close_after = True
+    new_line_if_parentheses_open_before = False
+    new_line_if_parentheses_open_after = False
+    new_line_if_parentheses_close_before = False
+    new_line_if_parentheses_close_after = False
+
+    new_line_else_if_bracket_open_before = True
+    new_line_else_if_bracket_open_after = True
+    new_line_else_if_bracket_close_before = True
+    new_line_else_if_bracket_close_after = True
+    new_line_else_if_parentheses_open_before = False
+    new_line_else_if_parentheses_open_after = False
+    new_line_else_if_parentheses_close_before = False
+    new_line_else_if_parentheses_close_after = False
+
+    new_line_else_bracket_open_before = True
+    new_line_else_bracket_open_after = True
+    new_line_else_bracket_close_before = True
+    new_line_else_bracket_close_after = True
+
     # Spaces
     space_function_after_name_definition = False
     space_function_after_name_declaration = False
@@ -56,6 +79,29 @@ class Style:
     space_class_bracket_close_before = False
     space_class_bracket_close_after = False
 
+    space_if_bracket_open_before = False
+    space_if_bracket_open_after = False
+    space_if_bracket_close_before = False
+    space_if_bracket_close_after = False
+    space_if_parentheses_open_before = True
+    space_if_parentheses_open_after = False
+    space_if_parentheses_close_before = False
+    space_if_parentheses_close_after = False
+
+    space_else_if_bracket_open_before = False
+    space_else_if_bracket_open_after = False
+    space_else_if_bracket_close_before = False
+    space_else_if_bracket_close_after = False
+    space_else_if_parentheses_open_before = True
+    space_else_if_parentheses_open_after = False
+    space_else_if_parentheses_close_before = False
+    space_else_if_parentheses_close_after = False
+
+    space_else_bracket_open_before = False
+    space_else_bracket_open_after = False
+    space_else_bracket_close_before = False
+    space_else_bracket_close_after = False
+
     space_after_cast = False
 
     space_unary_operator = False
@@ -69,6 +115,9 @@ class Style:
     indent_class_access = False
     indent_struct_member = True
     indent_function_content = True
+    indent_if_content = True
+    indent_else_if_content = True
+    indent_else_content = True
 
     # Attributes
     attribute_packed = "__attribute__((__packed__))"
@@ -124,6 +173,24 @@ class Style:
                 '}' +
                 str(self.__getattribute__(f"vnew_line_{obj}_bracket_close_after")) +
                 str(self.__getattribute__(f"vspace_{obj}_bracket_close_after"))
+        )
+
+    def parentheses_open(self, obj) -> str:
+        return (
+                str(self.__getattribute__(f"vnew_line_{obj}_parentheses_open_before")) +
+                str(self.__getattribute__(f"vspace_{obj}_parentheses_open_before")) +
+                '(' +
+                str(self.__getattribute__(f"vnew_line_{obj}_parentheses_open_after")) +
+                str(self.__getattribute__(f"vspace_{obj}_parentheses_open_after"))
+        )
+
+    def parentheses_close(self, obj) -> str:
+        return (
+                str(self.__getattribute__(f"vnew_line_{obj}_parentheses_close_before")) +
+                str(self.__getattribute__(f"vspace_{obj}_parentheses_close_before")) +
+                ')' +
+                str(self.__getattribute__(f"vnew_line_{obj}_parentheses_close_after")) +
+                str(self.__getattribute__(f"vspace_{obj}_parentheses_close_after"))
         )
 
     def __getattribute__(self, item) -> object:

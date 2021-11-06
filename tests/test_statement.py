@@ -23,8 +23,26 @@ def test_statement():
         fun.define()
     ])
 
-    print(statements.render())
-    print(declarations.render())
+    # print(statements.render())
+    # print(declarations.render())
+
+    c_if = CIf(
+        CLiteral(True),
+        [
+            var.declare()
+        ]
+    ).ELSE_IF(
+        CLiteral(False),
+        [
+            array.declare()
+        ]
+    ).ELSE(
+        [
+            var.declare()
+        ]
+    )
+
+    print(c_if.render())
 
 
 if __name__ == "__main__":
