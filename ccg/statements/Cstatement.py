@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, List, Callable, Sequence, Union
 
 from ..style import default_style
@@ -65,6 +66,28 @@ class CDeclarations(CStatements):
         )
 
 
+class CTokenStatement(CStatement, ABC):
+
+    def __init__(self):
+        super(CTokenStatement, self).__init__(self._render_function)
+
+    @property
+    @abstractmethod
+    def _token(self) -> str:
+        pass
+
+    def _post_block(self, style: 'Style') -> str:
+        return ""
+
+    def _render_function(self, style: 'Style' = default_style) -> str:
+        return (
+            f"{self._token}"
+            f"{self._post_block(style)}"
+            f"{style.__getattribute__('vspace_before_semicolon_{}_statement'.format(self._token))}"
+            f";"
+        )
+
+
 class CCompoundStatement(CStatement):
     _style_token: Union[str, None] = None
 
@@ -93,6 +116,3 @@ class CCompoundStatement(CStatement):
 
     def _post_block(self, style: 'Style') -> str:
         return ""
-
-
-CBreak = CStatementFreeStyle('break;')

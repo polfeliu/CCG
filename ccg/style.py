@@ -147,20 +147,20 @@ class Style:
     space_switch_parentheses_close_before = False
     space_switch_parentheses_close_after = False
 
-    space_while_parentheses_open_before = False
-    space_while_parentheses_open_after = False
-    space_while_parentheses_close_before = False
-    space_while_parentheses_close_after = False
     space_while_bracket_open_before = False
     space_while_bracket_open_after = False
     space_while_bracket_close_before = False
     space_while_bracket_close_after = False
+    space_while_parentheses_open_before = True
+    space_while_parentheses_open_after = False
+    space_while_parentheses_close_before = False
+    space_while_parentheses_close_after = False
 
     space_do_while_bracket_open_before = False
     space_do_while_bracket_open_after = False
     space_do_while_bracket_close_before = False
     space_do_while_bracket_close_after = False
-    space_do_while_parentheses_open_before = False
+    space_do_while_parentheses_open_before = True
     space_do_while_parentheses_open_after = False
     space_do_while_parentheses_close_before = False
     space_do_while_parentheses_close_after = False
@@ -169,7 +169,7 @@ class Style:
     space_for_bracket_open_after = False
     space_for_bracket_close_before = False
     space_for_bracket_close_after = False
-    space_for_parentheses_open_before = False
+    space_for_parentheses_open_before = True
     space_for_parentheses_open_after = False
     space_for_parentheses_close_before = False
     space_for_parentheses_close_after = False
@@ -181,6 +181,10 @@ class Style:
     space_after_binary_operator = True
     space_before_parentheses_operator = False
     space_after_parentheses_operator = False
+
+    space_before_semicolon_break_statement = False
+    space_before_semicolon_continue_statement = False
+    space_before_semicolon_return_statement = False
 
     # Indentation
     indent_class_member = True
@@ -232,7 +236,7 @@ class Style:
 
     not_operator_style = NotOperatorsStyles.Exclamation
     and_operator_style = AndOperatorStyles.DoubleAmpersand
-    or_operator_style = OrOperatorStyles.Explicit
+    or_operator_style = OrOperatorStyles.DoubleVerticalBar
 
     def bracket_open(self, obj) -> str:
         return (

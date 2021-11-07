@@ -31,19 +31,40 @@ def test_expression():
     NOT = COperators.Logic.Not
     print(NOT(CLiteral(False)).render())
 
-    SUM = COperators.Arithmetic.Sum
-    PARENTHESES = COperators.Parentheses
-    print(
-        PARENTHESES(
-            SUM(CLiteral(2), CLiteral(3))
-        ).render()
-    )
+    var = CVariable("u8Var", Cuint8)
+    print(var.declare().render())
 
     ASSIGN = COperators.Assignment.Assign
     print(
         ASSIGN(
-            CExpressionFreeStyle("a"),
+            var,  # Assign a value to that value
             CLiteral(5)
+        ).render()
+    )
+
+    SUM = COperators.Arithmetic.Sum
+    print(
+        SUM(
+            CLiteral(2),
+            var  # Use a variable in a sum
+        ).render()
+    )
+
+    PARENTHESES = COperators.Parentheses
+    print(
+        PARENTHESES(
+            # Typical operations (sum, subtract...) can be done using python built-in operations
+            var + CLiteral(2) - CLiteral(3) * CLiteral(4) / CLiteral(5) % CLiteral(6)
+            << CLiteral(7) >> CLiteral(8) & CLiteral(True) | CLiteral(False)
+            + PARENTHESES(
+                -CLiteral(9)  # Unary minus
+            )
+            + PARENTHESES(
+                +CLiteral(2)  # Unary Plus
+            )
+            + PARENTHESES(
+                ~CLiteral(False)  # Invert
+            )
         ).render()
     )
 

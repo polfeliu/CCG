@@ -232,7 +232,7 @@ def or_render(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
     return (
         f"{a.render(style)}"
         f"{before_space}"
-        f"{style.and_operator_style.value}"
+        f"{style.or_operator_style.value}"
         f"{after_space}"
         f"{b.render(style)}"
     )
@@ -251,6 +251,9 @@ class COperators:
         PostDecrementStatement = CStatementUnaryOperatorToken("--", order=Order.After)
 
     class Arithmetic:
+        UnaryPlus = CExpressionUnaryOperatorToken("+", order=Order.Before)
+        UnaryMinus = CExpressionUnaryOperatorToken("-", order=Order.Before)
+
         Sum = CExpressionBinaryOperatorToken("+")
         Subtract = CExpressionBinaryOperatorToken("-")
         Multiply = CExpressionBinaryOperatorToken("*")

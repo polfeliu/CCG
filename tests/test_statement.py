@@ -66,7 +66,8 @@ def test_statement():
     c_while = CWhile(
         CExpressionFreeStyle('i < 3'),
         [
-            var.declare()
+            var.declare(),
+            CContinue()
         ]
     )
 
@@ -74,7 +75,8 @@ def test_statement():
 
     c_do_while = CDoWhile(
         [
-            var.declare()
+            var.declare(),
+            CBreak()
         ],
         CLiteral(False)
     )
@@ -94,7 +96,8 @@ def test_statement():
         condition=CExpressionFreeStyle('i<10'),
         iteration=CExpressionFreeStyle('i++'),
         statements=[
-            var.declare()
+            var.declare(),
+            CReturn(var)
         ]
     )
 

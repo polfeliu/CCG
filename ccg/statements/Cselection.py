@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Union, List, Optional
 
-from .Cstatement import CStatement, CStatements, CCompoundStatement, CBreak
+from .Cstatement import CStatement, CStatements, CCompoundStatement
+from .Cjump import CBreak
 
 if TYPE_CHECKING:
     from ..expressions import CExpression
@@ -110,7 +111,7 @@ class CCaseSwitch(CStatement):
     def _all_statements(self) -> 'CStatements':
         statements = CStatements([self.statements])
         if self.auto_break is not None:
-            statements.append(CBreak)
+            statements.append(CBreak())
         return statements
 
     def _header(self, style: 'Style') -> str:
