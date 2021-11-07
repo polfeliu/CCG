@@ -63,6 +63,43 @@ def test_statement():
 
     print(c_switch.render())
 
+    c_while = CWhile(
+        CExpressionFreeStyle('i < 3'),
+        [
+            var.declare()
+        ]
+    )
+
+    print(c_while.render())
+
+    c_do_while = CDoWhile(
+        [
+            var.declare()
+        ],
+        CLiteral(False)
+    )
+
+    print(c_do_while.render())
+
+    c_empty_for = CFor(
+        statements=[
+            var.declare()
+        ]
+    )
+
+    print(c_empty_for.render())
+
+    c_for = CFor(
+        initial=CStatementFreeStyle('i=0'),
+        condition=CExpressionFreeStyle('i<10'),
+        iteration=CExpressionFreeStyle('i++'),
+        statements=[
+            var.declare()
+        ]
+    )
+
+    print(c_for.render())
+
 
 if __name__ == "__main__":
     test_statement()

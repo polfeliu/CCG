@@ -80,7 +80,7 @@ class CFunction(CGenericType, CItemDefinable):
             for argument in self.arguments:
                 default = ''
                 if argument.default is not None and include_defaults:
-                    default = f" = {argument.default.render()}"
+                    default = f" = {argument.default.render(style)}"
                 argument_list += f"{argument.c_type.name} {argument.name}{default}, "
             argument_list = argument_list.rstrip(", ")
         else:
@@ -144,7 +144,7 @@ class CFunction(CGenericType, CItemDefinable):
             f"{style.vspace_function_after_name_definition}"
             f"({self._argument_list(style=style)})"
             f"{style.bracket_open('function')}"
-            f"{style.indent(self.content.render(), 'function_content')}"
+            f"{style.indent(self.content.render(style), 'function_content')}"
             f"{style.bracket_close('function')};"
         )
 

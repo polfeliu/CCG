@@ -25,7 +25,7 @@ class CIfLadder(CStatement):
             content += c_else_if.render(style)
 
         if self.c_else is not None:
-            content += self.c_else.render()
+            content += self.c_else.render(style)
 
         return content
 
@@ -49,7 +49,7 @@ class CIf(CCompoundStatement):
         return (
             f"if"
             f"{style.parentheses_open(self._style_token)}"
-            f"{self.condition.render()}"
+            f"{self.condition.render(style)}"
             f"{style.parentheses_close(self._style_token)}"
         )
 
@@ -74,7 +74,7 @@ class CElseIf(CIf):
         return (
             f"else if"
             f"{style.parentheses_open(self._style_token)}"
-            f"{self.condition.render()}"
+            f"{self.condition.render(style)}"
             f"{style.parentheses_close(self._style_token)}"
         )
 
@@ -116,13 +116,13 @@ class CCaseSwitch(CStatement):
     def _header(self, style: 'Style') -> str:
         if self.match_expression is None:
             raise ValueError("Cannot render switch statement without a match_expression")
-        return f"case {self.match_expression.render()}:"
+        return f"case {self.match_expression.render(style)}:"
 
     def _render_function(self, style: 'Style') -> str:
         return (
             f"{self._header(style)}"
             f"{style.new_line_token}"
-            f"{style.indent(self._all_statements().render(), 'case_switch_content')}"
+            f"{style.indent(self._all_statements().render(style), 'case_switch_content')}"
         )
 
 
@@ -157,6 +157,6 @@ class CSwitch(CCompoundStatement):
         return (
             f"{self._style_token}"
             f"{style.parentheses_open(self._style_token)}"
-            f"{self.value.render()}"
+            f"{self.value.render(style)}"
             f"{style.parentheses_close(self._style_token)}"
         )

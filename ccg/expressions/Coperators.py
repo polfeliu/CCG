@@ -200,7 +200,7 @@ def not_render(style: 'Style', a: 'CExpression') -> str:
     return (
         f"{style.not_operator_style.value}"
         f"{space}"
-        f"{a.render()}"
+        f"{a.render(style)}"
     )
 
 
@@ -213,11 +213,11 @@ def and_render(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
         after_space = str(style.vspace_after_binary_operator)
 
     return (
-        f"{a.render()}"
+        f"{a.render(style)}"
         f"{before_space}"
         f"{style.and_operator_style.value}"
         f"{after_space}"
-        f"{b.render()}"
+        f"{b.render(style)}"
     )
 
 
@@ -230,11 +230,11 @@ def or_render(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
         after_space = str(style.vspace_after_binary_operator)
 
     return (
-        f"{a.render()}"
+        f"{a.render(style)}"
         f"{before_space}"
         f"{style.and_operator_style.value}"
         f"{after_space}"
-        f"{b.render()}"
+        f"{b.render(style)}"
     )
 
 

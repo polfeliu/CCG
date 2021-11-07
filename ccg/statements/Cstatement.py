@@ -76,7 +76,7 @@ class CCompoundStatement(CStatement):
         super(CCompoundStatement, self).__init__(self._render_function)
 
     def _render_function(self, style: 'Style') -> str:
-        content = self.statements.render()
+        content = self.statements.render(style)
         if self._style_token is not None:
             content = style.indent(content, self._style_token + '_content')
 
