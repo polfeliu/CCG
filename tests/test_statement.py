@@ -23,8 +23,8 @@ def test_statement():
         fun.define()
     ])
 
-    # print(statements.render())
-    # print(declarations.render())
+    print(statements.render())
+    print(declarations.render())
 
     c_if = CIf(
         CLiteral(True),
@@ -43,6 +43,25 @@ def test_statement():
     )
 
     print(c_if.render())
+
+    c_switch = CSwitch(
+        CExpressionFreeStyle('i'),
+        [
+            CSwitch.Case(
+                CLiteral(1),
+                [
+                    var.declare()
+                ]
+            ),
+            CSwitch.Default(
+                [
+                    array.declare()
+                ]
+            )
+        ]
+    )
+
+    print(c_switch.render())
 
 
 if __name__ == "__main__":

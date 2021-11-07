@@ -44,13 +44,16 @@ class CStatements(CStatement):
         super(CStatements, self).__init__(
             render_function=self.render
         )
-        self.statements = statements
+        self.statements = list(statements)
 
     def render(self, style: 'Style' = default_style) -> str:
         content = ""
         for statement in self.statements:
             content += f"{statement.render(style)}{style.new_line_token}"
         return content.rstrip(style.new_line_token)
+
+    def append(self, statement: CStatement):
+        self.statements.append(statement)
 
 
 class CDeclarations(CStatements):
@@ -79,9 +82,9 @@ class CCompoundStatement(CStatement):
 
         return (
             f"{self._pre_block(style)}"
-            f"{style.bracket_open(self._style_token) if self._style_token is not None else '{'}"
+            f"{style.bracket_open(self._style_token)}"
             f"{content}"
-            f"{style.bracket_close(self._style_token) if self._style_token is not None else '}'}"
+            f"{style.bracket_close(self._style_token)}"
             f"{self._post_block(style)}"
         )
 
@@ -90,3 +93,6 @@ class CCompoundStatement(CStatement):
 
     def _post_block(self, style: 'Style') -> str:
         return ""
+
+
+CBreak = CStatementFreeStyle('break;')

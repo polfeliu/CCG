@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Union, List, Optional
 
-from .Cstatement import CStatement, CStatements, CCompoundStatement
+from .Cstatement import CStatement, CStatements, CCompoundStatement, CBreak
 
 if TYPE_CHECKING:
     from ..expressions import CExpression
@@ -88,4 +88,75 @@ class CElse(CCompoundStatement):
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"else"
+        )
+
+
+class CCaseSwitch(CStatement):
+
+    def __init__(self,
+                 match_expression: Optional['CExpression'],
+                 statements: Union['CStatements', List['CStatement']],
+                 auto_break: bool = True
+                 ):
+        self.match_expression = match_expression
+        if isinstance(statements, CStatements):
+            self.statements = statements
+        else:
+            self.statements = CStatements(statements)
+
+        self.auto_break = auto_break
+        super(CCaseSwitch, self).__init__(self._render_function)
+
+    def _all_statements(self) -> 'CStatements':
+        statements = CStatements([self.statements])
+        if self.auto_break is not None:
+            statements.append(CBreak)
+        return statements
+
+    def _header(self, style: 'Style') -> str:
+        if self.match_expression is None:
+            raise ValueError("Cannot render switch statement without a match_expression")
+        return f"case {self.match_expression.render()}:"
+
+    def _render_function(self, style: 'Style') -> str:
+        return (
+            f"{self._header(style)}"
+            f"{style.new_line_token}"
+            f"{style.indent(self._all_statements().render(), 'case_switch_content')}"
+        )
+
+
+class CDefaultSwitch(CCaseSwitch):
+    def __init__(self,
+                 statements: Union['CStatements', List['CStatement']],
+                 auto_break: bool = True
+                 ):
+        super(CDefaultSwitch, self).__init__(
+            match_expression=None,
+            statements=statements,
+            auto_break=auto_break
+        )
+
+    def _header(self, style: 'Style') -> str:
+        return "default:"
+
+
+class CSwitch(CCompoundStatement):
+    Case = CCaseSwitch
+    Default = CDefaultSwitch
+
+    _style_token = "switch"
+
+    def __init__(self, value: 'CExpression', cases: List[CCaseSwitch]):
+        self.value = value
+        super(CSwitch, self).__init__(
+            CStatements(cases)
+        )
+
+    def _pre_block(self, style: 'Style') -> str:
+        return (
+            f"{self._style_token}"
+            f"{style.parentheses_open(self._style_token)}"
+            f"{self.value.render()}"
+            f"{style.parentheses_close(self._style_token)}"
         )

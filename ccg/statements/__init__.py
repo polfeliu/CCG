@@ -1,2 +1,3 @@
-from .Cstatement import CStatement, CDeclaration, CStatementFreeStyle, CDeclarationFreeStyle, CDeclarations, CStatements
-from .Cselection import CIf
+from .Cselection import CIf, CSwitch
+from .Cstatement import CStatement, CDeclaration, CStatementFreeStyle, CDeclarationFreeStyle, CDeclarations, \
+    CStatements, CBreak

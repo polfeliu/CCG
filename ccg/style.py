@@ -53,6 +53,15 @@ class Style:
     new_line_else_bracket_close_before = True
     new_line_else_bracket_close_after = True
 
+    new_line_switch_bracket_open_before = True
+    new_line_switch_bracket_open_after = True
+    new_line_switch_bracket_close_before = True
+    new_line_switch_bracket_close_after = True
+    new_line_switch_parentheses_open_before = False
+    new_line_switch_parentheses_open_after = False
+    new_line_switch_parentheses_close_before = False
+    new_line_switch_parentheses_close_after = False
+
     # Spaces
     space_function_after_name_definition = False
     space_function_after_name_declaration = False
@@ -102,6 +111,15 @@ class Style:
     space_else_bracket_close_before = False
     space_else_bracket_close_after = False
 
+    space_switch_bracket_open_before = False
+    space_switch_bracket_open_after = False
+    space_switch_bracket_close_before = False
+    space_switch_bracket_close_after = False
+    space_switch_parentheses_open_before = True
+    space_switch_parentheses_open_after = False
+    space_switch_parentheses_close_before = False
+    space_switch_parentheses_close_after = False
+
     space_after_cast = False
 
     space_unary_operator = False
@@ -118,6 +136,8 @@ class Style:
     indent_if_content = True
     indent_else_if_content = True
     indent_else_content = True
+    indent_switch_content = True
+    indent_case_switch_content = True
 
     # Attributes
     attribute_packed = "__attribute__((__packed__))"
