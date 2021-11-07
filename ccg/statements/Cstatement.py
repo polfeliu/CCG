@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Callable, Sequence
+from typing import TYPE_CHECKING, List, Callable, Sequence, Union
 
 from ..style import default_style
 
@@ -60,3 +60,33 @@ class CDeclarations(CStatements):
         super(CDeclarations, self).__init__(
             statements=declarations
         )
+
+
+class CCompoundStatement(CStatement):
+    _style_token: Union[str, None] = None
+
+    def __init__(self, statements: Union['CStatements', List['CStatement']]):
+        if isinstance(statements, CStatements):
+            self.statements = statements
+        else:
+            self.statements = CStatements(statements)
+        super(CCompoundStatement, self).__init__(self._render_function)
+
+    def _render_function(self, style: 'Style') -> str:
+        content = self.statements.render()
+        if self._style_token is not None:
+            content = style.indent(content, self._style_token + '_content')
+
+        return (
+            f"{self._pre_block(style)}"
+            f"{style.bracket_open(self._style_token) if self._style_token is not None else '{'}"
+            f"{content}"
+            f"{style.bracket_close(self._style_token) if self._style_token is not None else '}'}"
+            f"{self._post_block(style)}"
+        )
+
+    def _pre_block(self, style: 'Style') -> str:
+        return ""
+
+    def _post_block(self, style: 'Style') -> str:
+        return ""
