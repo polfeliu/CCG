@@ -25,13 +25,13 @@ def test_class():
         doc=Doc("Class Example", "This class holds methods and attributes to represent objects")
     )
 
-    print(my_class.declaration())
+    print(my_class.declare().render())
 
-    print(my_class.definition())
+    print(my_class.define().render())
 
     style = Style()
     style.class_members = Style.ClassMembers.inline_access_preserve_order
-    print(my_class.definition(style))
+    print(my_class.define().render(style))
 
     print(my_class.all_members_definition().render())
 
@@ -40,7 +40,7 @@ def test_class():
         c_type=my_class
     )
 
-    print(instance.declaration())
+    print(instance.declare().render())
 
 
 if __name__ == "__main__":

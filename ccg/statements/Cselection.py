@@ -46,12 +46,18 @@ class CIf(CCompoundStatement):
         self.condition = condition
         super(CIf, self).__init__(statements)
 
+    def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
+        return style.if_bracket
+
+    def _indent_content_style(self, style: 'Style') -> bool:
+        return style.indent_if_content
+
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"if"
-            f"{style.parentheses_open(self._style_token)}"
+            f"{style.open_parentheses(style.if_bracket)}"
             f"{self.condition.render(style)}"
-            f"{style.parentheses_close(self._style_token)}"
+            f"{style.close_parentheses(style.if_bracket)}"
         )
 
     def ELSE_IF(self, condition: 'CExpression', statements: Union['CStatements', List['CStatement']]) -> 'CIfLadder':
@@ -71,12 +77,18 @@ class CIf(CCompoundStatement):
 class CElseIf(CIf):
     _style_token = "else_if"
 
+    def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
+        return style.else_if_bracket
+
+    def _indent_content_style(self, style: 'Style') -> bool:
+        return style.indent_else_if_content
+
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"else if"
-            f"{style.parentheses_open(self._style_token)}"
+            f"{style.open_parentheses(style.else_if_parentheses)}"
             f"{self.condition.render(style)}"
-            f"{style.parentheses_close(self._style_token)}"
+            f"{style.close_parentheses(style.else_if_parentheses)}"
         )
 
 
@@ -85,6 +97,12 @@ class CElse(CCompoundStatement):
 
     def __init__(self, statements: Union['CStatements', List['CStatement']]):
         super(CElse, self).__init__(statements)
+
+    def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
+        return style.else_bracket
+
+    def _indent_content_style(self, style: 'Style') -> bool:
+        return style.indent_else_content
 
     def _pre_block(self, style: 'Style') -> str:
         return (
@@ -123,7 +141,7 @@ class CCaseSwitch(CStatement):
         return (
             f"{self._header(style)}"
             f"{style.new_line_token}"
-            f"{style.indent(self._all_statements().render(style), 'case_switch_content')}"
+            f"{style.indent(self._all_statements().render(style), style.indent_case_switch_content)}"
         )
 
 
@@ -154,10 +172,16 @@ class CSwitch(CCompoundStatement):
             CStatements(cases)
         )
 
+    def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
+        return style.switch_bracket
+
+    def _indent_content_style(self, style: 'Style') -> bool:
+        return style.indent_switch_content
+
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"{self._style_token}"
-            f"{style.parentheses_open(self._style_token)}"
+            f"{style.open_parentheses(style.switch_parentheses)}"
             f"{self.value.render(style)}"
-            f"{style.parentheses_close(self._style_token)}"
+            f"{style.close_parentheses(style.switch_parentheses)}"
         )

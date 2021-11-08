@@ -10,13 +10,22 @@ if TYPE_CHECKING:
 class CBreak(CTokenStatement):
     _token = "break"
 
+    def _semicolon_before_space(self, style: 'Style') -> bool:
+        return style.space_before_semicolon_break_statement
+
 
 class CContinue(CTokenStatement):
     _token = "continue"
 
+    def _semicolon_before_space(self, style: 'Style') -> bool:
+        return style.space_before_semicolon_continue_statement
+
 
 class CReturn(CTokenStatement):
     _token = "return"
+
+    def _semicolon_before_space(self, style: 'Style') -> bool:
+        return style.space_before_semicolon_return_statement
 
     def __init__(self, expression: 'CExpression'):
         super(CReturn, self).__init__()

@@ -16,13 +16,13 @@ def test_function():
         ])
     )
 
-    print(f.declaration())
-    print(f.definition())
+    print(f.declare().render())
+    print(f.define().render())
 
     f.static = True
 
-    print(f.declaration())
-    print(f.definition())
+    print(f.declare().render())
+    print(f.define().render())
 
 
 if __name__ == "__main__":

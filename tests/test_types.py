@@ -8,7 +8,7 @@ def test_types():
         initial_value=CLiteral(1),
         doc=Doc("My Custom Int8")
     )
-    print(var.declaration())
+    print(var.declare().render())
 
     array = CArray(
         c_type=Cint8,
@@ -17,7 +17,7 @@ def test_types():
         doc=Doc("My Custom Int8 Array", "This array is awesome because it can hold 10 int8")
     )
 
-    print(array.declaration())
+    print(array.declare().render())
 
     # New type
     custom = Cint8.type('TMyCustomType')
@@ -27,19 +27,19 @@ def test_types():
     )
 
     print(custom.typedef(doc=Doc("My Custom Type", "Awesome type because I have defined it")).render())
-    print(var.declaration())
+    print(var.declare().render())
 
     # Static
     var = CVariable(c_type=Cuint8, name="u8Var", static=True)
-    print(var.declaration())
+    print(var.declare().render())
 
     # Static and const
     var = CVariable(c_type=Cuint8, name="u8Var", static=True, const=True)
-    print(var.declaration())
+    print(var.declare().render())
 
     # Constexpr
     var = CVariable(c_type=Cuint8, name="u8Var", constexpr=True)
-    print(var.declaration())
+    print(var.declare().render())
 
 
 if __name__ == "__main__":

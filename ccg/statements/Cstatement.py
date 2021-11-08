@@ -79,16 +79,20 @@ class CTokenStatement(CStatement, ABC):
     def _post_block(self, style: 'Style') -> str:
         return ""
 
+    @abstractmethod
+    def _semicolon_before_space(self, style: 'Style') -> bool:
+        pass
+
     def _render_function(self, style: 'Style' = default_style) -> str:
         return (
             f"{self._token}"
             f"{self._post_block(style)}"
-            f"{style.__getattribute__('vspace_before_semicolon_{}_statement'.format(self._token))}"
+            f"{self._semicolon_before_space(style)}"
             f";"
         )
 
 
-class CCompoundStatement(CStatement):
+class CCompoundStatement(ABC, CStatement):
     _style_token: Union[str, None] = None
 
     def __init__(self, statements: Union['CStatements', List['CStatement']]):
@@ -98,16 +102,24 @@ class CCompoundStatement(CStatement):
             self.statements = CStatements(statements)
         super(CCompoundStatement, self).__init__(self._render_function)
 
+    @abstractmethod
+    def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
+        pass
+
+    @abstractmethod
+    def _indent_content_style(self, style: 'Style') -> bool:
+        pass
+
     def _render_function(self, style: 'Style') -> str:
         content = self.statements.render(style)
         if self._style_token is not None:
-            content = style.indent(content, self._style_token + '_content')
+            content = style.indent(content, self._indent_content_style(style))
 
         return (
             f"{self._pre_block(style)}"
-            f"{style.bracket_open(self._style_token)}"
+            f"{style.open_bracket(self._bracket_style(style))}"
             f"{content}"
-            f"{style.bracket_close(self._style_token)}"
+            f"{style.close_bracket(self._bracket_style(style))}"
             f"{self._post_block(style)}"
         )
 

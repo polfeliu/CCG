@@ -14,12 +14,18 @@ class CWhile(CCompoundStatement):
         self.condition = condition
         super(CWhile, self).__init__(statements)
 
+    def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
+        return style.while_bracket
+
+    def _indent_content_style(self, style: 'Style') -> bool:
+        return style.indent_while_content
+
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"{self._style_token}"
-            f"{style.parentheses_open(self._style_token)}"
+            f"{style.open_parentheses(style.while_bracket)}"
             f"{self.condition.render(style)}"
-            f"{style.parentheses_close(self._style_token)}"
+            f"{style.close_parentheses(style.while_bracket)}"
         )
 
 
@@ -30,6 +36,12 @@ class CDoWhile(CCompoundStatement):
         self.condition = condition
         super(CDoWhile, self).__init__(statements)
 
+    def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
+        return style.do_while_bracket
+
+    def _indent_content_style(self, style: 'Style') -> bool:
+        return style.indent_do_while_content
+
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"do"
@@ -38,9 +50,9 @@ class CDoWhile(CCompoundStatement):
     def _post_block(self, style: 'Style') -> str:
         return (
             f"while"
-            f"{style.parentheses_open(self._style_token)}"
+            f"{style.open_parentheses(style.do_while_bracket)}"
             f"{self.condition.render(style)}"
-            f"{style.parentheses_close(self._style_token)}"
+            f"{style.close_parentheses(style.do_while_bracket)}"
         )
 
 
@@ -62,14 +74,25 @@ class CFor(CCompoundStatement):
 
         super(CFor, self).__init__(statements)
 
+    def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
+        return style.for_bracket
+
+    def _indent_content_style(self, style: 'Style') -> bool:
+        return style.indent_for_content
+
     def _pre_block(self, style: 'Style') -> str:
+        delimiter = (
+            f"{style.space(style.for_space_before_semicolon)}"
+            f";"
+            f"{style.space(style.for_space_after_semicolon)}"
+        )
         return (
             f"for"
-            f"{style.parentheses_open(self._style_token)}"
+            f"{style.open_parentheses(style.for_bracket)}"
             f"{self.initial.render(style) if self.initial is not None else ''}"
-            ";"  # TODO Spacing between semicolons
+            f"{delimiter}"
             f"{self.condition.render(style) if self.condition is not None else ''}"
-            ";"
+            f"{delimiter}"
             f"{self.iteration.render(style) if self.iteration is not None else ''}"
-            f"{style.parentheses_close(self._style_token)}"
+            f"{style.close_parentheses(style.for_bracket)}"
         )

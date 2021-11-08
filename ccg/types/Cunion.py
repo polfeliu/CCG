@@ -84,15 +84,15 @@ class CUnionDef(CGenericType, CItemDefinable):
                 member_declaration = style.indent(member_declaration)
             members += member_declaration
             if member != self.members[-1]:  # Is not last member
-                members += str(style.vnew_line_union_members)
-                members += str(style.vspace_union_members)
+                members += str(style.new_line(style.new_line_union_members))
+                members += str(style.space(style.space_union_members))
         return (
             f"{self.doc_render(style) if doc else ''}"
             f"{self.space_def(from_space)}"
             f"{self.name}"
-            f"{style.bracket_open('union')}"
+            f"{style.open_bracket(style.union_bracket)}"
             f"{members}"
-            f"{style.bracket_close('union')}"
+            f"{style.close_bracket(style.union_bracket)}"
         )
 
     def declaration(self,

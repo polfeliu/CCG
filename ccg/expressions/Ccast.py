@@ -18,6 +18,6 @@ class CCast(CExpression):
     def render(self, style: 'Style' = default_style) -> str:
         return (
             f"({self.c_type.name})"
-            f"{style.vspace_after_cast}"
+            f"{style.space(style.space_after_cast)}"
             f"{self.expression.render(style)}"
         )

@@ -115,20 +115,20 @@ class CStructDef(CGenericType, CItemDefinable):
         for member in self.members:
             member_declaration = member.declaration(style=style)
             if style.new_line_union_members:
-                member_declaration = style.indent(member_declaration, 'struct_member')
+                member_declaration = style.indent(member_declaration, style.indent_struct_member)
             members += member_declaration
             if member != self.members[-1]:  # Is not last member
-                members += str(style.vnew_line_struct_members)
-                members += str(style.vspace_struct_members)
+                members += str(style.new_line(style.new_line_struct_members))
+                members += str(style.space(style.space_struct_members))
 
         return (
             f"{self.doc_render(style) if doc else ''}"
             f"{self.space_def(from_space)}"
             f"{self.name}"
             f"{style.attribute_packed if self.is_packed else ''}"
-            f"{style.bracket_open('struct')}"
+            f"{style.open_bracket(style.struct_bracket)}"
             f"{members}"
-            f"{style.bracket_close('struct')}"
+            f"{style.close_bracket(style.struct_bracket)}"
         )
 
     def declaration(self,

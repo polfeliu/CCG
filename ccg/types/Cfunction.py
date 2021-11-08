@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, List, Optional
 
 from .Ctypes import CGenericType, CVoidType, CNoType, CItemDefinable
-from ..statements import CDeclaration, CStatements
+from ..statements import CStatements
 from ..Cvariable import CVariable
 from ..style import default_style
 
@@ -102,11 +102,14 @@ class CFunction(CGenericType, CItemDefinable):
             f"{'static ' if self.static else ''}"
             f"{self.return_type.name}"
             f"{' ' if self.return_type is not CNoType else ''}"
-            f"{style.vnew_line_function_declaration_after_type}"
+            f"{style.space(style.space_function_after_name_definition)}"
+            f"{style.new_line(style.function_new_line_after_type_declaration)}"
             f"{self.space_def(from_space)}"
             f"{self.name}"
-            f"{style.vspace_function_after_name_declaration}"
-            f"{'(' + self._argument_list(style, include_defaults=True) + ')' if without_arguments == False else ''}"
+            f"{style.space(style.space_function_after_name_declaration)}"
+            f"{style.open_parentheses(style.function_declaration_parentheses) if without_arguments == False else ''}"
+            f"{self._argument_list(style, include_defaults=True) if without_arguments == False else ''}"
+            f"{style.close_parentheses(style.function_declaration_parentheses) if without_arguments == False else ''}"
             f"{';' if semicolon else ''}"
         )
 
@@ -141,19 +144,11 @@ class CFunction(CGenericType, CItemDefinable):
             f"{' ' if self.return_type is not CNoType else ''}"
             f"{self.space_def(from_space)}"
             f"{self.name}"
-            f"{style.vspace_function_after_name_definition}"
-            f"({self._argument_list(style=style)})"
-            f"{style.bracket_open('function')}"
-            f"{style.indent(self.content.render(style), 'function_content')}"
-            f"{style.bracket_close('function')};"
-        )
-
-    def declare(self) -> CDeclaration:
-        return CDeclaration(
-            render_function=self.declaration
-        )
-
-    def define(self) -> CDeclaration:
-        return CDeclaration(
-            render_function=self.definition
+            f"{style.space(style.space_function_after_name_definition)}"
+            f"{style.open_parentheses(style.function_definition_parentheses)}"
+            f"{self._argument_list(style=style)}"
+            f"{style.close_parentheses(style.function_definition_parentheses)}"
+            f"{style.open_bracket(style.function_bracket)}"
+            f"{style.indent(self.content.render(style), style.indent_function_content)}"
+            f"{style.close_bracket(style.function_bracket)}"
         )

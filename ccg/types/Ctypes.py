@@ -3,7 +3,7 @@ from copy import copy
 from typing import TYPE_CHECKING, List, Any, Optional
 
 from ..Cnamespace import CSpace
-from ..statements import CStatement
+from ..statements import CStatement, CDeclaration
 from ..style import default_style
 
 if TYPE_CHECKING:
@@ -28,9 +28,10 @@ class CGenericItem(CSpace, ABC):
         )
         self.doc = doc
 
-    def declare(self) -> CStatement:
-        return CStatement(
-            render_function=self.declaration
+    def declare(self, from_space: 'CSpace' = None) -> 'CDeclaration':
+        return CDeclaration(
+            render_function=self.declaration,
+            from_space=from_space
         )
 
     @abstractmethod
@@ -58,9 +59,10 @@ class CItemDefinable(ABC):
                    ) -> str:
         return ""
 
-    def define(self) -> CStatement:
-        return CStatement(
-            render_function=self.definition
+    def define(self, from_space: 'CSpace' = None) -> 'CDeclaration':
+        return CDeclaration(
+            render_function=self.definition,
+            from_space=from_space,
         )
 
 

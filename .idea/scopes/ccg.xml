@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="ccg" pattern="file[CCG]:ccg//*" />
+  <scope name="ccg" pattern="file[CCG]:ccg//*||file[CCG]:tests//*" />
 </component>

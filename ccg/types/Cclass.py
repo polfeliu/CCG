@@ -222,7 +222,7 @@ class CClass(CGenericType, CItemDefinable):
                     f"{member.access.name}: "
                     f"{member.declaration(style, from_space=self, doc=False)}"
                     f"{style.new_line_token if i < len(self.members) - 1 else ''}",
-                    obj="class_member"
+                    active=style.indent_class_member
                 )
         if style.class_members == Style.ClassMembers.group_by_access_specified:
             access_contents = []
@@ -237,10 +237,10 @@ class CClass(CGenericType, CItemDefinable):
                                 f"{member.declaration(from_space=self)}"
                                 f"{style.new_line_token * 2 if i < len(access_members) - 1 else ''}"
                             ),
-                            obj="class_member"
+                            active=style.indent_class_member
                         )
 
-                    access_content = style.indent(access_content, "class_access")
+                    access_content = style.indent(access_content, active=style.indent_class_access)
                     access_contents.append(access_content)
             for access_content in access_contents:
                 content += access_content + (style.new_line_token if access_content is not access_contents[-1] else '')
@@ -266,9 +266,9 @@ class CClass(CGenericType, CItemDefinable):
             f"{self.doc_render(style) if doc else ''}"
             f"{self.declaration(style=style, semicolon=False, from_space=from_space)}"
             f"{self._inheritance_definition}"
-            f"{style.bracket_open('class')}"
+            f"{style.open_bracket(style.class_bracket)}"
             f"{self._member_definition(style)}"
-            f"{style.bracket_close('class')};"
+            f"{style.close_bracket(style.class_bracket)};"
         )
 
     def all_members_definition(self) -> CStatements:
