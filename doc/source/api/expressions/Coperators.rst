@@ -1,4 +1,4 @@
-Operators
+COperators
 ======================================
 
 .. autoclass:: ccg.expressions.Coperators.COperators

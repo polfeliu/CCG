@@ -3,7 +3,7 @@ Types
 
 .. toctree::
    :maxdepth: 4
-   :caption: Expressions Api:
+   :caption: Types Api:
 
    Ctypes
    Cstruct

@@ -71,8 +71,8 @@ And print the definition:
 
    api/types/index
    api/expressions/index
+   api/statements/index
    api/Cnamespace
-   api/Cstatement
    api/Cusing
    api/Cvariable
    api/Carray

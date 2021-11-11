@@ -145,12 +145,12 @@ class CCaseSwitch(CStatement):
         )
 
 
-class CDefaultSwitch(CCaseSwitch):
+class CDefaultCaseSwitch(CCaseSwitch):
     def __init__(self,
                  statements: Union['CStatements', List['CStatement']],
                  auto_break: bool = True
                  ):
-        super(CDefaultSwitch, self).__init__(
+        super(CDefaultCaseSwitch, self).__init__(
             match_expression=None,
             statements=statements,
             auto_break=auto_break
@@ -162,7 +162,7 @@ class CDefaultSwitch(CCaseSwitch):
 
 class CSwitch(CCompoundStatement):
     Case = CCaseSwitch
-    Default = CDefaultSwitch
+    Default = CDefaultCaseSwitch
 
     _style_token = "switch"
 
