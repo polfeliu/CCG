@@ -55,6 +55,7 @@ class CIf(CCompoundStatement):
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"if"
+            f"{style.space(style.if_space_after_token)}"
             f"{style.open_parentheses(style.if_parentheses)}"
             f"{self.condition.render(style)}"
             f"{style.close_parentheses(style.if_parentheses)}"
@@ -86,6 +87,7 @@ class CElseIf(CIf):
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"else if"
+            f"{style.space(style.else_if_space_after_token)}"
             f"{style.open_parentheses(style.else_if_parentheses)}"
             f"{self.condition.render(style)}"
             f"{style.close_parentheses(style.else_if_parentheses)}"
@@ -107,6 +109,7 @@ class CElse(CCompoundStatement):
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"else"
+            f"{style.space(style.else_space_after_token)}"
         )
 
 
@@ -181,6 +184,7 @@ class CSwitch(CCompoundStatement):
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"{self._style_token}"
+            f"{style.space(style.switch_space_after_token)}"
             f"{style.open_parentheses(style.switch_parentheses)}"
             f"{self.value.render(style)}"
             f"{style.close_parentheses(style.switch_parentheses)}"

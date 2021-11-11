@@ -24,7 +24,7 @@ class Style:
         'new_line_open_before': True,
         'new_line_open_after': True,
         'new_line_close_before': True,
-        'new_line_close_after': False,
+        'new_line_close_after': True,
         'space_open_before': False,
         'space_open_after': False,
         'space_close_before': False,
@@ -72,31 +72,37 @@ class Style:
     if_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
     if_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     indent_if_content = True
+    if_space_after_token = True
 
     # Else if
     else_if_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
     else_if_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     indent_else_if_content = True
+    else_if_space_after_token = True
 
     # Else
     else_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
     indent_else_content = True
+    else_space_after_token = True
 
     # Switch
     switch_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
     switch_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     indent_switch_content = True
     indent_case_switch_content = True
+    switch_space_after_token = True
 
     # While
     while_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
     while_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     indent_while_content = True
+    while_space_after_token = True
 
     # Do while
     do_while_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
     do_while_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     indent_do_while_content = True
+    do_while_space_after_token = True
 
     # For
     for_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
@@ -105,6 +111,7 @@ class Style:
     for_space_before_semicolon = False
     for_space_after_semicolon = True
     for_spaces_if_void = False
+    for_space_after_token = True
 
     # Cast
     space_after_cast = False
