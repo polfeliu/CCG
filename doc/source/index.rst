@@ -13,14 +13,18 @@ Declare an C/C++ object, for instance, a function:
 .. code-block:: python
 
    f = CFunction(
-        name="examplefun",
-        return_type=Cuint32,
-        arguments=[
-            CFunction.Argument(name="first", c_type=Cuint32, doc=Doc("First argument")),
-            CFunction.Argument(name="second", c_type=Cdouble, default=CLiteral(2), doc=Doc("Second Argument"))
-        ],
-        doc=Doc("Awesome function", "This function is awesome because it does marvellous things",
-                ret="returns a lucky number")
+           name="examplefun",
+           return_type=Cuint32,
+           static=True,
+           arguments=[
+               CFunction.Argument(name="first", c_type=Cuint32, doc=Doc("First argument")),
+               CFunction.Argument(name="second", c_type=Cdouble, default=CLiteral(2), doc=Doc("Second Argument"))
+           ],
+           doc=Doc("Awesome function", "This function is awesome because it does marvellous things",
+                   ret="returns a lucky number"),
+           content=CStatements([
+               CVariable("local_var", Cint8).declare()
+           ])
    )
 
 Modify the default style and add your own choices:
@@ -28,13 +32,13 @@ Modify the default style and add your own choices:
 .. code-block:: python
 
    my_style = Style()
-   my_style.new_line_function_bracket_open_before = False
+   my_style.function_bracket.new_line_open_before = False
 
 Print the declaration:
 
 .. code-block:: python
 
-   print(f.declaration(style=my_style))
+   print(f.declare().render(my_style))
 
 .. code-block:: c
 
@@ -46,18 +50,19 @@ Print the declaration:
     * @param second Second Argument
     * @return returns a lucky number
     */
-   uint32_t examplefun(uint32_t first, double second = 2);
+   static uint32_t
+   examplefun(uint32_t first, double second = 2);
 
 And print the definition:
 
 .. code-block:: python
 
-   print(f.definition(style=my_style))
+   print(f.define().render(my_style))
 
 .. code-block:: c
 
    uint32_t examplefun(uint32_t first, double second){
-
+        int8_t local_var;
    };
 
 .. toctree::
