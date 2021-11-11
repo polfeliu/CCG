@@ -55,9 +55,9 @@ class CIf(CCompoundStatement):
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"if"
-            f"{style.open_parentheses(style.if_bracket)}"
+            f"{style.open_parentheses(style.if_parentheses)}"
             f"{self.condition.render(style)}"
-            f"{style.close_parentheses(style.if_bracket)}"
+            f"{style.close_parentheses(style.if_parentheses)}"
         )
 
     def ELSE_IF(self, condition: 'CExpression', statements: Union['CStatements', List['CStatement']]) -> 'CIfLadder':

@@ -23,9 +23,9 @@ class CWhile(CCompoundStatement):
     def _pre_block(self, style: 'Style') -> str:
         return (
             f"{self._style_token}"
-            f"{style.open_parentheses(style.while_bracket)}"
+            f"{style.open_parentheses(style.while_parentheses)}"
             f"{self.condition.render(style)}"
-            f"{style.close_parentheses(style.while_bracket)}"
+            f"{style.close_parentheses(style.while_parentheses)}"
         )
 
 
@@ -50,9 +50,9 @@ class CDoWhile(CCompoundStatement):
     def _post_block(self, style: 'Style') -> str:
         return (
             f"while"
-            f"{style.open_parentheses(style.do_while_bracket)}"
+            f"{style.open_parentheses(style.do_while_parentheses)}"
             f"{self.condition.render(style)}"
-            f"{style.close_parentheses(style.do_while_bracket)}"
+            f"{style.close_parentheses(style.do_while_parentheses)}"
         )
 
 
@@ -88,11 +88,11 @@ class CFor(CCompoundStatement):
         )
         return (
             f"for"
-            f"{style.open_parentheses(style.for_bracket)}"
+            f"{style.open_parentheses(style.for_parentheses)}"
             f"{self.initial.render(style) if self.initial is not None else ''}"
             f"{delimiter}"
             f"{self.condition.render(style) if self.condition is not None else ''}"
             f"{delimiter}"
             f"{self.iteration.render(style) if self.iteration is not None else ''}"
-            f"{style.close_parentheses(style.for_bracket)}"
+            f"{style.close_parentheses(style.for_parentheses)}"
         )

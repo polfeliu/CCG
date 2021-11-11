@@ -5,6 +5,7 @@ def test_function():
     f = CFunction(
         name="examplefun",
         return_type=Cuint32,
+        static=True,
         arguments=[
             CFunction.Argument(name="first", c_type=Cuint32, doc=Doc("First argument")),
             CFunction.Argument(name="second", c_type=Cdouble, default=CLiteral(2), doc=Doc("Second Argument"))
@@ -20,9 +21,6 @@ def test_function():
     print(f.define().render())
 
     f.static = True
-
-    print(f.declare().render())
-    print(f.define().render())
 
 
 if __name__ == "__main__":
