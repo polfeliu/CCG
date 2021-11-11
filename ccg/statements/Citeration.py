@@ -86,6 +86,11 @@ class CFor(CCompoundStatement):
             f";"
             f"{style.space(style.for_space_after_semicolon)}"
         )
+
+        if not style.for_spaces_if_void:
+            if self.initial is None and self.condition is None and self.iteration is None:
+                delimiter = ";"
+
         return (
             f"for"
             f"{style.open_parentheses(style.for_parentheses)}"

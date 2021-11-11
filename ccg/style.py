@@ -104,6 +104,7 @@ class Style:
     indent_for_content = True
     for_space_before_semicolon = False
     for_space_after_semicolon = True
+    for_spaces_if_void = False
 
     # Cast
     space_after_cast = False
