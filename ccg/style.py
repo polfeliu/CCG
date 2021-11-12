@@ -20,11 +20,22 @@ class Style:
         space_close_before: bool
         space_close_after: bool
 
-    _default_bracket = {
+    _default_statement_bracket = {
         'new_line_open_before': True,
         'new_line_open_after': True,
         'new_line_close_before': True,
         'new_line_close_after': True,
+        'space_open_before': False,
+        'space_open_after': False,
+        'space_close_before': False,
+        'space_close_after': False
+    }
+
+    _default_declaration_bracket = {
+        'new_line_open_before': True,
+        'new_line_open_after': True,
+        'new_line_close_before': True,
+        'new_line_close_after': False,
         'space_open_before': False,
         'space_open_after': False,
         'space_close_before': False,
@@ -43,7 +54,7 @@ class Style:
     }
 
     # Function
-    function_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
+    function_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
     function_definition_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     function_declaration_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     function_new_line_after_type_declaration = True
@@ -53,59 +64,59 @@ class Style:
     function_indent_content = True
 
     # Struct
-    struct_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
+    struct_bracket = GroupDelimitatorStyle(**_default_declaration_bracket)  # type: ignore
     struct_new_line_members = True
     struct_indent_members = True
     struct_space_members = False
 
     # Union
-    union_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
+    union_bracket = GroupDelimitatorStyle(**_default_declaration_bracket)  # type: ignore
     union_new_line_members = True
     union_space_members = False
 
     # Class
-    class_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
+    class_bracket = GroupDelimitatorStyle(**_default_declaration_bracket)  # type: ignore
     class_indent_members = True
     class_indent_access = False
 
     # If
-    if_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
+    if_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
     if_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     if_indent_content = True
     if_space_after_token = True
 
     # Else if
-    else_if_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
+    else_if_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
     else_if_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     else_if_indent_content = True
     else_if_space_after_token = True
 
     # Else
-    else_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
+    else_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
     else_indent_content = True
     else_space_after_token = True
 
     # Switch
-    switch_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
+    switch_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
     switch_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     switch_indent_content = True
     switch_indent_case_content = True
     switch_space_after_token = True
 
     # While
-    while_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
+    while_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
     while_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     while_indent_content = True
     while_space_after_token = True
 
     # Do while
-    do_while_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
+    do_while_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
     do_while_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     do_while_indent_content = True
     do_while_space_after_token = True
 
     # For
-    for_bracket = GroupDelimitatorStyle(**_default_bracket)  # type: ignore
+    for_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
     for_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
     for_indent_content = True
     for_space_before_semicolon = False
