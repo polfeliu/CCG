@@ -40,6 +40,8 @@ class CIfLadder(CStatement):
 
 
 class CIf(CCompoundStatement):
+    """If Statement"""
+
     _style_token = "if"
 
     def __init__(self, condition: 'CExpression', statements: Union['CStatements', List['CStatement']]):
@@ -76,6 +78,8 @@ class CIf(CCompoundStatement):
 
 
 class CElseIf(CIf):
+    """Else if statement"""
+
     _style_token = "else_if"
 
     def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
@@ -95,6 +99,8 @@ class CElseIf(CIf):
 
 
 class CElse(CCompoundStatement):
+    """Else statement"""
+
     _style_token = "else"
 
     def __init__(self, statements: Union['CStatements', List['CStatement']]):
@@ -114,6 +120,7 @@ class CElse(CCompoundStatement):
 
 
 class CCaseSwitch(CStatement):
+    """Case of Switch Statement"""
 
     def __init__(self,
                  match_expression: Optional['CExpression'],
@@ -149,6 +156,8 @@ class CCaseSwitch(CStatement):
 
 
 class CDefaultCaseSwitch(CCaseSwitch):
+    """Default Case of Switch Statement"""
+
     def __init__(self,
                  statements: Union['CStatements', List['CStatement']],
                  auto_break: bool = True
@@ -164,6 +173,8 @@ class CDefaultCaseSwitch(CCaseSwitch):
 
 
 class CSwitch(CCompoundStatement):
+    """Switch Statement"""
+
     Case = CCaseSwitch
     Default = CDefaultCaseSwitch
 

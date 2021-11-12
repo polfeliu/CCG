@@ -10,7 +10,10 @@ if TYPE_CHECKING:
 
 
 class CLiteral(CExpression):
+    """Literal Value"""
+
     class Format(Enum):
+        """Formatting Choice"""
         decimal = 10
         octal = 8
         hexadecimal = 16
@@ -57,6 +60,7 @@ class CLiteral(CExpression):
             raise TypeError
 
     def format_prefix(self):
+        """Prefix of the literal according to the format"""
         if self.literal_format == self.Format.decimal:
             return ""
         elif self.literal_format == self.Format.octal:
@@ -75,6 +79,10 @@ class CLiteral(CExpression):
             raise NotImplemented
 
     def format_literal(self, style: 'Style') -> str:
+        """Render the literal with the format selected.
+
+        Does not include prefix or suffix
+        """
         if isinstance(self.literal, bool):
             if self.literal_format == self.Format.boolean:
                 if self.literal:
@@ -86,7 +94,7 @@ class CLiteral(CExpression):
 
         elif isinstance(self.literal, int):
             if self.literal_format == self.Format.decimal:
-                return f"{self.literal:d}"
+                return f"{self.literal:d}"  # TODO STYLING CHOICE UPPERCASE
             elif self.literal_format == self.Format.octal:
                 return f"{self.literal:o}"
             elif self.literal_format == self.Format.hexadecimal:

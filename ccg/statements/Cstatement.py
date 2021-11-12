@@ -67,6 +67,7 @@ class CDeclarations(CStatements):
 
 
 class CTokenStatement(CStatement, ABC):
+    """Statement based on a token"""
 
     def __init__(self):
         super(CTokenStatement, self).__init__(self._render_function)
@@ -93,6 +94,8 @@ class CTokenStatement(CStatement, ABC):
 
 
 class CCompoundStatement(ABC, CStatement):
+    """Statement based on statements enclosed in brackets"""
+
     _style_token: Union[str, None] = None
 
     def __init__(self, statements: Union['CStatements', List['CStatement']]):

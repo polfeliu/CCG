@@ -8,6 +8,8 @@ if TYPE_CHECKING:
 
 
 class CWhile(CCompoundStatement):
+    """While Statement"""
+
     _style_token = "while"
 
     def __init__(self, condition: 'CExpression', statements: Union['CStatements', List['CStatement']]):
@@ -31,6 +33,8 @@ class CWhile(CCompoundStatement):
 
 
 class CDoWhile(CCompoundStatement):
+    """Do While Statement"""
+
     _style_token = "do_while"
 
     def __init__(self, statements: Union['CStatements', List['CStatement']], condition: 'CExpression'):
@@ -59,6 +63,8 @@ class CDoWhile(CCompoundStatement):
 
 
 class CFor(CCompoundStatement):
+    """For Statement"""
+
     _style_token = "for"
 
     def __init__(self,

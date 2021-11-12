@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 
 
 class CCast(CExpression):
+    """Explicit type cast"""
 
     def __init__(self, c_type: 'CGenericType', expression: CExpression):
         super(CCast, self).__init__()

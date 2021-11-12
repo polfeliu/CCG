@@ -31,7 +31,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.graphviz',
     'sphinx.ext.inheritance_diagram',
-    'myst_nb'
+    # 'myst_nb'
 ]
 
 # Autodoc
@@ -40,7 +40,7 @@ autodoc_default_options = {
     'members': True,
     'undoc-members': True,
     'show-inheritance': True,
-    'inherited-members': True
+    'inherited-members': True,
 }
 autodoc_typehints = 'description'
 

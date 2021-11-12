@@ -24,6 +24,7 @@ class CClassAccess(Enum):
 
 
 class CClassMember(ABC):
+    """Member of class"""
 
     def __init__(self, access: CClassAccess = CClassAccess.private):
         self.access = access
@@ -47,6 +48,7 @@ class CClassMember(ABC):
 
 
 class CClassFreeStyleMember(CClassMember):
+    """Freestyle member for class"""
 
     def __init__(self, content: str, access: CClassAccess = CClassAccess.private, doc: Optional['Doc'] = None):
         super(CClassFreeStyleMember, self).__init__()
@@ -66,6 +68,7 @@ class CClassFreeStyleMember(CClassMember):
 
 
 class CClassAttribute(CVariable, CClassMember):
+    """Attribute of class"""
 
     def __init__(self,
                  name: str,
@@ -91,6 +94,7 @@ class CClassAttribute(CVariable, CClassMember):
 
 
 class CClassMethod(CFunction, CClassMember):
+    """Method of class"""
 
     def __init__(self,
                  name: str,
@@ -113,6 +117,7 @@ class CClassMethod(CFunction, CClassMember):
 
 
 class CClassConstructor(CClassMethod):
+    """Constructor of class"""
 
     def __init__(self,
                  arguments: Optional[List['CFunctionArgument']] = None,
@@ -129,6 +134,8 @@ class CClassConstructor(CClassMethod):
 
 
 class ClassTypeMember(CClassMember):
+    """Type definition of class"""
+
     def __init__(self,
                  member: CGenericType,
                  access: CClassAccess = CClassAccess.private,
@@ -159,6 +166,7 @@ class ClassTypeMember(CClassMember):
 
 
 class CClassUsing(CUsing, CClassMember):
+    """Using declaration in class"""
 
     def __init__(self,
                  item: 'CGenericItem',
@@ -174,6 +182,7 @@ class CClassUsing(CUsing, CClassMember):
 
 
 class CClassInheritance:
+    """Inheritance relationship for class"""
 
     def __init__(self, cls: 'CClass', access: CClassAccess = CClassAccess.private):
         self.cls = cls
@@ -181,6 +190,8 @@ class CClassInheritance:
 
 
 class CClass(CGenericType, CItemDefinable):
+    """Cpp class"""
+
     Access = CClassAccess
     Attribute = CClassAttribute
     Method = CClassMethod
@@ -225,6 +236,7 @@ class CClass(CGenericType, CItemDefinable):
                     without_arguments: bool = False,
                     for_variable: bool = False
                     ) -> str:
+        """Forward declaration of class"""
         self.style_checks(style)
         return (
             f"{'class ' if not for_variable else ''}"
@@ -280,6 +292,7 @@ class CClass(CGenericType, CItemDefinable):
                    from_space: 'CSpace' = None,
                    doc: bool = True
                    ) -> str:
+        """Definition of class with members"""
         self.style_checks(style)
 
         return (
@@ -292,6 +305,7 @@ class CClass(CGenericType, CItemDefinable):
         )
 
     def all_members_definition(self) -> CStatements:
+        """Collection of statements that define all members"""
         return CStatements([
             member.define()
             for member

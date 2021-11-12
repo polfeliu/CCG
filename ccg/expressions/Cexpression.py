@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 
 class CExpression(ABC):
+    """Expression"""
 
     @abstractmethod
     def render(self, style: 'Style' = default_style) -> str:
@@ -51,6 +52,7 @@ class CExpression(ABC):
 
 
 class CExpressionFreeStyle(CExpression):
+    """Freestyle Expression"""
 
     def __init__(self, content: str):
         self.content = content

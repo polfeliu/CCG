@@ -8,6 +8,8 @@ if TYPE_CHECKING:
 
 
 class CBreak(CTokenStatement):
+    """Break Statement"""
+
     _token = "break"
 
     def _semicolon_before_space(self, style: 'Style') -> bool:
@@ -15,6 +17,8 @@ class CBreak(CTokenStatement):
 
 
 class CContinue(CTokenStatement):
+    """Continue Statement"""
+
     _token = "continue"
 
     def _semicolon_before_space(self, style: 'Style') -> bool:
@@ -22,6 +26,8 @@ class CContinue(CTokenStatement):
 
 
 class CReturn(CTokenStatement):
+    """Return Statement"""
+
     _token = "return"
 
     def _semicolon_before_space(self, style: 'Style') -> bool:

@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 
 class CStructDefMember:
+    """Member of struct definition"""
 
     def __init__(self,
                  variable: 'CVariable',
@@ -26,6 +27,7 @@ class CStructDefMember:
                 raise ValueError("Bitfields should not be bigger than type size")
 
     def declaration(self, style: 'Style' = default_style) -> str:
+        """Member declaration"""
         return (
             f"{self.variable.declaration(semicolon=False, style=style)}{f': {self.bitfield}' if self.bitfield else ''};"
         )
@@ -41,6 +43,9 @@ class CStructDefMember:
 
 
 class CStruct(CGenericType, CItemDefinable):
+    """Struct without inplace definition.
+
+    Assumes struct already is declared"""
 
     def __init__(self, struct_def: 'CStructDef'):
         super(CStruct, self).__init__(
@@ -66,6 +71,8 @@ class CStruct(CGenericType, CItemDefinable):
 
 
 class CStructDef(CGenericType, CItemDefinable):
+    """Struct with inplace definition"""
+
     Member = CStructDefMember
 
     def __init__(self,
@@ -102,6 +109,7 @@ class CStructDef(CGenericType, CItemDefinable):
 
     @property
     def struct(self) -> CStruct:
+        """Same struct without inplace definition"""
         return self._struct
 
     def definition(self,

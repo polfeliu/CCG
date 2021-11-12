@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 
 
 class CFunctionArgument(CVariable):
+    """Argument of a function or method"""
 
     def __init__(self,
                  name: str,
@@ -31,6 +32,8 @@ class CFunctionArgument(CVariable):
 
 
 class CFunction(CGenericType, CItemDefinable):
+    """Function"""
+
     Argument = CFunctionArgument
 
     def __init__(self,
@@ -97,6 +100,7 @@ class CFunction(CGenericType, CItemDefinable):
                     without_arguments: bool = False,
                     for_variable: bool = False
                     ) -> str:
+        """Declaration of function"""
         return (
             f"{self.doc_render(style) if doc else ''}"
             f"{'static ' if self.static else ''}"
@@ -137,6 +141,7 @@ class CFunction(CGenericType, CItemDefinable):
                    from_space: 'CSpace' = None,
                    doc: bool = False
                    ) -> str:
+        """Definition of function"""
         return (
             f"{self.doc_render(style) if doc else ''}"
             f"{'static ' if self.static else ''}"

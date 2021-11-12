@@ -239,6 +239,8 @@ def or_render(style: 'Style', a: 'CExpression', b: 'CExpression') -> str:
 
 
 class COperators:
+    """Collection of Operators"""
+
     class IncrementDecrement:
         PreIncrementExpression = CExpressionUnaryOperatorToken("++", order=Order.Before)
         PreDecrementExpression = CExpressionUnaryOperatorToken("--", order=Order.Before)
