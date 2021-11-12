@@ -114,12 +114,12 @@ class CStructDef(CGenericType, CItemDefinable):
         members = ""
         for member in self.members:
             member_declaration = member.declaration(style=style)
-            if style.new_line_union_members:
-                member_declaration = style.indent(member_declaration, style.indent_struct_member)
+            if style.union_new_line_members:
+                member_declaration = style.indent(member_declaration, style.struct_indent_members)
             members += member_declaration
             if member != self.members[-1]:  # Is not last member
-                members += str(style.new_line(style.new_line_struct_members))
-                members += str(style.space(style.space_struct_members))
+                members += str(style.new_line(style.struct_new_line_members))
+                members += str(style.space(style.struct_space_members))
 
         return (
             f"{self.doc_render(style) if doc else ''}"

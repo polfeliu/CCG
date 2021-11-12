@@ -50,7 +50,7 @@ class CIf(CCompoundStatement):
         return style.if_bracket
 
     def _indent_content_style(self, style: 'Style') -> bool:
-        return style.indent_if_content
+        return style.if_indent_content
 
     def _pre_block(self, style: 'Style') -> str:
         return (
@@ -82,7 +82,7 @@ class CElseIf(CIf):
         return style.else_if_bracket
 
     def _indent_content_style(self, style: 'Style') -> bool:
-        return style.indent_else_if_content
+        return style.else_if_indent_content
 
     def _pre_block(self, style: 'Style') -> str:
         return (
@@ -104,7 +104,7 @@ class CElse(CCompoundStatement):
         return style.else_bracket
 
     def _indent_content_style(self, style: 'Style') -> bool:
-        return style.indent_else_content
+        return style.else_indent_content
 
     def _pre_block(self, style: 'Style') -> str:
         return (
@@ -144,7 +144,7 @@ class CCaseSwitch(CStatement):
         return (
             f"{self._header(style)}"
             f"{style.new_line_token}"
-            f"{style.indent(self._all_statements().render(style), style.indent_case_switch_content)}"
+            f"{style.indent(self._all_statements().render(style), style.switch_indent_case_content)}"
         )
 
 
@@ -179,7 +179,7 @@ class CSwitch(CCompoundStatement):
         return style.switch_bracket
 
     def _indent_content_style(self, style: 'Style') -> bool:
-        return style.indent_switch_content
+        return style.switch_indent_content
 
     def _pre_block(self, style: 'Style') -> str:
         return (

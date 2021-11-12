@@ -18,7 +18,7 @@ class CWhile(CCompoundStatement):
         return style.while_bracket
 
     def _indent_content_style(self, style: 'Style') -> bool:
-        return style.indent_while_content
+        return style.while_indent_content
 
     def _pre_block(self, style: 'Style') -> str:
         return (
@@ -41,7 +41,7 @@ class CDoWhile(CCompoundStatement):
         return style.do_while_bracket
 
     def _indent_content_style(self, style: 'Style') -> bool:
-        return style.indent_do_while_content
+        return style.do_while_indent_content
 
     def _pre_block(self, style: 'Style') -> str:
         return (
@@ -80,7 +80,7 @@ class CFor(CCompoundStatement):
         return style.for_bracket
 
     def _indent_content_style(self, style: 'Style') -> bool:
-        return style.indent_for_content
+        return style.for_indent_content
 
     def _pre_block(self, style: 'Style') -> str:
         delimiter = (

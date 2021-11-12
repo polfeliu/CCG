@@ -222,7 +222,7 @@ class CClass(CGenericType, CItemDefinable):
                     f"{member.access.name}: "
                     f"{member.declaration(style, from_space=self, doc=False)}"
                     f"{style.new_line_token if i < len(self.members) - 1 else ''}",
-                    active=style.indent_class_member
+                    active=style.class_indent_members
                 )
         if style.class_members == Style.ClassMembers.group_by_access_specified:
             access_contents = []
@@ -237,10 +237,10 @@ class CClass(CGenericType, CItemDefinable):
                                 f"{member.declaration(from_space=self)}"
                                 f"{style.new_line_token * 2 if i < len(access_members) - 1 else ''}"
                             ),
-                            active=style.indent_class_member
+                            active=style.class_indent_members
                         )
 
-                    access_content = style.indent(access_content, active=style.indent_class_access)
+                    access_content = style.indent(access_content, active=style.class_indent_access)
                     access_contents.append(access_content)
             for access_content in access_contents:
                 content += access_content + (style.new_line_token if access_content is not access_contents[-1] else '')
