@@ -21,6 +21,7 @@ def test_class():
                              constexpr=True, doc=Doc("My Attribute")),
             CClass.TypeMember(Cuint8.type('NewType'), access=CClass.Access.public,
                               doc=Doc("New Type", "Defining types inside classes is awesome")),
+            CClass.FreeStyle("uint8_t freestyle_member = 1;")
         ],
         doc=Doc("Class Example", "This class holds methods and attributes to represent objects")
     )

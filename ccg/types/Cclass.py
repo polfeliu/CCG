@@ -46,6 +46,25 @@ class CClassMember(ABC):
         raise NotImplemented
 
 
+class CClassFreeStyleMember(CClassMember):
+
+    def __init__(self, content: str, access: CClassAccess = CClassAccess.private, doc: Optional['Doc'] = None):
+        super(CClassFreeStyleMember, self).__init__()
+        self.content = content
+        self.doc = doc
+
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None
+                    ) -> str:
+        return self.content
+
+    def doc_render(self, style: 'Style') -> str:
+        return self.doc.render(style) if self.doc is not None else ''
+
+
 class CClassAttribute(CVariable, CClassMember):
 
     def __init__(self,
@@ -169,6 +188,7 @@ class CClass(CGenericType, CItemDefinable):
     TypeMember = ClassTypeMember
     Using = CClassUsing
     Inherit = CClassInheritance
+    FreeStyle = CClassFreeStyleMember
 
     def __init__(self,
                  name: str,

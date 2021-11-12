@@ -18,3 +18,9 @@ Cclass
 .. inheritance-diagram:: ccg.types.Cclass.CClassConstructor
    :top-classes: ccg.types.Ctypes.CGenericItem
 .. autoclass:: ccg.types.Cclass.CClassConstructor
+
+.. inheritance-diagram:: ccg.types.Cclass.CClassMember
+.. autoclass:: ccg.types.Cclass.CClassMember
+
+.. inheritance-diagram:: ccg.types.Cclass.CClassFreeStyleMember
+.. autoclass:: ccg.types.Cclass.CClassFreeStyleMember
