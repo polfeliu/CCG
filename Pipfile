@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-dataclasses = "*"
 
 [dev-packages]
 sphinx = "==4.0.2"

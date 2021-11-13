@@ -1,24 +1,32 @@
 from enum import Enum
 from textwrap import indent
 from typing import List, Union, Optional
-from dataclasses import dataclass  # type: ignore
 
 
 class Style:
     check_hungarian = False
 
-    @dataclass
     class GroupDelimitatorStyle:
         """open or close brackets or parentheses style"""
 
-        new_line_open_before: bool
-        new_line_open_after: bool
-        new_line_close_before: bool
-        new_line_close_after: bool
-        space_open_before: bool
-        space_open_after: bool
-        space_close_before: bool
-        space_close_after: bool
+        def __init__(self,
+                     new_line_open_before: bool,
+                     new_line_open_after: bool,
+                     new_line_close_before: bool,
+                     new_line_close_after: bool,
+                     space_open_before: bool,
+                     space_open_after: bool,
+                     space_close_before: bool,
+                     space_close_after: bool
+                     ):
+            self.new_line_open_before = new_line_open_before
+            self.new_line_open_after = new_line_open_after
+            self.new_line_close_before = new_line_close_before
+            self.new_line_close_after = new_line_close_after
+            self.space_open_before = space_open_before
+            self.space_open_after = space_open_after
+            self.space_close_before = space_close_before
+            self.space_close_after = space_close_after
 
     _default_statement_bracket = {
         'new_line_open_before': True,
