@@ -157,6 +157,8 @@ class Style:
     literal_boolean_true_token = "true"
     literal_boolean_false_token = "false"
 
+    literal_hexadecimal_uppercase = True
+
     # Operators
     class NotOperatorsStyles(Enum):
         Exclamation = "!"

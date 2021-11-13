@@ -94,11 +94,14 @@ class CLiteral(CExpression):
 
         elif isinstance(self.literal, int):
             if self.literal_format == self.Format.decimal:
-                return f"{self.literal:d}"  # TODO STYLING CHOICE UPPERCASE
+                return f"{self.literal:d}"
             elif self.literal_format == self.Format.octal:
                 return f"{self.literal:o}"
             elif self.literal_format == self.Format.hexadecimal:
-                return f"{self.literal:x}"
+                if style.literal_hexadecimal_uppercase:
+                    return f"{self.literal:X}"
+                else:
+                    return f"{self.literal:x}"
             elif self.literal_format == self.Format.binary:
                 return f"{self.literal:b}"
             else:
