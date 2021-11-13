@@ -1,19 +1,21 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import TYPE_CHECKING, List, Union, Any, Optional
+from typing import TYPE_CHECKING, List, Union, Optional
 
 from .Cfunction import CFunction
-from .Cstatement import CStatements
-from .Ctypes import CGenericType, CVoidType, CNoType, CGenericItem, CItemDefinable
-from .Cusing import CUsing
-from .Cvariable import CVariable
-from .style import Style, default_style
+from ..statements import CStatements
+from .Ctypes import CGenericType, CGenericItem, CItemDefinable
+from .CstdTypes import CVoidType, CNoType
+from ..Cusing import CUsing
+from ..Cvariable import CVariable
+from ..style import Style, default_style
 
 if TYPE_CHECKING:
     from .Cfunction import CFunctionArgument
-    from .Cnamespace import CSpace
+    from ..Cnamespace import CSpace
     from .Ctypes import CGenericItem
-    from .doc import Doc
+    from ..expressions import CExpression
+    from ..doc import Doc
 
 
 class CClassAccess(Enum):
@@ -23,6 +25,7 @@ class CClassAccess(Enum):
 
 
 class CClassMember(ABC):
+    """Member of class"""
 
     def __init__(self, access: CClassAccess = CClassAccess.private):
         self.access = access
@@ -45,12 +48,33 @@ class CClassMember(ABC):
         raise NotImplemented
 
 
+class CClassFreeStyleMember(CClassMember):
+    """Freestyle member for class"""
+
+    def __init__(self, content: str, access: CClassAccess = CClassAccess.private, doc: Optional['Doc'] = None):
+        super(CClassFreeStyleMember, self).__init__()
+        self.content = content
+        self.doc = doc
+
+    def declaration(self,
+                    style: 'Style' = default_style,
+                    semicolon: bool = True,
+                    doc: bool = True,
+                    from_space: 'CSpace' = None
+                    ) -> str:
+        return self.content
+
+    def doc_render(self, style: 'Style') -> str:
+        return self.doc.render(style) if self.doc is not None else ''
+
+
 class CClassAttribute(CVariable, CClassMember):
+    """Attribute of class"""
 
     def __init__(self,
                  name: str,
                  c_type: 'CGenericType',
-                 initial_value: Any = None,
+                 initial_value: 'CExpression' = None,
                  access: CClassAccess = CClassAccess.private,
                  static: bool = False, const: bool = False, constexpr: bool = False,
                  auto_hungarize: bool = False,
@@ -71,12 +95,13 @@ class CClassAttribute(CVariable, CClassMember):
 
 
 class CClassMethod(CFunction, CClassMember):
+    """Method of class"""
 
     def __init__(self,
                  name: str,
                  return_type: CGenericType = CVoidType,
                  arguments: Optional[List['CFunctionArgument']] = None,
-                 content=None,
+                 content: Optional['CStatements'] = None,
                  access: CClassAccess = CClassAccess.private,
                  static: bool = False,
                  doc: Optional['Doc'] = None
@@ -93,6 +118,7 @@ class CClassMethod(CFunction, CClassMember):
 
 
 class CClassConstructor(CClassMethod):
+    """Constructor of class"""
 
     def __init__(self,
                  arguments: Optional[List['CFunctionArgument']] = None,
@@ -109,6 +135,8 @@ class CClassConstructor(CClassMethod):
 
 
 class ClassTypeMember(CClassMember):
+    """Type definition of class"""
+
     def __init__(self,
                  member: CGenericType,
                  access: CClassAccess = CClassAccess.private,
@@ -139,6 +167,7 @@ class ClassTypeMember(CClassMember):
 
 
 class CClassUsing(CUsing, CClassMember):
+    """Using declaration in class"""
 
     def __init__(self,
                  item: 'CGenericItem',
@@ -154,6 +183,7 @@ class CClassUsing(CUsing, CClassMember):
 
 
 class CClassInheritance:
+    """Inheritance relationship for class"""
 
     def __init__(self, cls: 'CClass', access: CClassAccess = CClassAccess.private):
         self.cls = cls
@@ -161,6 +191,8 @@ class CClassInheritance:
 
 
 class CClass(CGenericType, CItemDefinable):
+    """Cpp class"""
+
     Access = CClassAccess
     Attribute = CClassAttribute
     Method = CClassMethod
@@ -168,6 +200,7 @@ class CClass(CGenericType, CItemDefinable):
     TypeMember = ClassTypeMember
     Using = CClassUsing
     Inherit = CClassInheritance
+    FreeStyle = CClassFreeStyleMember
 
     def __init__(self,
                  name: str,
@@ -201,10 +234,16 @@ class CClass(CGenericType, CItemDefinable):
                     semicolon: bool = True,
                     doc: bool = True,
                     from_space: 'CSpace' = None,
-                    without_arguments: bool = False
+                    without_arguments: bool = False,
+                    for_variable: bool = False
                     ) -> str:
+        """Forward declaration of class"""
         self.style_checks(style)
-        return f"class {self.name}{';' if semicolon else ''}"
+        return (
+            f"{'class ' if not for_variable else ''}"
+            f"{self.name}"
+            f"{';' if semicolon else ''}"
+        )
 
     def _member_definition(self, style: 'Style') -> str:
         content = ""
@@ -216,7 +255,7 @@ class CClass(CGenericType, CItemDefinable):
                     f"{member.access.name}: "
                     f"{member.declaration(style, from_space=self, doc=False)}"
                     f"{style.new_line_token if i < len(self.members) - 1 else ''}",
-                    obj="class_member"
+                    active=style.class_indent_members
                 )
         if style.class_members == Style.ClassMembers.group_by_access_specified:
             access_contents = []
@@ -231,10 +270,10 @@ class CClass(CGenericType, CItemDefinable):
                                 f"{member.declaration(from_space=self)}"
                                 f"{style.new_line_token * 2 if i < len(access_members) - 1 else ''}"
                             ),
-                            obj="class_member"
+                            active=style.class_indent_members
                         )
 
-                    access_content = style.indent(access_content, "class_access")
+                    access_content = style.indent(access_content, active=style.class_indent_access)
                     access_contents.append(access_content)
             for access_content in access_contents:
                 content += access_content + (style.new_line_token if access_content is not access_contents[-1] else '')
@@ -254,18 +293,20 @@ class CClass(CGenericType, CItemDefinable):
                    from_space: 'CSpace' = None,
                    doc: bool = True
                    ) -> str:
+        """Definition of class with members"""
         self.style_checks(style)
 
         return (
             f"{self.doc_render(style) if doc else ''}"
             f"{self.declaration(style=style, semicolon=False, from_space=from_space)}"
             f"{self._inheritance_definition}"
-            f"{style.bracket_open('class')}"
+            f"{style.open_bracket(style.class_bracket)}"
             f"{self._member_definition(style)}"
-            f"{style.bracket_close('class')};"
+            f"{style.close_bracket(style.class_bracket)};"
         )
 
     def all_members_definition(self) -> CStatements:
+        """Collection of statements that define all members"""
         return CStatements([
             member.define()
             for member

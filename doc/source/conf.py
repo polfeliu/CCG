@@ -40,7 +40,7 @@ autodoc_default_options = {
     'members': True,
     'undoc-members': True,
     'show-inheritance': True,
-    'inherited-members': True
+    'inherited-members': True,
 }
 autodoc_typehints = 'description'
 

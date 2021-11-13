@@ -1,66 +1,151 @@
-from typing import List, Union, Optional
 from enum import Enum
-
 from textwrap import indent
+from typing import List, Union, Optional
 
 
 class Style:
     check_hungarian = False
 
-    # New lines
-    new_line_function_bracket_open_before = True
-    new_line_function_bracket_open_after = True
-    new_line_function_bracket_close_before = True
-    new_line_function_bracket_close_after = False
-    new_line_function_declaration_after_type = False
+    class GroupDelimitatorStyle:
+        """open or close brackets or parentheses style"""
 
-    new_line_struct_bracket_open_before = True
-    new_line_struct_bracket_open_after = True
-    new_line_struct_bracket_close_before = True
-    new_line_struct_bracket_close_after = False
-    new_line_struct_members = True
+        def __init__(self,
+                     new_line_open_before: bool,
+                     new_line_open_after: bool,
+                     new_line_close_before: bool,
+                     new_line_close_after: bool,
+                     space_open_before: bool,
+                     space_open_after: bool,
+                     space_close_before: bool,
+                     space_close_after: bool
+                     ):
+            self.new_line_open_before = new_line_open_before
+            self.new_line_open_after = new_line_open_after
+            self.new_line_close_before = new_line_close_before
+            self.new_line_close_after = new_line_close_after
+            self.space_open_before = space_open_before
+            self.space_open_after = space_open_after
+            self.space_close_before = space_close_before
+            self.space_close_after = space_close_after
 
-    new_line_union_bracket_open_before = True
-    new_line_union_bracket_open_after = True
-    new_line_union_bracket_close_before = True
-    new_line_union_bracket_close_after = False
-    new_line_union_members = True
+    _default_statement_bracket = {
+        'new_line_open_before': True,
+        'new_line_open_after': True,
+        'new_line_close_before': True,
+        'new_line_close_after': True,
+        'space_open_before': False,
+        'space_open_after': False,
+        'space_close_before': False,
+        'space_close_after': False
+    }
 
-    new_line_class_bracket_open_before = True
-    new_line_class_bracket_open_after = True
-    new_line_class_bracket_close_before = True
-    new_line_class_bracket_close_after = False
+    _default_declaration_bracket = {
+        'new_line_open_before': True,
+        'new_line_open_after': True,
+        'new_line_close_before': True,
+        'new_line_close_after': False,
+        'space_open_before': False,
+        'space_open_after': False,
+        'space_close_before': False,
+        'space_close_after': False
+    }
 
-    # Spaces
-    space_function_after_name_definition = False
-    space_function_after_name_declaration = False
+    _default_parentheses = {
+        'new_line_open_before': False,
+        'new_line_open_after': False,
+        'new_line_close_before': False,
+        'new_line_close_after': False,
+        'space_open_before': False,
+        'space_open_after': False,
+        'space_close_before': False,
+        'space_close_after': False
+    }
 
-    space_function_bracket_open_before = False
-    space_function_bracket_open_after = False
-    space_function_bracket_close_before = False
-    space_function_bracket_close_after = False
+    # Function
+    function_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
+    function_definition_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
+    function_declaration_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
+    function_new_line_after_type_declaration = True
+    function_space_after_name_definition = False
+    function_space_after_name_declaration = False
+    function_void_when_no_arguments = True
+    function_indent_content = True
 
-    space_struct_bracket_open_before = False
-    space_struct_bracket_open_after = False
-    space_struct_bracket_close_before = False
-    space_struct_bracket_close_after = False
-    space_struct_members = False
+    # Struct
+    struct_bracket = GroupDelimitatorStyle(**_default_declaration_bracket)  # type: ignore
+    struct_new_line_members = True
+    struct_indent_members = True
+    struct_space_members = False
 
-    space_union_bracket_open_before = False
-    space_union_bracket_open_after = False
-    space_union_bracket_close_before = False
-    space_union_bracket_close_after = False
-    space_union_members = False
+    # Union
+    union_bracket = GroupDelimitatorStyle(**_default_declaration_bracket)  # type: ignore
+    union_new_line_members = True
+    union_space_members = False
 
-    space_class_bracket_open_before = False
-    space_class_bracket_open_after = False
-    space_class_bracket_close_before = False
-    space_class_bracket_close_after = False
+    # Class
+    class_bracket = GroupDelimitatorStyle(**_default_declaration_bracket)  # type: ignore
+    class_indent_members = True
+    class_indent_access = False
 
-    # Indentation
-    indent_class_member = True
-    indent_class_access = False
-    indent_struct_member = True
+    # If
+    if_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
+    if_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
+    if_indent_content = True
+    if_space_after_token = True
+
+    # Else if
+    else_if_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
+    else_if_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
+    else_if_indent_content = True
+    else_if_space_after_token = True
+
+    # Else
+    else_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
+    else_indent_content = True
+    else_space_after_token = True
+
+    # Switch
+    switch_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
+    switch_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
+    switch_indent_content = True
+    switch_indent_case_content = True
+    switch_space_after_token = True
+
+    # While
+    while_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
+    while_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
+    while_indent_content = True
+    while_space_after_token = True
+
+    # Do while
+    do_while_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
+    do_while_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
+    do_while_indent_content = True
+    do_while_space_after_token = True
+
+    # For
+    for_bracket = GroupDelimitatorStyle(**_default_statement_bracket)  # type: ignore
+    for_parentheses = GroupDelimitatorStyle(**_default_parentheses)  # type: ignore
+    for_indent_content = True
+    for_space_before_semicolon = False
+    for_space_after_semicolon = True
+    for_spaces_if_void = False
+    for_space_after_token = True
+
+    # Cast
+    space_after_cast = False
+
+    # Operators
+    space_unary_operator = False
+    space_before_binary_operator = True
+    space_after_binary_operator = True
+    space_before_parentheses_operator = False
+    space_after_parentheses_operator = False
+
+    # Statements
+    space_before_semicolon_break_statement = False
+    space_before_semicolon_continue_statement = False
+    space_before_semicolon_return_statement = False
 
     # Attributes
     attribute_packed = "__attribute__((__packed__))"
@@ -72,49 +157,86 @@ class Style:
 
     class_members = ClassMembers.group_by_access_specified
 
-    # Functions
-    function_void_when_no_arguments = True
+    # Literals
+    literal_unsigned_token = "U"
+    literal_long_token = "L"
+    literal_float_token = "f"
+    literal_double_token = "d"
+    literal_boolean_true_token = "true"
+    literal_boolean_false_token = "false"
 
-    def bracket_open(self, obj) -> str:
-        return (
-                str(self.__getattribute__(f"vnew_line_{obj}_bracket_open_before")) +
-                str(self.__getattribute__(f"vspace_{obj}_bracket_open_before")) +
-                '{' +
-                str(self.__getattribute__(f"vnew_line_{obj}_bracket_open_after")) +
-                str(self.__getattribute__(f"vspace_{obj}_bracket_open_after"))
-        )
+    literal_hexadecimal_uppercase = True
 
-    def bracket_close(self, obj) -> str:
-        return (
-                str(self.__getattribute__(f"vnew_line_{obj}_bracket_close_before")) +
-                str(self.__getattribute__(f"vspace_{obj}_bracket_close_before")) +
-                '}' +
-                str(self.__getattribute__(f"vnew_line_{obj}_bracket_close_after")) +
-                str(self.__getattribute__(f"vspace_{obj}_bracket_close_after"))
-        )
+    # Operators
+    class NotOperatorsStyles(Enum):
+        Exclamation = "!"
+        Explicit = "not"
 
-    def __getattribute__(self, item) -> object:
-        if item.startswith('vnew_line'):
-            style_set = super(Style, self).__getattribute__(item[1:])
-            return self.new_line_token if style_set else ''
-        elif item.startswith('vspace'):
-            style_set = super(Style, self).__getattribute__(item[1:])
-            return ' ' if style_set else ''
-        else:
-            return super(Style, self).__getattribute__(item)
+    class AndOperatorStyles(Enum):
+        DoubleAmpersand = "&&"
+        Explicit = "and"
 
+    class OrOperatorStyles(Enum):
+        DoubleVerticalBar = "||"
+        Explicit = "or"
+
+    not_operator_style = NotOperatorsStyles.Exclamation
+    and_operator_style = AndOperatorStyles.DoubleAmpersand
+    or_operator_style = OrOperatorStyles.DoubleVerticalBar
+
+    # General tokens
     new_line_token = '\n'
     indent_token = '\t'
+    space_token = ' '
+    bracket_open_token = '{'
+    bracket_close_token = '}'
+    parentheses_open_token = '('
+    parentheses_close_token = ')'
 
-    def indent(self, value: str, obj: Optional[str] = None) -> str:
-        style_set = True
-        if obj is not None:
-            style_set = bool(self.__getattribute__(f"indent_{obj}"))
+    def space(self, active: bool = True) -> str:
+        return self.space_token if active else ''
 
-        if style_set:
-            return indent(value, self.indent_token)
-        else:
-            return value
+    def new_line(self, active: bool = True) -> str:
+        return self.new_line_token if active else ''
+
+    def indent(self, value: str, active: bool = True) -> str:
+        return indent(value, self.indent_token) if active else value
+
+    def open_bracket(self, group_style: GroupDelimitatorStyle):
+        return (
+            f"{self.new_line(group_style.new_line_open_before)}"
+            f"{self.space(group_style.space_open_before)}"
+            f"{self.bracket_open_token}"
+            f"{self.new_line(group_style.new_line_open_after)}"
+            f"{self.space(group_style.space_open_before)}"
+        )
+
+    def close_bracket(self, group_style: GroupDelimitatorStyle):
+        return (
+            f"{self.new_line(group_style.new_line_close_before)}"
+            f"{self.space(group_style.space_close_before)}"
+            f"{self.bracket_close_token}"
+            f"{self.new_line(group_style.new_line_close_after)}"
+            f"{self.space(group_style.space_close_before)}"
+        )
+
+    def open_parentheses(self, group_style: GroupDelimitatorStyle):
+        return (
+            f"{self.new_line(group_style.new_line_open_before)}"
+            f"{self.space(group_style.space_open_before)}"
+            f"{self.parentheses_open_token}"
+            f"{self.new_line(group_style.new_line_open_after)}"
+            f"{self.space(group_style.space_open_before)}"
+        )
+
+    def close_parentheses(self, group_style: GroupDelimitatorStyle):
+        return (
+            f"{self.new_line(group_style.new_line_close_before)}"
+            f"{self.space(group_style.space_close_before)}"
+            f"{self.parentheses_close_token}"
+            f"{self.new_line(group_style.new_line_close_after)}"
+            f"{self.space(group_style.space_close_before)}"
+        )
 
     @staticmethod
     def check_hungarian_variable(variable_name: str, hungarian_prefixes: Union[List[str], str]) -> bool:

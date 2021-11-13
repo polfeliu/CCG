@@ -5,6 +5,9 @@ if TYPE_CHECKING:
 
 
 class CSpace:
+    """Space of items
+
+    Generic for namespaces or classes"""
 
     def __init__(self, name: str, in_space: Optional['CSpace'] = None):
         self.name = name
@@ -35,4 +38,5 @@ class CSpace:
 
 
 class CNamespace(CSpace):
+    """Cpp Namespace"""
     pass

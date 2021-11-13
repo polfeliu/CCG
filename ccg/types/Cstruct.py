@@ -1,16 +1,17 @@
 from typing import TYPE_CHECKING, List, Optional
 
 from .Ctypes import CGenericType, CItemDefinable
-from .style import default_style
+from ..style import default_style
 
 if TYPE_CHECKING:
-    from .style import Style
-    from .Cvariable import CVariable
-    from .Cnamespace import CSpace
-    from .doc import Doc
+    from ..style import Style
+    from ..Cvariable import CVariable
+    from ..Cnamespace import CSpace
+    from ..doc import Doc
 
 
 class CStructDefMember:
+    """Member of struct definition"""
 
     def __init__(self,
                  variable: 'CVariable',
@@ -26,6 +27,7 @@ class CStructDefMember:
                 raise ValueError("Bitfields should not be bigger than type size")
 
     def declaration(self, style: 'Style' = default_style) -> str:
+        """Member declaration"""
         return (
             f"{self.variable.declaration(semicolon=False, style=style)}{f': {self.bitfield}' if self.bitfield else ''};"
         )
@@ -41,6 +43,9 @@ class CStructDefMember:
 
 
 class CStruct(CGenericType, CItemDefinable):
+    """Struct without inplace definition.
+
+    Assumes struct already is declared"""
 
     def __init__(self, struct_def: 'CStructDef'):
         super(CStruct, self).__init__(
@@ -66,6 +71,8 @@ class CStruct(CGenericType, CItemDefinable):
 
 
 class CStructDef(CGenericType, CItemDefinable):
+    """Struct with inplace definition"""
+
     Member = CStructDefMember
 
     def __init__(self,
@@ -102,6 +109,7 @@ class CStructDef(CGenericType, CItemDefinable):
 
     @property
     def struct(self) -> CStruct:
+        """Same struct without inplace definition"""
         return self._struct
 
     def definition(self,
@@ -114,21 +122,21 @@ class CStructDef(CGenericType, CItemDefinable):
         members = ""
         for member in self.members:
             member_declaration = member.declaration(style=style)
-            if style.new_line_union_members:
-                member_declaration = style.indent(member_declaration, 'struct_member')
+            if style.union_new_line_members:
+                member_declaration = style.indent(member_declaration, style.struct_indent_members)
             members += member_declaration
             if member != self.members[-1]:  # Is not last member
-                members += str(style.vnew_line_struct_members)
-                members += str(style.vspace_struct_members)
+                members += str(style.new_line(style.struct_new_line_members))
+                members += str(style.space(style.struct_space_members))
 
         return (
             f"{self.doc_render(style) if doc else ''}"
             f"{self.space_def(from_space)}"
             f"{self.name}"
             f"{style.attribute_packed if self.is_packed else ''}"
-            f"{style.bracket_open('struct')}"
+            f"{style.open_bracket(style.struct_bracket)}"
             f"{members}"
-            f"{style.bracket_close('struct')}"
+            f"{style.close_bracket(style.struct_bracket)}"
         )
 
     def declaration(self,
@@ -136,7 +144,8 @@ class CStructDef(CGenericType, CItemDefinable):
                     semicolon: bool = True,
                     doc: bool = True,
                     from_space: 'CSpace' = None,
-                    without_arguments: bool = False
+                    without_arguments: bool = False,
+                    for_variable: bool = False
                     ) -> str:
         return self.definition(style=style, from_space=from_space, doc=doc) + (';' if semicolon else '')
 

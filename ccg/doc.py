@@ -5,12 +5,20 @@ if TYPE_CHECKING:
 
 
 class Doc:
+    """Documentation"""
 
     def __init__(self,
                  brief: Optional[str] = None,
                  body: Optional[str] = None,
                  ret: Optional[str] = None
                  ):
+        """Constructor
+
+        Args:
+            brief: brief title of the object
+            body: body with description of the object
+            ret: documentation for return of function and methods
+        """
         self.brief = brief
         self.body = body
         self.ret = ret

@@ -1,11 +1,11 @@
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Optional
 
-from .Ctypes import CGenericItem
-from .Ctypes import HungarianNotationError
+from .types.Ctypes import CGenericType, CGenericItem, HungarianNotationError
 from .style import default_style
+from .expressions.Cexpression import CExpression
 
 if TYPE_CHECKING:
-    from .Ctypes import CGenericType
+    from .types.Ctypes import CGenericType
     from .style import Style
     from .Cnamespace import CSpace
     from .doc import Doc
@@ -15,12 +15,13 @@ def hungarize(name: str, c_type: 'CGenericType'):
     return c_type.hungarian_prefixes[0] + name[0].upper() + name[1:]
 
 
-class CVariable(CGenericItem):
+class CVariable(CGenericItem, CExpression):
+    """Variable"""
 
     def __init__(self,
                  name: str,
                  c_type: 'CGenericType',
-                 initial_value: Any = None,
+                 initial_value: 'CExpression' = None,
                  static: bool = False,
                  const: bool = False,
                  constexpr: bool = False,
@@ -35,10 +36,7 @@ class CVariable(CGenericItem):
             doc=doc
         )
         self.c_type = c_type
-        self._initial_value = initial_value
-        if initial_value is not None:
-            if self.c_type.check_value(self._initial_value) is not True:
-                raise ValueError(f"Initial value [{initial_value}] does not fit type [{self.c_type.name}]")
+        self.initial_value = initial_value
 
         self.static = static
         self.const = const
@@ -69,9 +67,9 @@ class CVariable(CGenericItem):
             f"{'static ' if self.static else ''}"
             f"{'const ' if self.const else ''}"
             f"{'constexpr ' if self.constexpr else ''}"
-            f"{self.c_type.declaration(style=style, semicolon=False, from_space=from_space)}"
+            f"{self.c_type.declaration(style=style, semicolon=False, from_space=from_space, for_variable=True)}"
             f" {self.name}"
-            f"{' = ' + str(self._initial_value) if self._initial_value is not None else ''}"
+            f"{' = ' + str(self.initial_value.render(style)) if self.initial_value is not None else ''}"
             f"{';' if semicolon else ''}"
         )
 
@@ -80,3 +78,6 @@ class CVariable(CGenericItem):
         if self.c_type.bit_size is None:
             raise ValueError("Cannot determine bit_size")
         return self.c_type.bit_size
+
+    def render(self, style: 'Style' = default_style) -> str:
+        return self.name

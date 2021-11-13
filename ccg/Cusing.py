@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 
-from .Ctypes import CGenericItem
+from .types.Ctypes import CGenericItem
 from .style import default_style
 
 if TYPE_CHECKING:
@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 
 
 class CUsing(CGenericItem):
+    """Using item from namespace"""
 
     def __init__(self,
                  item: CGenericItem,
