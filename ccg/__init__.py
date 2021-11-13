@@ -1,4 +1,4 @@
-__version__ = "0.1.0dev"
+__version__ = "0.0.2"
 
 from .style import Style, default_style
 from .doc import Doc
