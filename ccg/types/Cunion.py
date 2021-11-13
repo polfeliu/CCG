@@ -10,6 +10,9 @@ if TYPE_CHECKING:
 
 
 class CUnion(CGenericType, CItemDefinable):
+    """Union without inplace definition.
+
+    Assumes union already is declared"""
 
     def __init__(self, union_def: 'CUnionDef'):
         super(CUnion, self).__init__(
@@ -35,6 +38,7 @@ class CUnion(CGenericType, CItemDefinable):
 
 
 class CUnionDef(CGenericType, CItemDefinable):
+    """Union with inplace definition"""
 
     def __init__(self,
                  name: Optional[str] = None,

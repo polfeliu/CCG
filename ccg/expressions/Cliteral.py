@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Union, Optional
 
 from .Cexpression import CExpression
 from ..style import default_style
-from ..types.Ctypes import CIntegerType
+from ..types.CstdTypes import CIntegerType
 
 if TYPE_CHECKING:
     from ..style import Style

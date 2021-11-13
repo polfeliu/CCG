@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING, List, Union, Optional
 
 from .Cfunction import CFunction
 from ..statements import CStatements
-from .Ctypes import CGenericType, CVoidType, CNoType, CGenericItem, CItemDefinable
+from .Ctypes import CGenericType, CGenericItem, CItemDefinable
+from .CstdTypes import CVoidType, CNoType
 from ..Cusing import CUsing
 from ..Cvariable import CVariable
 from ..style import Style, default_style

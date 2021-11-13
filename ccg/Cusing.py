@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 
 
 class CUsing(CGenericItem):
+    """Using item from namespace"""
 
     def __init__(self,
                  item: CGenericItem,

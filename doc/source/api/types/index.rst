@@ -6,6 +6,7 @@ Types
    :caption: Types Api:
 
    Ctypes
+   Cstdtypes
    Cstruct
    Cunion
    Cfunction

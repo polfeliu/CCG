@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, List, Optional
 
-from .Ctypes import CGenericType, CVoidType, CNoType, CItemDefinable
+from .Ctypes import CGenericType, CItemDefinable
+from .CstdTypes import CVoidType, CNoType
 from ..statements import CStatements
 from ..Cvariable import CVariable
 from ..style import default_style

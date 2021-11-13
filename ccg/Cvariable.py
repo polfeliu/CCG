@@ -16,6 +16,7 @@ def hungarize(name: str, c_type: 'CGenericType'):
 
 
 class CVariable(CGenericItem, CExpression):
+    """Variable"""
 
     def __init__(self,
                  name: str,

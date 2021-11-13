@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 
 class CArray(CVariable):
+    """Array"""
 
     def __init__(self,
                  name: str,

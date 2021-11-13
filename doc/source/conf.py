@@ -31,7 +31,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.graphviz',
     'sphinx.ext.inheritance_diagram',
-    # 'myst_nb'
+    'myst_nb'
 ]
 
 # Autodoc
