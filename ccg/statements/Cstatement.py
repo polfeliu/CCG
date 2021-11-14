@@ -88,7 +88,7 @@ class CTokenStatement(CStatement, ABC):
         return (
             f"{self._token}"
             f"{self._post_block(style)}"
-            f"{self._semicolon_before_space(style)}"
+            f"{style.space(self._semicolon_before_space(style))}"
             f";"
         )
 
