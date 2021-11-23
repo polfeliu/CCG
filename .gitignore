@@ -3,3 +3,4 @@
 /dist/*
 /ccg.egg-info/*
 /.ipynb_checkpoints/*
+/tests/test_file_output.c

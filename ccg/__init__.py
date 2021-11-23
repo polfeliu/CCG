@@ -10,3 +10,4 @@ from .Cnamespace import CNamespace
 from .Cusing import CUsing
 from .statements import *
 from .expressions import *
+from .file import File
