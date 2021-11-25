@@ -22,34 +22,59 @@ class File:
         self.style = style
 
     def generate(self, path: str):
-        generated = self.declarations.render()
-
-        # self._analyze_code_sections(generated)
-
+        current_code_sections = {}
         if isfile(path):
             # Scan user code sections
             with open(path, "r") as current:
                 current_content = current.read()
-                self._analyze_code_sections(current_content)
+                current_code_sections = self._analyze_code_sections(current_content)
+
+        generated = self.declarations.render()
+
+        # self._analyze_code_sections(generated)
 
         """with open(path, "w+") as output:
             output.write(generated)"""
 
     def _analyze_code_sections(self, content: str) -> dict:
         any_identifier = r'(.*)'
+        any_begin_pattern = self.style.user_code_begin_pattern(any_identifier)
+        any_end_pattern = self.style.user_code_end_pattern(any_identifier)
         pattern = (
-            rf"{self.style.user_code_begin_pattern(any_identifier)}"
+            rf"{any_begin_pattern}"
             rf"(.|\n|\r|\t)*?"  # Any content between
-            rf"{self.style.user_code_end_pattern(any_identifier)}"
+            rf"{any_end_pattern}"
         )
 
-        # print(pattern)
+        code_sections = {}
 
-        for a in re.finditer(pattern, content):
-            print(a.group())
-        print("####")
+        identifier_finder = "--------------------------"
 
-        return {}
+        for section_match in re.finditer(pattern, content):
+            section = section_match.group()
+            begin_token = re.search(any_begin_pattern, section).group()
+            end_token = re.search(any_end_pattern, section).group()
+
+            begin_id = begin_token \
+                .lstrip(self.style.user_code_begin_pattern_before) \
+                .rstrip(self.style.user_code_begin_pattern_after)
+
+            end_id = end_token \
+                .lstrip(self.style.user_code_end_pattern_before) \
+                .rstrip(self.style.user_code_end_pattern_after)
+
+            if begin_id != end_id:
+                raise ValueError("Code sections identifiers do not match")
+
+            if begin_id in code_sections:
+                raise KeyError(f"identifier {begin_id} is duplicated")
+
+            code_sections[begin_id] = section \
+                .lstrip(self.style.user_code_begin(begin_id)) \
+                .rstrip(self.style.user_code_end(begin_id))
+
+        print(code_sections)
+        return code_sections
 
 
 class UserCodeStatement(CStatement):

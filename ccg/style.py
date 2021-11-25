@@ -274,11 +274,25 @@ class Style:
     def doxygen_command(self, command_name: str) -> str:
         return f"{self.doc_doxygen_command_token}{command_name}"
 
+    user_code_begin_pattern_before = r"\/\* USER CODE BEGIN "
+    user_code_begin_pattern_after = r"\*\/"
+
+    user_code_end_pattern_before = r"\/\* USER CODE END "
+    user_code_end_pattern_after = r"\*\/"
+
     def user_code_begin_pattern(self, identifier: str) -> str:
-        return rf"\/\* USER CODE BEGIN {identifier}\*\/"
+        return (
+            f"{self.user_code_begin_pattern_before}"
+            f"{identifier}"
+            f"{self.user_code_begin_pattern_after}"
+        )
 
     def user_code_end_pattern(self, identifier: str) -> str:
-        return rf"\/\* USER CODE END {identifier}\*\/"
+        return (
+            f"{self.user_code_end_pattern_before}"
+            f"{identifier}"
+            f"{self.user_code_end_pattern_after}"
+        )
 
     def user_code_begin(self, identifier: str) -> str:
         return self.user_code_begin_pattern(identifier).replace('\\', '')
