@@ -275,10 +275,10 @@ class Style:
         return f"{self.doc_doxygen_command_token}{command_name}"
 
     user_code_begin_pattern_before = r"\/\* USER CODE BEGIN "
-    user_code_begin_pattern_after = r"\*\/"
+    user_code_begin_pattern_after = r" \*\/"
 
     user_code_end_pattern_before = r"\/\* USER CODE END "
-    user_code_end_pattern_after = r"\*\/"
+    user_code_end_pattern_after = r" \*\/"
 
     def user_code_begin_pattern(self, identifier: str) -> str:
         return (
@@ -299,8 +299,6 @@ class Style:
 
     def user_code_end(self, identifier: str) -> str:
         return self.user_code_end_pattern(identifier).replace('\\', '')
-
-    user_code_identifier_match = r'(.*)'
 
 
 default_style = Style()
