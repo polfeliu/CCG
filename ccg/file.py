@@ -55,7 +55,6 @@ class File:
                     # On this content
                     code
                 )
-                break
         return code
 
     def _analyze_code_sections(self, content: str) -> dict:
