@@ -2,6 +2,8 @@ from ccg import *
 from os.path import join, dirname
 
 
+# TODO Create example instead of text
+
 def test_file():
     function = CFunction(
         name="examplefun",
@@ -35,7 +37,7 @@ def test_file():
         user_code_statement_2
     ])
 
-    file.generate(join(dirname(__file__), "test_file_output.c"))
+    file.generate(join(dirname(__file__), "generated_code/test_file_output.c"))
 
 
 if __name__ == "__main__":

@@ -3,7 +3,8 @@ from typing import TYPE_CHECKING, Union, List, Callable, Dict
 from .statements import CDeclarations, CDeclaration, CStatement
 from .style import default_style
 
-from os.path import isfile
+from os.path import isfile, dirname
+from os import makedirs
 import re
 
 if TYPE_CHECKING:
@@ -30,15 +31,14 @@ class File:
             self.declarations = CDeclarations(declarations)
         self.style = style
 
-    def generate(self, path: str) -> None:
+    def generate(self, path: str, auto_create_folders: bool = True) -> None:
         """Generate code in path
 
         Args:
             path: path of the file to generate
+            auto_create_folders: if true, if the path specified does not exist, will create the folder tree required
         """
         generated = self.declarations.render()
-
-        # TODO Automatically create folder tree if it doenst exist
 
         if isfile(path):
             # File already exist, scan current user code sections
@@ -51,6 +51,9 @@ class File:
         else:
             # File does not exist, generate
             code_with_sections = generated
+
+            if auto_create_folders:
+                makedirs(dirname(path), exist_ok=True)
 
         with open(path, "w+") as output:
             output.write(code_with_sections)
