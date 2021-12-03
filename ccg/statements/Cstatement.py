@@ -5,7 +5,6 @@ from ..style import default_style
 
 if TYPE_CHECKING:
     from ..style import Style
-    from ..file import UserSectionCallback
 
 
 class CStatement:
@@ -15,7 +14,7 @@ class CStatement:
         self.render_function = render_function
         self.kwargs = kwargs
 
-    def render(self, style: 'Style' = default_style, user_code_callback: Optional['UserSectionCallback'] = None) -> str:
+    def render(self, style: 'Style' = default_style) -> str:
         return self.render_function(style=style, **self.kwargs)
 
 

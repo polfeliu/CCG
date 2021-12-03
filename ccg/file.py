@@ -102,15 +102,23 @@ class File:
         for section_match in re.finditer(self.style.user_section_pattern(), content):
             section = section_match.group()
 
-            begin_token = re.search(
+            begin_token_search = re.search(
                 self.style.user_section_begin_pattern(r'(.*)'),
                 section
-            ).group()
+            )
+            if begin_token_search is None:
+                raise RuntimeError("Could not find begin token inside section")
+            else:
+                begin_token = begin_token_search.group()
 
-            end_token = re.search(
+            end_token_search = re.search(
                 self.style.user_section_end_pattern(r'(.*)'),
                 section
-            ).group()
+            )
+            if end_token_search is None:
+                raise RuntimeError("Could not find end token inside section")
+            else:
+                end_token = end_token_search.group()
 
             begin_id = begin_token \
                 .lstrip(self.style.user_section_begin_pattern_before) \
