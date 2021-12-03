@@ -24,9 +24,9 @@ def test_file():
         initial_value=CCast(Cint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.decimal))
     )
 
-    user_code_statement = UserCodeStatement("first")
+    user_code_statement = UserSectionStatement("first")
 
-    user_code_statement_2 = UserCodeStatement("second")
+    user_code_statement_2 = UserSectionStatement("second")
 
     file = File([
         var.declare(),

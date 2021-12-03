@@ -274,31 +274,57 @@ class Style:
     def doxygen_command(self, command_name: str) -> str:
         return f"{self.doc_doxygen_command_token}{command_name}"
 
-    user_code_begin_pattern_before = r"\/\* USER CODE BEGIN "
-    user_code_begin_pattern_after = r" \*\/"
+    user_section_begin_pattern_before = r"\/\* USER SECTION BEGIN "
+    """Regex Token before identifier in begin section"""
 
-    user_code_end_pattern_before = r"\/\* USER CODE END "
-    user_code_end_pattern_after = r" \*\/"
+    user_section_begin_pattern_after = r" \*\/"
+    """Regex Token after identifier in begin section"""
 
-    def user_code_begin_pattern(self, identifier: str) -> str:
+    user_section_end_pattern_before = r"\/\* USER SECTION END "
+    """Regex Token before identifier in end section"""
+
+    user_section_end_pattern_after = r" \*\/"
+    """Regex Token after identifier in end section"""
+
+    def user_section_begin_pattern(self, identifier: str) -> str:
+        """Regex pattern to find begin sections
+
+        Args:
+            identifier: identifier of the user section
+        """
         return (
-            f"{self.user_code_begin_pattern_before}"
+            f"{self.user_section_begin_pattern_before}"
             f"{identifier}"
-            f"{self.user_code_begin_pattern_after}"
+            f"{self.user_section_begin_pattern_after}"
         )
 
-    def user_code_end_pattern(self, identifier: str) -> str:
+    def user_section_end_pattern(self, identifier: str) -> str:
+        """Regex pattern to find end sections
+
+        Args:
+            identifier: identifier of the user section
+        """
         return (
-            f"{self.user_code_end_pattern_before}"
+            f"{self.user_section_end_pattern_before}"
             f"{identifier}"
-            f"{self.user_code_end_pattern_after}"
+            f"{self.user_section_end_pattern_after}"
         )
 
-    def user_code_begin(self, identifier: str) -> str:
-        return self.user_code_begin_pattern(identifier).replace('\\', '')
+    def user_section_begin(self, identifier: str) -> str:
+        """String to begin user section
 
-    def user_code_end(self, identifier: str) -> str:
-        return self.user_code_end_pattern(identifier).replace('\\', '')
+            Args:
+                identifier: identifier of the user section
+            """
+        return self.user_section_begin_pattern(identifier).replace('\\', '')
+
+    def user_section_end(self, identifier: str) -> str:
+        """String to end user section
+
+        Args:
+            identifier: identifier of the user section
+        """
+        return self.user_section_end_pattern(identifier).replace('\\', '')
 
 
 default_style = Style()
