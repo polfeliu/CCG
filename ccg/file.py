@@ -42,8 +42,8 @@ class File:
 
         if isfile(path):
             # File already exist, scan current user code sections
-            current_code_sections = {}
             with open(path, "r") as current:
+                current_code_sections = {}
                 current_content = current.read()
                 current_code_sections = self._analyze_code_sections(current_content)
 
@@ -74,10 +74,10 @@ class File:
             if identifier in sections.keys():
                 code = re.sub(
                     # Find Pattern
-                    self.user_code_pattern(identifier),
+                    self.style.user_section_pattern(identifier),
 
                     # Replace with
-                    render_user_code_section(
+                    render_user_section(
                         identifier=identifier,
                         content=sections[identifier],
                         style=self.style
@@ -98,12 +98,19 @@ class File:
             dictionary of sections with identifier as key and content of code section as value
         """
         code_sections = {}
-
-        for section_match in re.finditer(self.user_code_pattern(), content):
-
+        print(self.style.user_section_pattern())
+        for section_match in re.finditer(self.style.user_section_pattern(), content):
             section = section_match.group()
-            begin_token = re.search(self.any_begin_pattern(), section).group()
-            end_token = re.search(self.any_end_pattern(), section).group()
+
+            begin_token = re.search(
+                self.style.user_section_begin_pattern(r'(.*)'),
+                section
+            ).group()
+
+            end_token = re.search(
+                self.style.user_section_end_pattern(r'(.*)'),
+                section
+            ).group()
 
             begin_id = begin_token \
                 .lstrip(self.style.user_section_begin_pattern_before) \
@@ -114,12 +121,12 @@ class File:
                 .rstrip(self.style.user_section_end_pattern_after)
 
             if begin_id != end_id:
-                # TODO Info of content, line....
-                raise ValueError("Code sections identifiers do not match")
+                raise ValueError(f"Code sections identifiers do not match \n"
+                                 f"begin id: {begin_id}\n"
+                                 f"end id: {end_id}")
 
             if begin_id in code_sections:
-                # TODO Info of content, line....
-                raise KeyError(f"identifier {begin_id} is duplicated")
+                raise KeyError(f"Identifier {begin_id} is duplicated")
 
             code_sections[begin_id] = section \
                 .lstrip(self.style.user_section_begin(begin_id)) \
@@ -127,23 +134,8 @@ class File:
 
         return code_sections
 
-    def any_begin_pattern(self) -> str:
-        return self.style.user_section_begin_pattern(r'(.*)')  # TODO REMOVE
 
-    def any_end_pattern(self) -> str:
-        return self.style.user_section_end_pattern(r'(.*)')
-
-    def user_code_pattern(self, identifier: str = r'(.*)') -> str:  # TODO Move to style
-        # Defaults to any
-        return (
-            rf"{self.style.user_section_begin_pattern(identifier)}"
-            rf"(.|\n|\r|\t)*?"  # Any content between
-            rf"{self.style.user_section_end_pattern(identifier)}"
-        )
-
-
-# TODO USER CODE NAME REFACTOR
-def render_user_code_section(identifier: str, content: str, style: 'Style') -> str:
+def render_user_section(identifier: str, content: str, style: 'Style') -> str:
     """Render user section
 
     Args:
@@ -154,6 +146,14 @@ def render_user_code_section(identifier: str, content: str, style: 'Style') -> s
     Returns:
         str: generated user section
     """
+    is_identifier_legal = re.match(
+        pattern=style.user_section_identifier_pattern,
+        string=identifier
+    )
+
+    if not is_identifier_legal:
+        raise ValueError(f"Identifier {identifier} does not have a valid name")
+
     return (
         f"{style.user_section_begin(identifier)}"
         f"{content}"
@@ -167,18 +167,16 @@ class UserSectionStatement(CStatement):
         """Constructor
 
         Args:
-            identifier: identifier of user code statement
+            identifier: identifier of user section statement
             default_content:
         """
-        # TODO VALIDATE IDENTIFIER INCLUDES STANDARD CHARACTERS
-        # TODO Validate is unique to... file....??
         super(UserSectionStatement, self).__init__(self._render)
         self.identifier = identifier
         self.default_content = default_content
 
     def _render(self, style: 'Style' = default_style) -> str:
         """Render Code Section"""
-        return render_user_code_section(
+        return render_user_section(
             identifier=self.identifier,
             content=self.default_content,
             style=style

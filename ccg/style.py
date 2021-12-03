@@ -291,6 +291,9 @@ class Style:
 
         Args:
             identifier: identifier of the user section
+
+        Returns:
+            regex pattern
         """
         return (
             f"{self.user_section_begin_pattern_before}"
@@ -303,6 +306,9 @@ class Style:
 
         Args:
             identifier: identifier of the user section
+
+        Returns:
+            regex pattern
         """
         return (
             f"{self.user_section_end_pattern_before}"
@@ -310,12 +316,31 @@ class Style:
             f"{self.user_section_end_pattern_after}"
         )
 
+    user_section_identifier_pattern = '([a-zA-Z0-9_-]*)'
+    """User Section identifier must match this pattern"""
+
+    def user_section_pattern(self, identifier: str = user_section_identifier_pattern) -> str:
+        """Regex pattern to find a complete user section
+
+        Args:
+            identifier: identifier of the user section. Defaults to any identifier
+
+        Returns:
+            regex pattern
+        """
+        # Defaults to any
+        return (
+            rf"{self.user_section_begin_pattern(identifier)}"
+            rf"(.|\n|\r|\t)*?"  # Any content between
+            rf"{self.user_section_end_pattern(identifier)}"
+        )
+
     def user_section_begin(self, identifier: str) -> str:
         """String to begin user section
 
-            Args:
-                identifier: identifier of the user section
-            """
+        Args:
+            identifier: identifier of the user section
+        """
         return self.user_section_begin_pattern(identifier).replace('\\', '')
 
     def user_section_end(self, identifier: str) -> str:
