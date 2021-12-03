@@ -1,4 +1,4 @@
-Style
+File
 ======================================
 
-.. autoclass:: ccg.Style
+.. autoclass:: ccg.File

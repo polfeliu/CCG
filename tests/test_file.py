@@ -2,8 +2,6 @@ from ccg import *
 from os.path import join, dirname
 
 
-# TODO Create example instead of text
-
 def test_file():
     function = CFunction(
         name="examplefun",
@@ -26,16 +24,18 @@ def test_file():
         initial_value=CCast(Cint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.decimal))
     )
 
-    user_code_statement = UserSectionStatement("first")
+    user_section = UserSectionStatement("first")
 
-    user_code_statement_2 = UserSectionStatement("second")
+    user_section_2 = UserSectionStatement("second")
 
-    file = File([
+    declarations = CDeclarations([
         var.declare(),
-        user_code_statement,
+        user_section,
         function.declare(),
-        user_code_statement_2
+        user_section_2
     ])
+
+    file = File(declarations)
 
     file.generate(join(dirname(__file__), "generated_code/test_file_output.c"))
 

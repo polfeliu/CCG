@@ -10,7 +10,7 @@ import re
 if TYPE_CHECKING:
     from .style import Style
 
-UserCodeCallback = Callable[['Style', str], str]
+UserSectionCallback = Callable[['Style', str], str]
 
 
 class File:
@@ -25,7 +25,7 @@ class File:
             declarations: declarations in the file
             style:
         """
-        if isinstance(declarations, CDeclaration):
+        if isinstance(declarations, CDeclarations):
             self.declarations = declarations
         else:
             self.declarations = CDeclarations(declarations)
@@ -98,7 +98,7 @@ class File:
             dictionary of sections with identifier as key and content of code section as value
         """
         code_sections = {}
-        print(self.style.user_section_pattern())
+
         for section_match in re.finditer(self.style.user_section_pattern(), content):
             section = section_match.group()
 
@@ -161,6 +161,7 @@ def render_user_section(identifier: str, content: str, style: 'Style') -> str:
     )
 
 
+# TODO More than statements???
 class UserSectionStatement(CStatement):
 
     def __init__(self, identifier: str, default_content: str = "\n"):

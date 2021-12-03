@@ -4,3 +4,4 @@
 /ccg.egg-info/*
 /.ipynb_checkpoints/*
 /tests/generated_code/*
+/doc/source/examples/generated_code/*

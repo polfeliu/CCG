@@ -78,6 +78,7 @@ And print the definition:
    api/Carray
    api/doc
    api/style
+   api/file
 
 
 .. toctree::
@@ -92,6 +93,7 @@ And print the definition:
    examples/struct
    examples/types
    examples/union
+   examples/file
 
 Indices and tables
 ==================

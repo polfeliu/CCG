@@ -1,4 +1,4 @@
 Documentation
 ======================================
 
-.. autoclass:: ccg.doc.Doc
+.. autoclass:: ccg.Doc
