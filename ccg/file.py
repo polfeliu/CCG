@@ -169,17 +169,25 @@ def render_user_section(identifier: str, content: str, style: 'Style') -> str:
     )
 
 
-# TODO More than statements???
-class UserSectionStatement(CStatement):
+class UserSection(CDeclaration):
+    """User Section
+
+    Allows creating sections in a file where the user can edit the file
+        and the generation of code will not overwrite those changes
+
+    Note:
+        Inherits from declaration since it can be on the outer scope of a file, or as a statement inside the
+         contents of a function for example (that contains statements, but declaration inherits from statement)
+    """
 
     def __init__(self, identifier: str, default_content: str = "\n"):
         """Constructor
 
         Args:
-            identifier: identifier of user section statement
+            identifier: identifier of user section
             default_content:
         """
-        super(UserSectionStatement, self).__init__(self._render)
+        super(UserSection, self).__init__(self._render)
         self.identifier = identifier
         self.default_content = default_content
 
