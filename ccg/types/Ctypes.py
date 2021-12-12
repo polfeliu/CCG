@@ -63,7 +63,7 @@ class CItemDefinable(ABC):
                    from_space: 'CSpace' = None,
                    doc: bool = False
                    ) -> str:
-        return ""
+        raise NotImplemented
 
     def define(self, from_space: 'CSpace' = None) -> 'CDeclaration':
         return CDeclaration(

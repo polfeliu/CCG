@@ -1,6 +1,6 @@
 from enum import Enum
 from textwrap import indent
-from typing import List, Union, Optional
+from typing import List, Union
 
 
 class Style:
@@ -80,7 +80,14 @@ class Style:
     # Union
     union_bracket = GroupDelimitatorStyle(**_default_declaration_bracket)  # type: ignore
     union_new_line_members = True
+    # TODO indent union???
     union_space_members = False
+
+    # Enum
+    enum_bracket = GroupDelimitatorStyle(**_default_declaration_bracket)  # type: ignore
+    enum_new_line_members = True
+    enum_indent_members = True
+    enum_space_members = False
 
     # Class
     class_bracket = GroupDelimitatorStyle(**_default_declaration_bracket)  # type: ignore
@@ -237,6 +244,30 @@ class Style:
             f"{self.new_line(group_style.new_line_close_after)}"
             f"{self.space(group_style.space_close_before)}"
         )
+
+    # TODO use this method for struct and union also
+    def token_separated_members(self,
+                                token: str,
+                                members: List[str],
+                                new_line: bool,
+                                indent: bool,
+                                space: bool
+                                ):
+        render = ""
+        for i, member in enumerate(members):
+            if new_line:
+                render += self.indent(member, indent)
+            else:
+                render += member
+
+            if i < len(members) - 1:  # Is not last member
+                render += (
+                    f"{token}"
+                    f"{self.new_line(new_line)}"
+                    f"{self.space(space)}"
+                )
+
+        return render
 
     @staticmethod
     def check_hungarian_variable(variable_name: str, hungarian_prefixes: Union[List[str], str]) -> bool:
