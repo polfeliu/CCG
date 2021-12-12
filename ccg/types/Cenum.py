@@ -70,10 +70,21 @@ class CEnum(CGenericItem):
             indent=style.enum_indent_members,
             space=style.enum_space_members
         )
+        enum_base = ''
+        if self.base_type is not None:
+            enum_base = ': ' + self.base_type.declaration(
+                style=style,
+                semicolon=False,
+                from_space=from_space,
+                for_variable=True
+            )
+
         return (
+            f"{self.doc_render(style) if doc else ''}"
             f"{self.key.value}"
+            f"{self.space_def(from_space)}"
             f"{self.name if self.name is not None else ''}"
-            f"{self.base_type.declaration(style=style, semicolon=False, from_space=from_space, for_variable=True) if self.base_type is not None else ''}"
+            f"{enum_base}"
             f"{style.open_bracket(style.enum_bracket)}"
             f"{members}"
             f"{style.close_bracket(style.enum_bracket)}"
