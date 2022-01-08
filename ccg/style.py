@@ -80,7 +80,7 @@ class Style:
     # Union
     union_bracket = GroupDelimitatorStyle(**_default_declaration_bracket)  # type: ignore
     union_new_line_members = True
-    # TODO indent union???
+    union_indent_members = True
     union_space_members = False
 
     # Enum

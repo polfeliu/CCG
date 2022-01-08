@@ -85,7 +85,7 @@ class CUnionDef(CGenericType, CItemDefinable):
         for member in self.members:
             member_declaration = member.declaration(style=style)
             if style.union_new_line_members:
-                member_declaration = style.indent(member_declaration)
+                member_declaration = style.indent(member_declaration, style.union_indent_members)
             members += member_declaration
             if member != self.members[-1]:  # Is not last member
                 members += str(style.new_line(style.union_new_line_members))
