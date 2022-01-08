@@ -92,6 +92,7 @@ And print the definition:
    examples/statement
    examples/struct
    examples/types
+   examples/enum
    examples/union
    examples/file
 

@@ -11,3 +11,4 @@ Types
    Cunion
    Cfunction
    Cclass
+   Cenum

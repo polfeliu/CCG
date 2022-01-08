@@ -89,5 +89,5 @@ class CEnum(CGenericItem):
             f"{style.open_bracket(style.enum_bracket)}"
             f"{members}"
             f"{style.close_bracket(style.enum_bracket)}"
-            f";"  # TODO ??
+            f"{';' if semicolon else ''}"
         )
