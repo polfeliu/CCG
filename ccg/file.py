@@ -43,7 +43,6 @@ class File:
         if isfile(path):
             # File already exist, scan current user code sections
             with open(path, "r") as current:
-                current_code_sections = {}
                 current_content = current.read()
                 current_code_sections = self._analyze_code_sections(current_content)
 
