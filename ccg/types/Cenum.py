@@ -82,6 +82,7 @@ class CEnum(CGenericItem):
         return (
             f"{self.doc_render(style) if doc else ''}"
             f"{self.key.value}"
+            f" "
             f"{self.space_def(from_space)}"
             f"{self.name if self.name is not None else ''}"
             f"{enum_base}"
