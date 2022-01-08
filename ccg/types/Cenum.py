@@ -45,7 +45,7 @@ class CEnum(CGenericItem):
                  doc: Optional['Doc'] = None
                  ):
         super(CEnum, self).__init__(
-            name=name,
+            name=name if name is not None else '',
             in_space=in_space,
             doc=doc
         )
