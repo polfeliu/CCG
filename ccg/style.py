@@ -245,7 +245,6 @@ class Style:
             f"{self.space(group_style.space_close_before)}"
         )
 
-    # TODO use this method for struct and union also
     def token_separated_members(self,
                                 token: str,
                                 members: List[str],
