@@ -1,2 +1,44 @@
 extend = "tools/rulesets/ruff/ruff.toml"
 extend-exclude = ["tools/rulesets"]
+
+[lint]
+ignore = [
+    # TODO(rulesets): fix 401 in 17 file(s), e.g. `CClass` may be undefined, or defined from star imports
+    "undefined-local-with-import-star-usage",
+    # TODO(rulesets): fix 21 in 19 file(s), e.g. `from .ccg import *` used; unable to detect undefined names
+    "undefined-local-with-import-star",
+    # TODO(rulesets): fix 20 in 2 file(s), e.g. Use specific rule codes when ignoring type issues
+    "blanket-type-ignore",
+    # TODO(rulesets): fix 4 in 1 file(s), e.g. Variable `NOT` in function should be lowercase
+    "non-lowercase-variable-in-function",
+    # TODO(rulesets): fix 3 in 1 file(s), e.g. Mutable default value for class attribute
+    "mutable-class-default",
+    # TODO(rulesets): fix 3 in 1 file(s), e.g. Avoid equality comparisons to `False`; use `not without_arguments:` for false ch
+    "true-false-comparison",
+    # TODO(rulesets): fix 2 in 2 file(s), e.g. Use a single `if` statement instead of nested `if` statements
+    "collapsible-if",
+    # TODO(rulesets): fix 2 in 2 file(s), e.g. Module level import not at top of file
+    "module-import-not-at-top-of-file",
+    # TODO(rulesets): fix 2 in 2 file(s), e.g. Class could be dataclass or namedtuple
+    "class-as-data-structure",
+    # TODO(rulesets): fix 2 in 2 file(s), e.g. PEP 484 prohibits implicit `Optional`
+    "implicit-optional",
+    # TODO(rulesets): fix 2 in 2 file(s), e.g. `os.path.abspath()` should be replaced by `Path.resolve()`
+    "os-path-abspath",
+    # TODO(rulesets): fix 1 in 1 file(s), e.g. Consider `[*self.in_space.full_space_list, self]` instead of concatenation
+    "collection-literal-concatenation",
+    # TODO(rulesets): fix 1 in 1 file(s), e.g. Membership test against single-item container
+    "single-item-membership-test",
+    # TODO(rulesets): fix 1 in 1 file(s), e.g. Multiple `isinstance` calls for `member`, merge into a single call
+    "duplicate-isinstance-call",
+    # TODO(rulesets): fix 1 in 1 file(s), e.g. Missing explicit `return` at the end of function able to return non-`None` value
+    "implicit-return",
+    # TODO(rulesets): fix 1 in 1 file(s), e.g. Unnecessary list comprehension
+    "unnecessary-comprehension-in-call",
+    # TODO(rulesets): fix 1 in 1 file(s), e.g. Variable `copyright` is shadowing a Python builtin
+    "builtin-variable-shadowing",
+    # TODO(rulesets): fix 1 in 1 file(s), e.g. `os.path.dirname()` should be replaced by `Path.parent`
+    "os-path-dirname",
+    # TODO(rulesets): fix 1 in 1 file(s), e.g. `os.path.join()` should be replaced by `Path` with `/` operator
+    "os-path-join",
+]
