@@ -1,38 +1,30 @@
-from typing import TYPE_CHECKING, Optional, List
+from typing import TYPE_CHECKING, Optional
 
 from .Cvariable import CVariable
 from .style import default_style
 
 if TYPE_CHECKING:
-    from .style import Style
-    from .types.Ctypes import CGenericType
     from .Cnamespace import CSpace
     from .doc import Doc
+    from .style import Style
+    from .types.Ctypes import CGenericType
 
 
 class CArray(CVariable):
     """Array"""
 
-    def __init__(self,
-                 name: str,
-                 c_type: 'CGenericType',
-                 length: int,
-                 doc: Optional['Doc'] = None
-                 ):
-        super().__init__(
-            name=name,
-            c_type=c_type,
-            doc=doc
-        )
+    def __init__(self, name: str, c_type: "CGenericType", length: int, doc: Optional["Doc"] = None):
+        super().__init__(name=name, c_type=c_type, doc=doc)
         self.length = length
 
-    def declaration(self,
-                    style: 'Style' = default_style,
-                    semicolon: bool = True,
-                    doc: bool = True,
-                    from_space: 'CSpace' = None,
-                    without_arguments: bool = False
-                    ) -> str:
+    def declaration(
+        self,
+        style: "Style" = default_style,
+        semicolon: bool = True,
+        doc: bool = True,
+        from_space: "CSpace" = None,
+        without_arguments: bool = False,
+    ) -> str:
         self.style_checks(style)
 
         return (
@@ -43,7 +35,7 @@ class CArray(CVariable):
         )
 
     @property
-    def hungarian_prefixes(self) -> List[str]:
+    def hungarian_prefixes(self) -> list[str]:
         return self.c_type.hungarian_prefixes
 
     @property

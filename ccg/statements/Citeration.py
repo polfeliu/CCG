@@ -1,6 +1,6 @@
-from typing import TYPE_CHECKING, Union, List
+from typing import TYPE_CHECKING, Union
 
-from .Cstatement import CStatement, CStatements, CCompoundStatement
+from .Cstatement import CCompoundStatement, CStatement, CStatements
 
 if TYPE_CHECKING:
     from ..expressions import CExpression
@@ -12,17 +12,19 @@ class CWhile(CCompoundStatement):
 
     _style_token = "while"
 
-    def __init__(self, condition: 'CExpression', statements: Union['CStatements', List['CStatement']]):
+    def __init__(
+        self, condition: "CExpression", statements: Union["CStatements", list["CStatement"]]
+    ):
         self.condition = condition
-        super(CWhile, self).__init__(statements)
+        super().__init__(statements)
 
-    def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
+    def _bracket_style(self, style: "Style") -> "Style.GroupDelimitatorStyle":
         return style.while_bracket
 
-    def _indent_content_style(self, style: 'Style') -> bool:
+    def _indent_content_style(self, style: "Style") -> bool:
         return style.while_indent_content
 
-    def _pre_block(self, style: 'Style') -> str:
+    def _pre_block(self, style: "Style") -> str:
         return (
             f"{self._style_token}"
             f"{style.space(style.while_space_after_token)}"
@@ -37,22 +39,22 @@ class CDoWhile(CCompoundStatement):
 
     _style_token = "do_while"
 
-    def __init__(self, statements: Union['CStatements', List['CStatement']], condition: 'CExpression'):
+    def __init__(
+        self, statements: Union["CStatements", list["CStatement"]], condition: "CExpression"
+    ):
         self.condition = condition
-        super(CDoWhile, self).__init__(statements)
+        super().__init__(statements)
 
-    def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
+    def _bracket_style(self, style: "Style") -> "Style.GroupDelimitatorStyle":
         return style.do_while_bracket
 
-    def _indent_content_style(self, style: 'Style') -> bool:
+    def _indent_content_style(self, style: "Style") -> bool:
         return style.do_while_indent_content
 
-    def _pre_block(self, style: 'Style') -> str:
-        return (
-            f"do"
-        )
+    def _pre_block(self, style: "Style") -> str:
+        return "do"
 
-    def _post_block(self, style: 'Style') -> str:
+    def _post_block(self, style: "Style") -> str:
         return (
             f"while"
             f"{style.space(style.do_while_space_after_token)}"
@@ -67,12 +69,13 @@ class CFor(CCompoundStatement):
 
     _style_token = "for"
 
-    def __init__(self,
-                 initial: Union['CStatement', 'CExpression', None] = None,
-                 condition: Union['CExpression', None] = None,
-                 iteration: Union['CExpression', None] = None,
-                 statements: Union['CStatements', List['CStatement'], None] = None
-                 ):
+    def __init__(
+        self,
+        initial: Union["CStatement", "CExpression", None] = None,
+        condition: Union["CExpression", None] = None,
+        iteration: Union["CExpression", None] = None,
+        statements: Union["CStatements", list["CStatement"], None] = None,
+    ):
         self.initial = initial
         self.condition = condition
         self.iteration = iteration
@@ -80,15 +83,15 @@ class CFor(CCompoundStatement):
         if statements is None:
             statements = CStatements([])
 
-        super(CFor, self).__init__(statements)
+        super().__init__(statements)
 
-    def _bracket_style(self, style: 'Style') -> 'Style.GroupDelimitatorStyle':
+    def _bracket_style(self, style: "Style") -> "Style.GroupDelimitatorStyle":
         return style.for_bracket
 
-    def _indent_content_style(self, style: 'Style') -> bool:
+    def _indent_content_style(self, style: "Style") -> bool:
         return style.for_indent_content
 
-    def _pre_block(self, style: 'Style') -> str:
+    def _pre_block(self, style: "Style") -> str:
         delimiter = (
             f"{style.space(style.for_space_before_semicolon)}"
             f";"

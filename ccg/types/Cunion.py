@@ -1,12 +1,13 @@
-from typing import TYPE_CHECKING, List, Optional
-from .Ctypes import CGenericType, CItemDefinable
+from typing import TYPE_CHECKING, Optional
+
 from ..Cvariable import CVariable
 from ..style import default_style
+from .Ctypes import CGenericType, CItemDefinable
 
 if TYPE_CHECKING:
-    from ..style import Style
     from ..Cnamespace import CSpace
     from ..doc import Doc
+    from ..style import Style
 
 
 class CUnion(CGenericType, CItemDefinable):
@@ -14,25 +15,18 @@ class CUnion(CGenericType, CItemDefinable):
 
     Assumes union already is declared"""
 
-    def __init__(self, union_def: 'CUnionDef'):
-        super(CUnion, self).__init__(
-            name=union_def.name
-        )
+    def __init__(self, union_def: "CUnionDef"):
+        super().__init__(name=union_def.name)
         self.union_def = union_def
 
-    def definition(self,
-                   style: 'Style' = default_style,
-                   from_space: 'CSpace' = None,
-                   doc: bool = False
-                   ) -> str:
+    def definition(
+        self, style: "Style" = default_style, from_space: "CSpace" = None, doc: bool = False
+    ) -> str:
         self.style_checks(style)
 
-        return (
-            f"{self.space_def(from_space)}"
-            f"{self.name}"
-        )
+        return f"{self.space_def(from_space)}{self.name}"
 
-    def style_checks(self, style: 'Style') -> None:
+    def style_checks(self, style: "Style") -> None:
         # Name of the union type is not checked by hungarian
         pass
 
@@ -40,33 +34,26 @@ class CUnion(CGenericType, CItemDefinable):
 class CUnionDef(CGenericType, CItemDefinable):
     """Union with inplace definition"""
 
-    def __init__(self,
-                 name: Optional[str] = None,
-                 members: List[CVariable] = None,
-                 doc: Optional['Doc'] = None
-                 ):
+    def __init__(
+        self, name: str | None = None, members: list[CVariable] = None, doc: Optional["Doc"] = None
+    ):
         if name is None:
-            self.name = ''
+            self.name = ""
             self.is_anonymous = True
         else:
             self.name = name
             self.is_anonymous = False
 
-        super(CUnionDef, self).__init__(
-            name=f"union {self.name}",
-            doc=doc
-        )
+        super().__init__(name=f"union {self.name}", doc=doc)
 
         if members is None or len(members) < 1:
             raise KeyError("Unions have to have at least one member")
 
         self.members = members
 
-        self._union = CUnion(
-            union_def=self
-        )
+        self._union = CUnion(union_def=self)
 
-    def style_checks(self, style: 'Style') -> None:
+    def style_checks(self, style: "Style") -> None:
         # Name of the union type is not checked by hungarian
         pass
 
@@ -74,11 +61,9 @@ class CUnionDef(CGenericType, CItemDefinable):
     def union(self) -> CUnion:
         return self._union
 
-    def definition(self,
-                   style: 'Style' = default_style,
-                   from_space: 'CSpace' = None,
-                   doc: bool = False
-                   ) -> str:
+    def definition(
+        self, style: "Style" = default_style, from_space: "CSpace" = None, doc: bool = False
+    ) -> str:
         self.style_checks(style)
 
         members = ""
@@ -99,12 +84,15 @@ class CUnionDef(CGenericType, CItemDefinable):
             f"{style.close_bracket(style.union_bracket)}"
         )
 
-    def declaration(self,
-                    style: 'Style' = default_style,
-                    semicolon: bool = True,
-                    doc: bool = True,
-                    from_space: 'CSpace' = None,
-                    without_arguments: bool = False,
-                    for_variable: bool = False
-                    ) -> str:
-        return self.definition(style=style, from_space=from_space, doc=doc) + (';' if semicolon else '')
+    def declaration(
+        self,
+        style: "Style" = default_style,
+        semicolon: bool = True,
+        doc: bool = True,
+        from_space: "CSpace" = None,
+        without_arguments: bool = False,
+        for_variable: bool = False,
+    ) -> str:
+        return self.definition(style=style, from_space=from_space, doc=doc) + (
+            ";" if semicolon else ""
+        )

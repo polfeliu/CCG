@@ -1,33 +1,30 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, Optional
 
-from .Ctypes import CGenericType, CItemDefinable
-from .CstdTypes import CVoidType, CNoType
-from ..statements import CStatements
 from ..Cvariable import CVariable
+from ..statements import CStatements
 from ..style import default_style
+from .CstdTypes import CNoType, CVoidType
+from .Ctypes import CGenericType, CItemDefinable
 
 if TYPE_CHECKING:
-    from ..style import Style
     from ..Cnamespace import CSpace
-    from ..expressions import CExpression
     from ..doc import Doc
+    from ..expressions import CExpression
+    from ..style import Style
 
 
 class CFunctionArgument(CVariable):
     """Argument of a function or method"""
 
-    def __init__(self,
-                 name: str,
-                 c_type: 'CGenericType',
-                 default: 'CExpression' = None,
-                 auto_hungarize: bool = False,
-                 doc: Optional['Doc'] = None
-                 ):
-        super(CFunctionArgument, self).__init__(
-            name=name,
-            c_type=c_type,
-            auto_hungarize=auto_hungarize
-        )
+    def __init__(
+        self,
+        name: str,
+        c_type: "CGenericType",
+        default: "CExpression" = None,
+        auto_hungarize: bool = False,
+        doc: Optional["Doc"] = None,
+    ):
+        super().__init__(name=name, c_type=c_type, auto_hungarize=auto_hungarize)
         self.doc = doc
         self.default = default
 
@@ -37,21 +34,17 @@ class CFunction(CGenericType, CItemDefinable):
 
     Argument = CFunctionArgument
 
-    def __init__(self,
-                 name: str,
-                 return_type: CGenericType = CVoidType,
-                 arguments: Optional[List[CFunctionArgument]] = None,
-                 content: Optional['CStatements'] = None,
-                 in_space: Optional['CSpace'] = None,
-                 static: bool = False,
-                 doc: Optional['Doc'] = None
-                 ):
-        super(CFunction, self).__init__(
-            name=name,
-            hungarian_prefixes=[],
-            in_space=in_space,
-            doc=doc
-        )
+    def __init__(
+        self,
+        name: str,
+        return_type: CGenericType = CVoidType,
+        arguments: list[CFunctionArgument] | None = None,
+        content: Optional["CStatements"] = None,
+        in_space: Optional["CSpace"] = None,
+        static: bool = False,
+        doc: Optional["Doc"] = None,
+    ):
+        super().__init__(name=name, hungarian_prefixes=[], in_space=in_space, doc=doc)
         if arguments is None:
             self.arguments = []
         else:
@@ -74,15 +67,17 @@ class CFunction(CGenericType, CItemDefinable):
                     defaults_started = True
             else:
                 if argument.default is None:
-                    raise SyntaxError(f"Argument [{argument.name}] without default follows arguments with defaults"
-                                      f"on function [{self.name}]")
+                    raise SyntaxError(
+                        f"Argument [{argument.name}] without default follows arguments with defaults"
+                        f"on function [{self.name}]"
+                    )
 
-    def _argument_list(self, style: 'Style', include_defaults: bool = False) -> str:
+    def _argument_list(self, style: "Style", include_defaults: bool = False) -> str:
         argument_list = ""
         if len(self.arguments) > 0:
             argument_list = ""
             for argument in self.arguments:
-                default = ''
+                default = ""
                 if argument.default is not None and include_defaults:
                     default = f" = {argument.default.render(style)}"
                 argument_list += f"{argument.c_type.name} {argument.name}{default}, "
@@ -93,14 +88,15 @@ class CFunction(CGenericType, CItemDefinable):
 
         return argument_list
 
-    def declaration(self,
-                    style: 'Style' = default_style,
-                    semicolon: bool = True,
-                    doc: bool = True,
-                    from_space: 'CSpace' = None,
-                    without_arguments: bool = False,
-                    for_variable: bool = False
-                    ) -> str:
+    def declaration(
+        self,
+        style: "Style" = default_style,
+        semicolon: bool = True,
+        doc: bool = True,
+        from_space: "CSpace" = None,
+        without_arguments: bool = False,
+        for_variable: bool = False,
+    ) -> str:
         """Declaration of function"""
         return (
             f"{self.doc_render(style) if doc else ''}"
@@ -118,7 +114,7 @@ class CFunction(CGenericType, CItemDefinable):
             f"{';' if semicolon else ''}"
         )
 
-    def doc_render(self, style: 'Style') -> str:
+    def doc_render(self, style: "Style") -> str:
         if self.doc is None:
             return ""
 
@@ -131,17 +127,16 @@ class CFunction(CGenericType, CItemDefinable):
             )
         if self.return_type != CVoidType:
             if self.doc.ret is None:
-                raise AttributeError(f"Missing return value documentation for function with non void return value")
-            else:
-                content.append(f"{style.doxygen_command('return')} {self.doc.ret}")
+                raise AttributeError(
+                    "Missing return value documentation for function with non void return value"
+                )
+            content.append(f"{style.doxygen_command('return')} {self.doc.ret}")
 
         return self.doc.render(style, content=content)
 
-    def definition(self,
-                   style: 'Style' = default_style,
-                   from_space: 'CSpace' = None,
-                   doc: bool = False
-                   ) -> str:
+    def definition(
+        self, style: "Style" = default_style, from_space: "CSpace" = None, doc: bool = False
+    ) -> str:
         """Definition of function"""
         return (
             f"{self.doc_render(style) if doc else ''}"

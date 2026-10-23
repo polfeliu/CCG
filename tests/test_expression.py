@@ -6,25 +6,37 @@ def test_expression():
     var = CVariable(
         c_type=Cint8,
         name="i8Mycustomint",
-        initial_value=CCast(Cint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.decimal))
+        initial_value=CCast(
+            Cint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.decimal)
+        ),
     )
     print(var.declare().render())
 
     var.c_type = Cuint8
-    var.initial_value = CCast(Cuint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.octal))
+    var.initial_value = CCast(
+        Cuint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.octal)
+    )
     print(var.declare().render())
 
-    var.initial_value = CCast(Cuint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.hexadecimal))
+    var.initial_value = CCast(
+        Cuint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.hexadecimal)
+    )
     print(var.declare().render())
 
-    var.initial_value = CCast(Cuint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.binary))
+    var.initial_value = CCast(
+        Cuint8, CLiteral(12, c_type=Cuint8, literal_format=CLiteral.Format.binary)
+    )
     print(var.declare().render())
 
     var.c_type = Cfloat
-    var.initial_value = CCast(Cfloat, CLiteral(12, c_type=Cfloat, literal_format=CLiteral.Format.float_decimals))
+    var.initial_value = CCast(
+        Cfloat, CLiteral(12, c_type=Cfloat, literal_format=CLiteral.Format.float_decimals)
+    )
     print(var.declare().render())
 
-    var.initial_value = CCast(Cfloat, CLiteral(12, c_type=Cfloat, literal_format=CLiteral.Format.float_scientific))
+    var.initial_value = CCast(
+        Cfloat, CLiteral(12, c_type=Cfloat, literal_format=CLiteral.Format.float_scientific)
+    )
     print(var.declare().render())
 
     # Operators
@@ -38,7 +50,7 @@ def test_expression():
     print(
         ASSIGN(
             var,  # Assign a value to that value
-            CLiteral(5)
+            CLiteral(5),
         ).render()
     )
 
@@ -46,7 +58,7 @@ def test_expression():
     print(
         SUM(
             CLiteral(2),
-            var  # Use a variable in a sum
+            var,  # Use a variable in a sum
         ).render()
     )
 
@@ -55,7 +67,10 @@ def test_expression():
         PARENTHESES(
             # Typical operations (sum, subtract...) can be done using python built-in operations
             var + CLiteral(2) - CLiteral(3) * CLiteral(4) / CLiteral(5) % CLiteral(6)
-            << CLiteral(7) >> CLiteral(8) & CLiteral(True) | CLiteral(False)
+            << CLiteral(7)
+            >> CLiteral(8)
+            & CLiteral(True)
+            | CLiteral(False)
             + PARENTHESES(
                 -CLiteral(9)  # Unary minus
             )

@@ -1,9 +1,9 @@
 from enum import Enum
-from typing import TYPE_CHECKING, Union, Optional
+from typing import TYPE_CHECKING
 
-from .Cexpression import CExpression
 from ..style import default_style
 from ..types.CstdTypes import CIntegerType
+from .Cexpression import CExpression
 
 if TYPE_CHECKING:
     from ..style import Style
@@ -14,6 +14,7 @@ class CLiteral(CExpression):
 
     class Format(Enum):
         """Formatting Choice"""
+
         decimal = 10
         octal = 8
         hexadecimal = 16
@@ -22,11 +23,12 @@ class CLiteral(CExpression):
         float_scientific = -2
         boolean = -10
 
-    def __init__(self,
-                 literal: Union[int, float, bool],
-                 c_type: Union[CIntegerType, None] = None,
-                 literal_format: Optional[Format] = None
-                 ):
+    def __init__(
+        self,
+        literal: float | bool,
+        c_type: CIntegerType | None = None,
+        literal_format: Format | None = None,
+    ):
         self.literal = literal
         self.c_type = c_type
         if literal_format is not None:
@@ -46,15 +48,25 @@ class CLiteral(CExpression):
                 raise TypeError(f"Cannot format bool with {self.literal_format}")
 
         elif isinstance(literal, int):
-            if self.literal_format not in [self.Format.decimal, self.Format.octal, self.Format.hexadecimal,
-                                           self.Format.binary]:
-                if self.literal_format in [self.Format.float_decimals, self.Format.float_scientific]:
+            if self.literal_format not in [
+                self.Format.decimal,
+                self.Format.octal,
+                self.Format.hexadecimal,
+                self.Format.binary,
+            ]:
+                if self.literal_format in [
+                    self.Format.float_decimals,
+                    self.Format.float_scientific,
+                ]:
                     self.literal = float(self.literal)
                 else:
                     raise TypeError(f"Cannot format integer with {self.literal_format}")
 
         elif isinstance(literal, float):
-            if self.literal_format not in [self.Format.float_decimals, self.Format.float_scientific]:
+            if self.literal_format not in [
+                self.Format.float_decimals,
+                self.Format.float_scientific,
+            ]:
                 raise TypeError(f"Cannot format float with {self.literal_format}")
         else:
             raise TypeError
@@ -63,22 +75,21 @@ class CLiteral(CExpression):
         """Prefix of the literal according to the format"""
         if self.literal_format == self.Format.decimal:
             return ""
-        elif self.literal_format == self.Format.octal:
+        if self.literal_format == self.Format.octal:
             return "0"
-        elif self.literal_format == self.Format.hexadecimal:
+        if self.literal_format == self.Format.hexadecimal:
             return "0x"
-        elif self.literal_format == self.Format.binary:
+        if self.literal_format == self.Format.binary:
             return "0b"
-        elif self.literal_format == self.Format.float_decimals:
+        if (
+            self.literal_format == self.Format.float_decimals
+            or self.literal_format == self.Format.float_scientific
+            or self.literal_format == self.Format.boolean
+        ):
             return ""
-        elif self.literal_format == self.Format.float_scientific:
-            return ""
-        elif self.literal_format == self.Format.boolean:
-            return ""
-        else:
-            raise NotImplemented
+        raise NotImplementedError
 
-    def format_literal(self, style: 'Style') -> str:
+    def format_literal(self, style: "Style") -> str:
         """Render the literal with the format selected.
 
         Does not include prefix or suffix
@@ -87,36 +98,30 @@ class CLiteral(CExpression):
             if self.literal_format == self.Format.boolean:
                 if self.literal:
                     return style.literal_boolean_true_token
-                else:
-                    return style.literal_boolean_false_token
-            else:
-                raise NotImplemented
+                return style.literal_boolean_false_token
+            raise NotImplementedError
 
-        elif isinstance(self.literal, int):
+        if isinstance(self.literal, int):
             if self.literal_format == self.Format.decimal:
                 return f"{self.literal:d}"
-            elif self.literal_format == self.Format.octal:
+            if self.literal_format == self.Format.octal:
                 return f"{self.literal:o}"
-            elif self.literal_format == self.Format.hexadecimal:
+            if self.literal_format == self.Format.hexadecimal:
                 if style.literal_hexadecimal_uppercase:
                     return f"{self.literal:X}"
-                else:
-                    return f"{self.literal:x}"
-            elif self.literal_format == self.Format.binary:
+                return f"{self.literal:x}"
+            if self.literal_format == self.Format.binary:
                 return f"{self.literal:b}"
-            else:
-                raise NotImplemented
-        elif isinstance(self.literal, float):
+            raise NotImplementedError
+        if isinstance(self.literal, float):
             if self.literal_format == self.Format.float_decimals:
                 return str(float(f"{self.literal:g}"))
-            elif self.literal_format == self.Format.float_scientific:
+            if self.literal_format == self.Format.float_scientific:
                 return f"{self.literal:e}"
-            else:
-                raise NotImplemented
-        else:
-            raise NotImplemented
+            raise NotImplementedError
+        raise NotImplementedError
 
-    def render(self, style: 'Style' = default_style) -> str:
+    def render(self, style: "Style" = default_style) -> str:
         return (
             f"{self.format_prefix()}"
             f"{self.format_literal(style)}"

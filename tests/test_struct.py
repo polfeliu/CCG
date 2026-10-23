@@ -11,26 +11,32 @@ def test_struct():
             CStructDef.Member(CVariable("i8Asdf", Cint8), bitfield=3, doc=Doc("Random variable")),
             CStructDef.Member(CArray("i8Name", c_type=Cint8, length=3)),
             CStructDef.Member(
-                CVariable("tNestedstruct", c_type=CStructDef(
-                    # This struct def is anonymous
-                    is_packed=True,  # And packed
-                    members=[
-                        CStructDef.Member(CVariable("i64Qwer", Cint64)),
-                    ]),
-                          )
+                CVariable(
+                    "tNestedstruct",
+                    c_type=CStructDef(
+                        # This struct def is anonymous
+                        is_packed=True,  # And packed
+                        members=[
+                            CStructDef.Member(CVariable("i64Qwer", Cint64)),
+                        ],
+                    ),
+                )
             ),
-
             CStructDef.Member(
-                CVariable("tNestedstruct2", c_type=CStructDef(
-                    "TNestedstruct2",
-                    members=[
-                        CStructDef.Member(CVariable("i64Qwer", Cint64)),
-                    ]).struct,
-                          # Reference the struct type, not the def, and its not declared inplace.
-                          # Assumes this struct will be defined somewhere else
-                          )
-            )
-        ])
+                CVariable(
+                    "tNestedstruct2",
+                    c_type=CStructDef(
+                        "TNestedstruct2",
+                        members=[
+                            CStructDef.Member(CVariable("i64Qwer", Cint64)),
+                        ],
+                    ).struct,
+                    # Reference the struct type, not the def, and its not declared inplace.
+                    # Assumes this struct will be defined somewhere else
+                )
+            ),
+        ],
+    )
 
     # Declaration of struct definition
     print(example_struct_def.declare().render())

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .style import Style
@@ -7,11 +7,7 @@ if TYPE_CHECKING:
 class Doc:
     """Documentation"""
 
-    def __init__(self,
-                 brief: Optional[str] = None,
-                 body: Optional[str] = None,
-                 ret: Optional[str] = None
-                 ):
+    def __init__(self, brief: str | None = None, body: str | None = None, ret: str | None = None):
         """Constructor
 
         Args:
@@ -23,7 +19,7 @@ class Doc:
         self.body = body
         self.ret = ret
 
-    def render(self, style: 'Style', content: Optional[List[str]] = None) -> str:
+    def render(self, style: "Style", content: list[str] | None = None) -> str:
         lines = []
 
         if self.body is not None:

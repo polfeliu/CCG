@@ -9,20 +9,26 @@ def test_union():
             CVariable("i8Title", Cint8, doc=Doc("Title")),
             CVariable("i8Asdf", Cint8, doc=Doc("Random variable")),
             CArray("i8Name", c_type=Cint8, length=3),
-            CVariable("tNestedUnion", c_type=CUnionDef(
-                # This union def is anonymous
-                members=[
-                    CVariable("i64Qwer", Cint64),
-                ]),
-                      ),
-
-            CVariable("tNestedUnion2", c_type=CUnionDef(
-                "TNestedUnion2",
-                members=[
-                    CVariable("i64Qwer", Cint64),
-                ]).union,  # Reference the union type, not the def, and its not declared inplace
-                      )
-        ])
+            CVariable(
+                "tNestedUnion",
+                c_type=CUnionDef(
+                    # This union def is anonymous
+                    members=[
+                        CVariable("i64Qwer", Cint64),
+                    ]
+                ),
+            ),
+            CVariable(
+                "tNestedUnion2",
+                c_type=CUnionDef(
+                    "TNestedUnion2",
+                    members=[
+                        CVariable("i64Qwer", Cint64),
+                    ],
+                ).union,  # Reference the union type, not the def, and its not declared inplace
+            ),
+        ],
+    )
 
     # Declaration of union definition
     print(example_union_def.declaration())

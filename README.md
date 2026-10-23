@@ -12,18 +12,21 @@ Declare an C/C++ object, for instance, a function:
 
 ```python
 f = CFunction(
-        name="examplefun",
-        return_type=Cuint32,
-        static=True,
-        arguments=[
-            CFunction.Argument(name="first", c_type=Cuint32, doc=Doc("First argument")),
-            CFunction.Argument(name="second", c_type=Cdouble, default=CLiteral(2), doc=Doc("Second Argument"))
-        ],
-        doc=Doc("Awesome function", "This function is awesome because it does marvellous things",
-                ret="returns a lucky number"),
-        content=CStatements([
-            CVariable("local_var", Cint8).declare()
-        ])
+    name="examplefun",
+    return_type=Cuint32,
+    static=True,
+    arguments=[
+        CFunction.Argument(name="first", c_type=Cuint32, doc=Doc("First argument")),
+        CFunction.Argument(
+            name="second", c_type=Cdouble, default=CLiteral(2), doc=Doc("Second Argument")
+        ),
+    ],
+    doc=Doc(
+        "Awesome function",
+        "This function is awesome because it does marvellous things",
+        ret="returns a lucky number",
+    ),
+    content=CStatements([CVariable("local_var", Cint8).declare()]),
 )
 ```
 

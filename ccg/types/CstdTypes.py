@@ -1,49 +1,38 @@
-from typing import TYPE_CHECKING, List, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from .Ctypes import CGenericType
 
 if TYPE_CHECKING:
     from ..style import Style
-    from ..doc import Doc
 
 
 class CStdType(CGenericType):
     """Standard Type"""
 
-    def literal_suffix(self, style: 'Style'):
+    def literal_suffix(self, style: "Style"):
         if self is Cfloat:
             return style.literal_float_token
-        elif self is Cdouble:
+        if self is Cdouble:
             return style.literal_double_token
-        elif self is Cbool:
+        if self is Cbool:
             return ""
-        else:
-            raise NotImplemented
+        raise NotImplementedError
 
 
 class CIntegerType(CStdType):
     """Integer Type"""
 
-    def __init__(self,
-                 name: str,
-                 hungarian_prefixes: Optional[List[str]],
-                 bits: int,
-                 is_signed: bool
-                 ):
-        super(CIntegerType, self).__init__(
-            name=name,
-            hungarian_prefixes=hungarian_prefixes,
-            bit_size=bits
-        )
+    def __init__(self, name: str, hungarian_prefixes: list[str] | None, bits: int, is_signed: bool):
+        super().__init__(name=name, hungarian_prefixes=hungarian_prefixes, bit_size=bits)
         self.is_signed = is_signed
         if self.is_signed:
-            self.minimum = -2 ** (bits - 1)
+            self.minimum = -(2 ** (bits - 1))
             self.maximum = 2 ** (bits - 1) - 1
         else:
             self.minimum = 0
-            self.maximum = 2 ** bits - 1
+            self.maximum = 2**bits - 1
 
-    def literal_suffix(self, style: 'Style'):
+    def literal_suffix(self, style: "Style"):
         suffix = ""
 
         if not self.is_signed:
@@ -64,87 +53,35 @@ class CIntegerType(CStdType):
         return value in range(self.minimum, self.maximum + 1)
 
 
-Cint8 = CIntegerType(
-    name="int8_t",
-    hungarian_prefixes=["i8"],
-    bits=8,
-    is_signed=True
-)
+Cint8 = CIntegerType(name="int8_t", hungarian_prefixes=["i8"], bits=8, is_signed=True)
 """uint8_t"""
 
-Cuint8 = CIntegerType(
-    name="uint8_t",
-    hungarian_prefixes=["u8"],
-    bits=8,
-    is_signed=False
-)
+Cuint8 = CIntegerType(name="uint8_t", hungarian_prefixes=["u8"], bits=8, is_signed=False)
 
-Cint16 = CIntegerType(
-    name="int16_t",
-    hungarian_prefixes=["i16"],
-    bits=16,
-    is_signed=True
-)
+Cint16 = CIntegerType(name="int16_t", hungarian_prefixes=["i16"], bits=16, is_signed=True)
 
-Cuint16 = CIntegerType(
-    name="uint16_t",
-    hungarian_prefixes=["u16"],
-    bits=16,
-    is_signed=False
-)
+Cuint16 = CIntegerType(name="uint16_t", hungarian_prefixes=["u16"], bits=16, is_signed=False)
 
-Cint32 = CIntegerType(
-    name="int32_t",
-    hungarian_prefixes=["i32"],
-    bits=32,
-    is_signed=True
-)
+Cint32 = CIntegerType(name="int32_t", hungarian_prefixes=["i32"], bits=32, is_signed=True)
 
-Cuint32 = CIntegerType(
-    name="uint32_t",
-    hungarian_prefixes=["u32"],
-    bits=32,
-    is_signed=False
-)
+Cuint32 = CIntegerType(name="uint32_t", hungarian_prefixes=["u32"], bits=32, is_signed=False)
 
-Cint64 = CIntegerType(
-    name="int8_t",
-    hungarian_prefixes=["i64"],
-    bits=64,
-    is_signed=True
-)
+Cint64 = CIntegerType(name="int8_t", hungarian_prefixes=["i64"], bits=64, is_signed=True)
 
-Cuint64 = CIntegerType(
-    name="uint64_t",
-    hungarian_prefixes=["u64"],
-    bits=64,
-    is_signed=False
-)
+Cuint64 = CIntegerType(name="uint64_t", hungarian_prefixes=["u64"], bits=64, is_signed=False)
 
-Cfloat = CStdType(
-    name="float",
-    hungarian_prefixes=["f"],
-    bit_size=32
-)
+Cfloat = CStdType(name="float", hungarian_prefixes=["f"], bit_size=32)
 
-Cdouble = CStdType(
-    name="double",
-    hungarian_prefixes=["db"],
-    bit_size=64
-)
+Cdouble = CStdType(name="double", hungarian_prefixes=["db"], bit_size=64)
 
 Cbool = CStdType(
     name="bool",
     hungarian_prefixes=["b", "is"],
 )
 
-CVoidType = CGenericType(
-    name='void'
-)
+CVoidType = CGenericType(name="void")
 
-CNoType = CGenericType(
-    name=''
-)
+CNoType = CGenericType(name="")
 
 
 class StdTypes:

@@ -1,6 +1,5 @@
 from enum import Enum
 from textwrap import indent
-from typing import List, Union, Optional
 
 
 class Style:
@@ -9,16 +8,17 @@ class Style:
     class GroupDelimitatorStyle:
         """open or close brackets or parentheses style"""
 
-        def __init__(self,
-                     new_line_open_before: bool,
-                     new_line_open_after: bool,
-                     new_line_close_before: bool,
-                     new_line_close_after: bool,
-                     space_open_before: bool,
-                     space_open_after: bool,
-                     space_close_before: bool,
-                     space_close_after: bool
-                     ):
+        def __init__(
+            self,
+            new_line_open_before: bool,
+            new_line_open_after: bool,
+            new_line_close_before: bool,
+            new_line_close_after: bool,
+            space_open_before: bool,
+            space_open_after: bool,
+            space_close_before: bool,
+            space_close_after: bool,
+        ):
             self.new_line_open_before = new_line_open_before
             self.new_line_open_after = new_line_open_after
             self.new_line_close_before = new_line_close_before
@@ -29,36 +29,36 @@ class Style:
             self.space_close_after = space_close_after
 
     _default_statement_bracket = {
-        'new_line_open_before': True,
-        'new_line_open_after': True,
-        'new_line_close_before': True,
-        'new_line_close_after': True,
-        'space_open_before': False,
-        'space_open_after': False,
-        'space_close_before': False,
-        'space_close_after': False
+        "new_line_open_before": True,
+        "new_line_open_after": True,
+        "new_line_close_before": True,
+        "new_line_close_after": True,
+        "space_open_before": False,
+        "space_open_after": False,
+        "space_close_before": False,
+        "space_close_after": False,
     }
 
     _default_declaration_bracket = {
-        'new_line_open_before': True,
-        'new_line_open_after': True,
-        'new_line_close_before': True,
-        'new_line_close_after': False,
-        'space_open_before': False,
-        'space_open_after': False,
-        'space_close_before': False,
-        'space_close_after': False
+        "new_line_open_before": True,
+        "new_line_open_after": True,
+        "new_line_close_before": True,
+        "new_line_close_after": False,
+        "space_open_before": False,
+        "space_open_after": False,
+        "space_close_before": False,
+        "space_close_after": False,
     }
 
     _default_parentheses = {
-        'new_line_open_before': False,
-        'new_line_open_after': False,
-        'new_line_close_before': False,
-        'new_line_close_after': False,
-        'space_open_before': False,
-        'space_open_after': False,
-        'space_close_before': False,
-        'space_close_after': False
+        "new_line_open_before": False,
+        "new_line_open_after": False,
+        "new_line_close_before": False,
+        "new_line_close_after": False,
+        "space_open_before": False,
+        "space_open_after": False,
+        "space_close_before": False,
+        "space_close_after": False,
     }
 
     # Function
@@ -185,19 +185,19 @@ class Style:
     or_operator_style = OrOperatorStyles.DoubleVerticalBar
 
     # General tokens
-    new_line_token = '\n'
-    indent_token = '\t'
-    space_token = ' '
-    bracket_open_token = '{'
-    bracket_close_token = '}'
-    parentheses_open_token = '('
-    parentheses_close_token = ')'
+    new_line_token = "\n"
+    indent_token = "\t"
+    space_token = " "
+    bracket_open_token = "{"
+    bracket_close_token = "}"
+    parentheses_open_token = "("
+    parentheses_close_token = ")"
 
     def space(self, active: bool = True) -> str:
-        return self.space_token if active else ''
+        return self.space_token if active else ""
 
     def new_line(self, active: bool = True) -> str:
-        return self.new_line_token if active else ''
+        return self.new_line_token if active else ""
 
     def indent(self, value: str, active: bool = True) -> str:
         return indent(value, self.indent_token) if active else value
@@ -239,7 +239,7 @@ class Style:
         )
 
     @staticmethod
-    def check_hungarian_variable(variable_name: str, hungarian_prefixes: Union[List[str], str]) -> bool:
+    def check_hungarian_variable(variable_name: str, hungarian_prefixes: list[str] | str) -> bool:
         if isinstance(hungarian_prefixes, str):
             hungarian_prefixes = [str(hungarian_prefixes)]
 
@@ -258,18 +258,19 @@ class Style:
 
     doc_doxygen_command_token = "@"
 
-    def doxygen_format(self, lines: List[str]) -> str:
+    def doxygen_format(self, lines: list[str]) -> str:
         if len(lines) == 0:
             return ""
-        elif len(lines) == 1:
+        if len(lines) == 1:
             return f"{self.doc_doxygen_start_block} {lines[0]}{self.doc_doxygen_end_block}{self.new_line_token}"
-        else:
-            content = ''.join([f"{self.doc_doxygen_line_block}{line}{self.new_line_token}" for line in lines])
-            return (
-                f"{self.doc_doxygen_start_block}{self.new_line_token}"
-                f"{content}"
-                f"{self.doc_doxygen_end_block}{self.new_line_token}"
-            )
+        content = "".join([
+            f"{self.doc_doxygen_line_block}{line}{self.new_line_token}" for line in lines
+        ])
+        return (
+            f"{self.doc_doxygen_start_block}{self.new_line_token}"
+            f"{content}"
+            f"{self.doc_doxygen_end_block}{self.new_line_token}"
+        )
 
     def doxygen_command(self, command_name: str) -> str:
         return f"{self.doc_doxygen_command_token}{command_name}"
